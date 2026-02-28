@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Chapter One — Whispers of Caring</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:        #f7f3ee;
+      --bg2:       #eee8df;
+      --ink:       #1e1a14;
+      --ink-mid:   #4a4236;
+      --ink-dim:   #9a8f80;
+      --rose:      #b85c5c;
+      --rose-soft: #f0dada;
+      --sage:      #6b8f71;
+      --sage-soft: #d8e8da;
+      --border:    rgba(74,66,54,0.1);
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Jost', sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── Subtle paper texture ── */
+    body::after {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 9999;
+    }
+
+    /* ══ NAV ══ */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      height: 58px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 48px;
+      background: rgba(247,243,238,0.93);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-brand {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      font-style: italic;
+      color: var(--ink);
+      text-decoration: none;
+      letter-spacing: 0.01em;
+    }
+
+    .nav-links { display: flex; gap: 30px; }
+    .nav-links a {
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--ink-dim);
+      text-decoration: none;
+      transition: color 0.25s;
+    }
+    .nav-links a:hover { color: var(--rose); }
+
+    /* ══ HERO ══ */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center;
+      padding: 80px 24px 60px;
+      position: relative;
+      background: url('su11.jpg') center/cover no-repeat;
+    }
+
+    /* overlay so text reads well over any photo */
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom,
+        rgba(247,243,238,0.82) 0%,
+        rgba(247,243,238,0.70) 50%,
+        rgba(247,243,238,0.92) 100%);
+    }
+
+    .hero-inner { position: relative; z-index: 1; max-width: 680px; }
+
+    /* floating leaves — CSS only */
+    .leaf {
+      position: absolute;
+      font-size: 1.1rem;
+      opacity: 0;
+      animation: leafFloat 14s ease-in-out infinite;
+      pointer-events: none; z-index: 0;
+    }
+    .leaf:nth-child(1) { left: 8%;  top: 20%; animation-delay: 0s;   animation-duration: 13s; }
+    .leaf:nth-child(2) { left: 82%; top: 30%; animation-delay: 3s;   animation-duration: 16s; }
+    .leaf:nth-child(3) { left: 15%; top: 65%; animation-delay: 6s;   animation-duration: 12s; }
+    .leaf:nth-child(4) { left: 74%; top: 70%; animation-delay: 9s;   animation-duration: 15s; }
+    .leaf:nth-child(5) { left: 50%; top: 12%; animation-delay: 2s;   animation-duration: 18s; }
+
+    @keyframes leafFloat {
+      0%   { opacity: 0; transform: translateY(0) rotate(0deg); }
+      15%  { opacity: 0.35; }
+      50%  { transform: translateY(-40px) rotate(20deg); }
+      85%  { opacity: 0.25; }
+      100% { opacity: 0; transform: translateY(-80px) rotate(-10deg); }
+    }
+
+    .hero-tag {
+      display: inline-flex; align-items: center; gap: 12px;
+      font-size: 0.6rem; font-weight: 500;
+      letter-spacing: 0.5em; text-transform: uppercase;
+      color: var(--sage);
+      margin-bottom: 22px;
+      animation: riseIn 0.9s ease both;
+    }
+    .hero-tag::before, .hero-tag::after {
+      content: ''; width: 24px; height: 1px;
+      background: var(--sage); opacity: 0.6;
+    }
+
+    .hero h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.6rem, 7vw, 5rem);
+      font-weight: 300;
+      font-style: italic;
+      color: var(--ink);
+      line-height: 1.1;
+      letter-spacing: -0.01em;
+      animation: riseIn 0.9s ease 0.12s both;
+    }
+
+    .hero h1 strong {
+      font-weight: 600;
+      font-style: normal;
+      display: block;
+      color: var(--rose);
+    }
+
+    .hero-divider {
+      display: flex; align-items: center; justify-content: center; gap: 14px;
+      margin: 26px auto;
+      animation: riseIn 0.9s ease 0.24s both;
+    }
+    .hero-divider::before, .hero-divider::after {
+      content: ''; width: 60px; height: 1px;
+      background: var(--ink-dim); opacity: 0.3;
+    }
+    .hero-divider span { font-size: 0.75rem; color: var(--rose); opacity: 0.7; }
+
+    .hero-desc {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem;
+      font-weight: 300;
+      line-height: 1.85;
+      color: var(--ink-mid);
+      max-width: 520px;
+      margin: 0 auto;
+      animation: riseIn 0.9s ease 0.36s both;
+    }
+
+    .scroll-cue {
+      position: absolute; bottom: 36px; left: 50%;
+      transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+      z-index: 1;
+      animation: riseIn 0.9s ease 0.8s both;
+    }
+    .scroll-cue span {
+      font-size: 0.58rem; letter-spacing: 0.35em;
+      text-transform: uppercase; color: var(--ink-dim);
+    }
+    .scroll-cue .arr {
+      width: 18px; height: 18px;
+      border-right: 1.5px solid var(--rose);
+      border-bottom: 1.5px solid var(--rose);
+      transform: rotate(45deg);
+      animation: bounceDown 1.8s ease-in-out infinite;
+    }
+
+    /* ══ MAIN ══ */
+    .main {
+      max-width: 700px; margin: 0 auto;
+      padding: 80px 28px 100px;
+    }
+
+    /* section label */
+    .section-label {
+      display: flex; align-items: center; gap: 14px;
+      margin-bottom: 36px;
+    }
+    .section-label span {
+      font-size: 0.6rem; font-weight: 500;
+      letter-spacing: 0.4em; text-transform: uppercase;
+      color: var(--ink-dim);
+      white-space: nowrap;
+    }
+    .section-label::after {
+      content: ''; flex: 1; height: 1px;
+      background: var(--border);
+    }
+
+    /* ── phase cards ── */
+    .phases { display: flex; flex-direction: column; gap: 14px; }
+
+    .phase-card {
+      display: flex; align-items: center; gap: 20px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 24px;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .phase-card::before {
+      content: '';
+      position: absolute; left: 0; top: 0; bottom: 0;
+      width: 3px;
+      background: var(--rose);
+      transform: scaleY(0);
+      transform-origin: bottom;
+      transition: transform 0.3s ease;
+      border-radius: 3px 0 0 3px;
+    }
+
+    .phase-card:hover {
+      transform: translateX(5px);
+      box-shadow: 0 8px 28px rgba(30,26,20,0.08);
+      border-color: rgba(184,92,92,0.2);
+    }
+
+    .phase-card:hover::before { transform: scaleY(1); }
+
+    .phase-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.2rem;
+      font-weight: 300;
+      color: var(--bg2);
+      line-height: 1;
+      min-width: 36px;
+      transition: color 0.3s;
+      user-select: none;
+    }
+
+    .phase-card:hover .phase-num { color: var(--rose-soft); }
+
+    .phase-info { flex: 1; }
+
+    .phase-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: 4px;
+      line-height: 1.3;
+    }
+
+    .phase-subtitle {
+      font-size: 0.72rem;
+      color: var(--ink-dim);
+      font-weight: 300;
+      letter-spacing: 0.05em;
+    }
+
+    .phase-arrow {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--ink-dim);
+      transition: all 0.3s;
+      flex-shrink: 0;
+    }
+    .phase-card:hover .phase-arrow {
+      background: var(--rose);
+      border-color: var(--rose);
+      color: white;
+      transform: translateX(2px);
+    }
+
+    /* writing animation on open cards */
+    .phase-card.active-phase .phase-title {
+      color: var(--rose);
+    }
+
+    /* ── back button ── */
+    .back-wrap {
+      margin-top: 64px;
+      padding-top: 40px;
+      border-top: 1px solid var(--border);
+      display: flex; align-items: center; gap: 16px;
+    }
+
+    .back-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 11px 26px;
+      border: 1.5px solid var(--border);
+      border-radius: 50px;
+      color: var(--ink-mid);
+      text-decoration: none;
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      transition: all 0.25s;
+    }
+    .back-btn:hover {
+      border-color: var(--sage);
+      color: var(--sage);
+      background: var(--sage-soft);
+    }
+    .back-btn svg { width: 13px; height: 13px; }
+
+    .back-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 0.9rem;
+      color: var(--ink-dim);
+    }
+
+    /* ══ STORY INTRO TEXT ══ */
+    .story-intro {
+      margin-bottom: 60px;
+    }
+
+    .story-intro p {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.13rem;
+      font-weight: 300;
+      line-height: 1.95;
+      color: var(--ink-mid);
+      text-align: justify;
+      hyphens: auto;
+    }
+
+    .story-intro p::first-letter {
+      font-size: 3.8rem;
+      font-weight: 600;
+      color: var(--rose);
+      float: left;
+      line-height: 0.8;
+      margin: 0.05em 0.1em 0 0;
+      font-style: italic;
+    }
+
+    /* ══ DECORATIVE QUOTE ══ */
+    .story-quote {
+      margin: 48px 0;
+      padding: 24px 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      text-align: center;
+    }
+
+    .story-quote p {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.25rem;
+      font-style: italic;
+      font-weight: 300;
+      color: var(--ink-mid);
+      line-height: 1.7;
+    }
+
+    /* ══ ANIMATIONS ══ */
+    @keyframes riseIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes bounceDown {
+      0%, 100% { transform: rotate(45deg) translateY(0); }
+      50%       { transform: rotate(45deg) translateY(5px); }
+    }
+
+    .reveal {
+      opacity: 0; transform: translateY(20px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+    .reveal.in { opacity: 1; transform: none; }
+
+    /* stagger children */
+    .phases .phase-card { opacity: 0; transform: translateX(-16px); transition: opacity 0.5s ease, transform 0.5s ease, box-shadow 0.25s, border-color 0.25s; }
+    .phases.in .phase-card:nth-child(1) { opacity:1; transform:none; transition-delay: 0.05s; }
+    .phases.in .phase-card:nth-child(2) { opacity:1; transform:none; transition-delay: 0.12s; }
+    .phases.in .phase-card:nth-child(3) { opacity:1; transform:none; transition-delay: 0.19s; }
+    .phases.in .phase-card:nth-child(4) { opacity:1; transform:none; transition-delay: 0.26s; }
+    .phases.in .phase-card:nth-child(5) { opacity:1; transform:none; transition-delay: 0.33s; }
+    .phases.in .phase-card:nth-child(6) { opacity:1; transform:none; transition-delay: 0.4s;  }
+
+    /* hover must override the transform carefully */
+    .phases.in .phase-card:hover { transform: translateX(5px); }
+
+    @media (max-width: 580px) {
+      nav { padding: 0 18px; }
+      .nav-links { gap: 18px; }
+      .main { padding: 60px 18px 80px; }
+      .hero h1 { font-size: 2.4rem; }
+      .phase-num { font-size: 1.6rem; min-width: 28px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══ Nav ══ -->
+  <nav>
+    <a href="Homepage.html" class="nav-brand">Whispers of Caring</a>
+    <div class="nav-links">
+      <a href="Homepage.html">Home</a>
+      <a href="#">Novel 1</a>
+    </div>
+  </nav>
+
+  <!-- ══ Hero ══ -->
+  <section class="hero">
+    <!-- floating leaves -->
+    <div class="leaf">🍃</div>
+    <div class="leaf">🌿</div>
+    <div class="leaf">🍂</div>
+    <div class="leaf">🌱</div>
+    <div class="leaf">🍃</div>
+
+    <div class="hero-inner">
+      <p class="hero-tag">Novel 1</p>
+      <h1>
+        Lucifer &amp; Victoria's<br>
+        <strong>Journey</strong>
+      </h1>
+      <div class="hero-divider"><span>❧</span></div>
+      <p class="hero-desc">
+        Two souls in the same school who never spoke — brought together by destiny, digital corridors, and the quiet magic of <em>caring.</em>
+      </p>
+    </div>
+
+    <div class="scroll-cue">
+      <span>Explore</span>
+      <div class="arr"></div>
+    </div>
+  </section>
+
+  <!-- ══ Main content ══ -->
+  <main class="main">
+
+    <!-- Story intro -->
+    <div class="story-intro reveal">
+      <p>
+        In the town of Evervale, there is a prestigious school known for its high standards and rigorous environment. In section B — a reserved boy named Lucifer, quiet yet well-respected. In section A — Victoria, a remarkable student known for her creative prowess and intellectual acumen. Despite attending the same school, these two individuals were unknowingly on different trajectories. They had seen each other, but never once spoken. Just living their lives.
+      </p>
+    </div>
+
+    <div class="story-quote reveal">
+      <p>"Fate had other plans — weaving their paths together through the digital dawn."</p>
+    </div>
+
+    <!-- Chapter phases -->
+    <div class="section-label reveal">
+      <span>Chapter One · Six Phases</span>
+    </div>
+
+    <div class="phases">
+
+      <a href="Serendipitous Reunion.html" class="phase-card">
+        <span class="phase-num">01</span>
+        <div class="phase-info">
+          <div class="phase-title">Serendipitous Reunion</div>
+          <div class="phase-subtitle">Where destiny arranges the first real meeting</div>
+        </div>
+        <div class="phase-arrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+      </a>
+
+      <a href="Echoes Of Evervale A Walk Down Memory Lane.html" class="phase-card">
+        <span class="phase-num">02</span>
+        <div class="phase-info">
+          <div class="phase-title">Echoes of Evervale</div>
+          <div class="phase-subtitle">A walk down memory lane through the old school halls</div>
+        </div>
+        <div class="phase-arrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+      </a>
+
+      <a href="Skyward_Bonds_A_Zipline_Adventure.html" class="phase-card">
+        <span class="phase-num">03</span>
+        <div class="phase-info">
+          <div class="phase-title">Skyward Bonds</div>
+          <div class="phase-subtitle">A zipline adventure high above the world</div>
+        </div>
+        <div class="phase-arrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+      </a>
+
+      <a href="Savoring_Moments_Exploring_Tastes_and_Tales.html" class="phase-card">
+        <span class="phase-num">04</span>
+        <div class="phase-info">
+          <div class="phase-title">Savoring Moments</div>
+          <div class="phase-subtitle">Exploring tastes, tales, and the joy of shared afternoons</div>
+        </div>
+        <div class="phase-arrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+      </a>
+
+      <a href="Connections_in_Pixels_An_Arcade_to_Console_Journey.html" class="phase-card">
+        <span class="phase-num">05</span>
+        <div class="phase-info">
+          <div class="phase-title">Connections in Pixels</div>
+          <div class="phase-subtitle">An arcade-to-console journey through digital nostalgia</div>
+        </div>
+        <div class="phase-arrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+      </a>
+
+      <a href="Sunset_Serenade_A_parting_symphony_from_Evervale.html" class="phase-card">
+        <span class="phase-num">06</span>
+        <div class="phase-info">
+          <div class="phase-title">Sunset Serenade</div>
+          <div class="phase-subtitle">A parting symphony from Evervale — where the story began</div>
+        </div>
+        <div class="phase-arrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+      </a>
+
+    </div>
+
+    <!-- Back -->
+    <div class="back-wrap reveal">
+      <a href="Homepage.html" class="back-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+        Back to Home
+      </a>
+      <span class="back-text">Return to the beginning of the story</span>
+    </div>
+
+  </main>
+
+  <script>
+    /* Scroll reveal for generic .reveal elements */
+    const revealObs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('in'); revealObs.unobserve(e.target); }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+    /* Stagger the phases list */
+    const phasesObs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('in'); phasesObs.unobserve(e.target); }
+      });
+    }, { threshold: 0.05 });
+
+    document.querySelectorAll('.phases').forEach(el => phasesObs.observe(el));
+  </script>
+
+</body>
+</html>
