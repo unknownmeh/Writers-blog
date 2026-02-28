@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sunset Serenade — A Parting Symphony from Evervale</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:          #fff8f0;
+      --bg2:         #fdeede;
+      --parchment:   #f9ede0;
+      --sunset:      #d4622a;
+      --sunset-soft: #fae0d0;
+      --dusk:        #7c4f8a;
+      --dusk-soft:   #ecdff2;
+      --amber:       #d4860a;
+      --amber-soft:  #fdf0d0;
+      --ink:         #1c1008;
+      --ink-mid:     #4a3018;
+      --ink-dim:     #9a7e60;
+      --border:      rgba(212,98,42,0.12);
+      --shadow:      rgba(28,16,8,0.07);
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Jost', sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      overflow-x: hidden;
+    }
+
+    body::after {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.02'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 9999;
+    }
+
+    /* ══ NAV ══ */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      height: 58px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 48px;
+      background: rgba(255,248,240,0.93);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-brand {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem; font-style: italic;
+      color: var(--ink); text-decoration: none;
+    }
+    .nav-links { display: flex; gap: 30px; }
+    .nav-links a {
+      font-size: 0.68rem; font-weight: 500;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--ink-dim); text-decoration: none;
+      transition: color 0.25s;
+    }
+    .nav-links a:hover { color: var(--sunset); }
+    .nav-links a.active { color: var(--sunset); border-bottom: 1.5px solid var(--sunset); padding-bottom: 2px; }
+
+    /* ══ HERO ══ */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center;
+      padding: 80px 24px 70px;
+      position: relative;
+      background: url('ph6.jpg') center/cover no-repeat;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom,
+        rgba(255,248,240,0.80) 0%,
+        rgba(253,238,222,0.68) 40%,
+        rgba(255,248,240,0.92) 100%);
+    }
+
+    /* ── sun glow ── */
+    .sun-glow {
+      position: absolute;
+      bottom: 28%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 180px; height: 180px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,180,60,0.45) 0%, transparent 70%);
+      animation: sunPulse 4s ease-in-out infinite;
+      pointer-events: none; z-index: 0;
+    }
+
+    @keyframes sunPulse {
+      0%, 100% { transform: translateX(-50%) scale(1);   opacity: 0.7; }
+      50%       { transform: translateX(-50%) scale(1.18); opacity: 1; }
+    }
+
+    /* ── horizon line ── */
+    .horizon {
+      position: absolute;
+      bottom: 28%;
+      left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(to right, transparent, rgba(212,98,42,0.3), transparent);
+      z-index: 0;
+    }
+
+    /* ── floating stars (for night-bus section) ── */
+    .star {
+      position: absolute;
+      width: 3px; height: 3px;
+      border-radius: 50%;
+      background: var(--amber);
+      opacity: 0;
+      animation: twinkle 3s ease-in-out infinite;
+    }
+    .star:nth-child(3) { top: 12%; left: 15%; animation-delay: 0s; }
+    .star:nth-child(4) { top: 18%; left: 70%; animation-delay: 0.7s; }
+    .star:nth-child(5) { top: 8%;  left: 42%; animation-delay: 1.4s; }
+    .star:nth-child(6) { top: 22%; left: 88%; animation-delay: 2s; }
+    .star:nth-child(7) { top: 6%;  left: 28%; animation-delay: 0.4s; }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0; transform: scale(0.8); }
+      50%       { opacity: 0.6; transform: scale(1.4); }
+    }
+
+    /* ── floating petals ── */
+    .petal {
+      position: absolute;
+      font-size: 1rem;
+      opacity: 0; pointer-events: none;
+      animation: petalDrift 10s ease-in-out infinite;
+    }
+    .petal:nth-child(8)  { left: 10%;  top: 30%; animation-delay: 0s;   animation-duration: 11s; }
+    .petal:nth-child(9)  { left: 78%;  top: 25%; animation-delay: 3s;   animation-duration: 9s; }
+    .petal:nth-child(10) { left: 55%;  top: 20%; animation-delay: 6s;   animation-duration: 12s; }
+
+    @keyframes petalDrift {
+      0%   { opacity: 0; transform: translateY(0) translateX(0) rotate(0deg); }
+      20%  { opacity: 0.35; }
+      60%  { opacity: 0.25; transform: translateY(60px) translateX(20px) rotate(30deg); }
+      100% { opacity: 0; transform: translateY(120px) translateX(-10px) rotate(60deg); }
+    }
+
+    .hero-inner { position: relative; z-index: 2; max-width: 680px; }
+
+    .hero-tag {
+      display: inline-flex; align-items: center; gap: 12px;
+      font-size: 0.6rem; font-weight: 500;
+      letter-spacing: 0.5em; text-transform: uppercase;
+      color: var(--sunset); margin-bottom: 22px;
+      animation: riseIn 0.9s ease both;
+    }
+    .hero-tag::before, .hero-tag::after {
+      content: ''; width: 24px; height: 1px;
+      background: var(--sunset); opacity: 0.5;
+    }
+
+    .hero h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.8rem, 7.5vw, 5.2rem);
+      font-weight: 300; font-style: italic;
+      color: var(--ink); line-height: 1.08;
+      animation: riseIn 0.9s ease 0.12s both;
+    }
+    .hero h1 strong {
+      font-style: normal; font-weight: 600;
+      color: var(--sunset); display: block;
+    }
+
+    .hero-divider {
+      display: flex; align-items: center; justify-content: center; gap: 14px;
+      margin: 26px auto;
+      animation: riseIn 0.9s ease 0.24s both;
+    }
+    .hero-divider::before, .hero-divider::after {
+      content: ''; width: 55px; height: 1px;
+      background: var(--ink-dim); opacity: 0.25;
+    }
+    .hero-divider span { font-size: 0.85rem; opacity: 0.55; }
+
+    .hero-desc {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem; font-weight: 300;
+      line-height: 1.85; color: var(--ink-mid);
+      max-width: 500px; margin: 0 auto;
+      animation: riseIn 0.9s ease 0.36s both;
+    }
+
+    .hero-pills {
+      display: flex; gap: 10px; justify-content: center;
+      margin-top: 28px; flex-wrap: wrap;
+      animation: riseIn 0.9s ease 0.48s both;
+    }
+    .pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 14px;
+      background: rgba(255,255,255,0.72);
+      backdrop-filter: blur(6px);
+      border: 1px solid rgba(212,98,42,0.15);
+      border-radius: 50px;
+      font-size: 0.68rem; font-weight: 500;
+      letter-spacing: 0.07em; color: var(--sunset);
+    }
+
+    .scroll-cue {
+      position: absolute; bottom: 36px; left: 50%;
+      transform: translateX(-50%); z-index: 2;
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+      animation: riseIn 0.9s ease 0.8s both;
+    }
+    .scroll-cue span {
+      font-size: 0.58rem; letter-spacing: 0.35em;
+      text-transform: uppercase; color: var(--ink-dim);
+    }
+    .arr {
+      width: 18px; height: 18px;
+      border-right: 1.5px solid var(--sunset);
+      border-bottom: 1.5px solid var(--sunset);
+      transform: rotate(45deg);
+      animation: bounceDown 1.8s ease-in-out infinite;
+    }
+
+    /* ══ STORY ══ */
+    .story { max-width: 720px; margin: 0 auto; padding: 90px 32px 110px; }
+
+    .chapter-header { text-align: center; margin-bottom: 60px; }
+    .chapter-header .label {
+      font-size: 0.6rem; font-weight: 500;
+      letter-spacing: 0.5em; text-transform: uppercase;
+      color: var(--sunset); display: block; margin-bottom: 12px;
+    }
+    .chapter-header h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem; font-weight: 400; font-style: italic; color: var(--ink);
+    }
+    .chapter-header .rule {
+      display: flex; align-items: center; gap: 16px;
+      justify-content: center; margin-top: 20px;
+    }
+    .chapter-header .rule::before,
+    .chapter-header .rule::after {
+      content: ''; width: 60px; height: 1px; background: var(--border);
+    }
+    .chapter-header .rule span { font-size: 0.85rem; color: var(--sunset); opacity: 0.55; }
+
+    /* paragraphs */
+    .story p {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.12rem; font-weight: 300;
+      line-height: 2; color: var(--ink-mid);
+      margin-bottom: 1.9em; text-align: justify; hyphens: auto;
+    }
+    .drop-cap::first-letter {
+      font-size: 4.8rem; font-weight: 600;
+      color: var(--sunset); float: left;
+      line-height: 0.78; margin: 0.06em 0.12em 0 0; font-style: italic;
+    }
+
+    /* dialogue */
+    .dialogue-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--sunset);
+      border-radius: 0 10px 10px 0;
+      padding: 28px 32px; margin: 2.2em 0;
+      box-shadow: 0 4px 20px var(--shadow);
+    }
+    .d-row {
+      display: grid; grid-template-columns: 86px 1fr;
+      gap: 14px; margin-bottom: 18px; align-items: start;
+    }
+    .d-row:last-child { margin-bottom: 0; }
+    .d-name {
+      font-size: 0.6rem; font-weight: 500;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      text-align: right; padding-right: 14px;
+      border-right: 1.5px solid var(--border);
+      padding-top: 4px; line-height: 1.4;
+    }
+    .d-name.v { color: var(--dusk); }
+    .d-name.l { color: var(--sunset); }
+    .d-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.05rem; font-style: italic;
+      line-height: 1.75; color: var(--ink-mid);
+    }
+
+    /* forum message bubbles */
+    .forum-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px 28px; margin: 2.2em 0;
+      box-shadow: 0 4px 20px var(--shadow);
+    }
+    .forum-card .forum-header {
+      display: flex; align-items: center; gap: 10px;
+      padding-bottom: 14px; margin-bottom: 18px;
+      border-bottom: 1px solid var(--border);
+    }
+    .forum-card .forum-header .dot { width: 8px; height: 8px; border-radius: 50%; }
+    .dot-sunset { background: var(--sunset); }
+    .dot-dusk   { background: var(--dusk); }
+    .dot-amber  { background: var(--amber); }
+    .forum-card .forum-title {
+      font-size: 0.62rem; font-weight: 500;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--ink-dim); margin-left: 6px;
+    }
+    .forum-card .online {
+      margin-left: auto;
+      display: flex; align-items: center; gap: 5px;
+      font-size: 0.6rem; color: #22c55e; letter-spacing: 0.1em;
+    }
+    .forum-card .online::before {
+      content: '';
+      width: 6px; height: 6px; border-radius: 50%;
+      background: #22c55e; box-shadow: 0 0 5px #22c55e;
+      animation: pulse 2s infinite;
+    }
+
+    .msg-wrap { display: flex; flex-direction: column; gap: 14px; }
+    .msg { display: flex; flex-direction: column; max-width: 76%; }
+    .msg.v { align-self: flex-start; }
+    .msg.l { align-self: flex-end; }
+    .msg-name {
+      font-size: 0.58rem; font-weight: 500;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    .msg.v .msg-name { color: var(--dusk); padding-left: 4px; }
+    .msg.l .msg-name { color: var(--sunset); text-align: right; padding-right: 4px; }
+    .msg-bubble {
+      padding: 11px 16px; border-radius: 14px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.02rem; font-style: italic;
+      line-height: 1.65; color: var(--ink-mid);
+    }
+    .msg.v .msg-bubble {
+      background: var(--dusk-soft);
+      border: 1px solid rgba(124,79,138,0.15);
+      border-bottom-left-radius: 4px;
+    }
+    .msg.l .msg-bubble {
+      background: var(--sunset-soft);
+      border: 1px solid rgba(212,98,42,0.15);
+      border-bottom-right-radius: 4px;
+    }
+
+    @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.4;} }
+
+    /* scene break */
+    .scene-break {
+      display: flex; align-items: center; gap: 18px; margin: 48px 0;
+    }
+    .scene-break::before, .scene-break::after {
+      content: ''; flex: 1; height: 1px;
+      background: linear-gradient(to right, transparent, var(--border), transparent);
+    }
+    .scene-break span { font-size: 1rem; opacity: 0.4; }
+
+    /* farewell card */
+    .farewell-card {
+      background: linear-gradient(135deg, var(--sunset-soft), var(--bg2));
+      border: 1px solid rgba(212,98,42,0.18);
+      border-radius: 12px;
+      padding: 32px 36px; margin: 2.5em 0;
+      position: relative; overflow: hidden;
+    }
+    .farewell-card::after {
+      content: '🌇';
+      position: absolute; right: 20px; bottom: 12px;
+      font-size: 3.5rem; opacity: 0.09;
+    }
+    .farewell-card p { font-style: italic; text-align: left; margin-bottom: 1.1em; }
+    .farewell-card p:last-child { margin-bottom: 0; }
+
+    /* bus journey card */
+    .bus-card {
+      background: linear-gradient(135deg, var(--amber-soft), var(--parchment));
+      border: 1px solid rgba(212,134,10,0.15);
+      border-radius: 12px;
+      padding: 32px 36px; margin: 2.5em 0;
+      position: relative; overflow: hidden;
+    }
+    .bus-card::after {
+      content: '🚌';
+      position: absolute; right: 20px; bottom: 12px;
+      font-size: 3.5rem; opacity: 0.09;
+    }
+    .bus-card p { font-style: italic; text-align: left; margin-bottom: 1.1em; }
+    .bus-card p:last-child { margin-bottom: 0; }
+
+    /* pull quote */
+    .pull-quote {
+      margin: 3em 0; padding: 26px 32px;
+      border-top: 2px solid var(--sunset);
+      border-bottom: 2px solid var(--sunset);
+      text-align: center;
+    }
+    .pull-quote p {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.28rem; font-style: italic;
+      color: var(--ink); text-align: center;
+      margin-bottom: 0; line-height: 1.65;
+    }
+
+    /* bond summary */
+    .bond-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 32px 36px; margin: 2.5em 0;
+      box-shadow: 0 4px 20px var(--shadow);
+    }
+    .bond-card .bond-label {
+      font-size: 0.6rem; font-weight: 500;
+      letter-spacing: 0.4em; text-transform: uppercase;
+      color: var(--sunset); display: block; margin-bottom: 20px;
+    }
+    .bond-rows { display: flex; flex-direction: column; gap: 14px; }
+    .bond-row {
+      display: flex; align-items: flex-start; gap: 14px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    .bond-row:last-child { border-bottom: none; padding-bottom: 0; }
+    .bond-icon { font-size: 1.2rem; flex-shrink: 0; margin-top: 2px; }
+    .bond-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.05rem; font-weight: 300;
+      line-height: 1.75; color: var(--ink-mid);
+      font-style: italic;
+    }
+
+    /* final chapter close */
+    .chapter-close {
+      text-align: center; margin-top: 72px;
+      padding-top: 48px; border-top: 1px solid var(--border);
+    }
+    .chapter-close .the-end {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.7rem; font-weight: 400;
+      letter-spacing: 0.55em; text-transform: uppercase;
+      color: var(--sunset); display: block; margin-bottom: 16px;
+    }
+    .chapter-close .closing {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic; font-size: 1.2rem;
+      color: var(--ink-mid); line-height: 1.85;
+      max-width: 500px; margin: 0 auto 36px;
+    }
+    .btn-group { display: flex; align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap; }
+    .return-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 28px;
+      border: 1.5px solid var(--sunset);
+      border-radius: 50px;
+      color: var(--sunset); text-decoration: none;
+      font-size: 0.7rem; font-weight: 500;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      transition: all 0.25s;
+    }
+    .return-btn:hover {
+      background: var(--sunset); color: white;
+      box-shadow: 0 6px 24px rgba(212,98,42,0.25);
+      transform: translateY(-2px);
+    }
+    .return-btn svg { width: 13px; height: 13px; transition: transform 0.25s; }
+    .return-btn:hover svg { transform: translateX(-3px); }
+    .return-btn.ghost {
+      border-color: var(--border); color: var(--ink-dim);
+    }
+    .return-btn.ghost:hover {
+      background: var(--parchment); color: var(--ink-mid);
+      box-shadow: none;
+    }
+
+    /* ANIMATIONS */
+    @keyframes riseIn {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes bounceDown {
+      0%, 100% { transform: rotate(45deg) translateY(0); }
+      50%       { transform: rotate(45deg) translateY(5px); }
+    }
+    .reveal {
+      opacity: 0; transform: translateY(22px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+    .reveal.in { opacity: 1; transform: none; }
+
+    @media (max-width: 580px) {
+      nav { padding: 0 18px; }
+      .story { padding: 60px 18px 80px; }
+      .d-row { grid-template-columns: 66px 1fr; gap: 10px; }
+      .dialogue-card, .forum-card { padding: 20px 16px; }
+      .farewell-card, .bus-card, .bond-card { padding: 22px 18px; }
+      .btn-group { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="Chapter_One.html" class="nav-brand">Whispers of Caring</a>
+    <div class="nav-links">
+      <a href="Homepage.html">Home</a>
+      
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="sun-glow"></div>
+    <div class="horizon"></div>
+
+    <!-- stars -->
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+
+    <!-- petals -->
+    <div class="petal">🌸</div>
+    <div class="petal">🍂</div>
+    <div class="petal">🌿</div>
+
+    <div class="hero-inner">
+      <p class="hero-tag">Phase Six · Final</p>
+      <h1>Sunset<br><strong>Serenade</strong></h1>
+      <div class="hero-divider"><span>🌅</span></div>
+      <p class="hero-desc">A parting symphony from Evervale — where a day of adventures finds its golden close, and a friendship finds its forever.</p>
+      <div class="hero-pills">
+        <span class="pill">🌅 Evervale Sunset</span>
+        <span class="pill">🚌 The Journey Home</span>
+        <span class="pill">💬 A Message Waiting</span>
+      </div>
+    </div>
+
+    <div class="scroll-cue">
+      <span>Finale</span>
+      <div class="arr"></div>
+    </div>
+  </section>
+
+  <!-- STORY -->
+  <main class="story">
+
+    <div class="chapter-header reveal">
+      <span class="label">Chapter One · Phase VI</span>
+      <h2>A Parting Symphony from Evervale</h2>
+      <div class="rule"><span>❧</span></div>
+    </div>
+
+    <p class="drop-cap reveal">
+      The evening sun dipped below the horizon, casting a warm glow over Evervale. Lucifer and Victoria reluctantly tore themselves away from the immersive world of gaming. With a sense of contentment and camaraderie lingering in the air, they embarked on a leisurely evening walk through the quiet streets of the town.
+    </p>
+
+    <p class="reveal">
+      The familiar sights and sounds of Evervale enveloped them, wrapping them in a blanket of nostalgia and serenity. They exchanged stories and laughter, reliving the highlights of their day and sharing hopes for the future.
+    </p>
+
+    <p class="reveal">
+      As they neared the bus stand where Lucifer would board the bus to his hometown, a bittersweet feeling washed over them. It was a moment of transition — a farewell to a day filled with newfound friendship and shared adventures.
+    </p>
+
+    <div class="dialogue-card reveal">
+      <div class="d-row">
+        <span class="d-name l">Lucifer</span>
+        <span class="d-text">"Thank you, Victoria, for an unforgettable day. I never imagined our chance encounter would lead to such an incredible adventure."</span>
+      </div>
+      <div class="d-row">
+        <span class="d-name v">Victoria</span>
+        <span class="d-text">"The pleasure was all mine, Lucifer. Today has been a reminder of the beauty of unexpected connections and the joy of shared experiences."</span>
+      </div>
+    </div>
+
+    <div class="farewell-card reveal">
+      <p>They stood together in silence for a moment, soaking in the peaceful ambiance of the evening. The sound of a distant bus approaching broke the stillness — signaling the end of their time together.</p>
+      <p>With a final embrace, Lucifer and Victoria bid each other farewell, promising to stay in touch and make plans for future adventures.</p>
+    </div>
+
+    <div class="scene-break reveal"><span>🚌</span></div>
+
+    <div class="bus-card reveal">
+      <p>As Lucifer boarded the bus, he couldn't help but feel a sense of excitement for the journey ahead, fueled by the memories of a day filled with laughter, friendship, and the magic of Evervale.</p>
+      <p>Settled into his seat, he glanced out the window at the fading silhouette of Evervale against the twilight sky. The memories of the day played like a montage in his mind — each moment etched with the warmth of friendship and the promise of new beginnings.</p>
+      <p>As the bus rolled along the darkened highway, Lucifer found himself lost in thought, his mind drifting back to the laughter-filled moments he had shared with Victoria. He felt a sense of kinship with her — a shared understanding that transcended words.</p>
+    </div>
+
+    <div class="pull-quote reveal">
+      <p>"Thank you, Evervale — for reminding me of the magic of new friendships and the beauty of shared experiences. Until we meet again."</p>
+    </div>
+
+    <p class="reveal">
+      As the bus carried Lucifer away, he looked back one last time — the town now bathed in the soft glow of twilight. He stepped off at his hometown, and walked home beneath the starlit sky with a renewed sense of purpose and excitement, fueled by the memories of a day that had changed everything.
+    </p>
+
+    <p class="reveal">
+      Arriving home, he indulged in a refreshing shower, then settled onto his bed and idly perused the forum before delving into his photo albums. As he swiped through the images, he was transported back — from their school days to the zipline, the café, the arcade, and the bittersweet farewell at the bus stop. A wistful smile played on his lips as he lovingly reminisced about every unforgettable hour spent with Victoria.
+    </p>
+
+    <div class="scene-break reveal"><span>💬</span></div>
+
+    <!-- Forum messages -->
+    <div class="forum-card reveal">
+      <div class="forum-header">
+        <div class="dot dot-sunset"></div>
+        <div class="dot dot-dusk"></div>
+        <div class="dot dot-amber"></div>
+        <span class="forum-title">Evervale Forums · Private Message</span>
+        <span class="online">Online</span>
+      </div>
+      <div class="msg-wrap">
+        <div class="msg v">
+          <span class="msg-name">Victoria</span>
+          <div class="msg-bubble">"Hola, Lucifer. Did you reach your home?"</div>
+        </div>
+        <div class="msg l">
+          <span class="msg-name">Lucifer</span>
+          <div class="msg-bubble">"Hola, Victoria. Ten minutes before I reached home."</div>
+        </div>
+        <div class="msg v">
+          <span class="msg-name">Victoria</span>
+          <div class="msg-bubble">"Why don't you send me a message after reaching home? I feel very tense about whether you reached home safely or not!"</div>
+        </div>
+        <div class="msg l">
+          <span class="msg-name">Lucifer</span>
+          <div class="msg-bubble">"Yes, Highness. Sorry for not informing you. 🙏"</div>
+        </div>
+        <div class="msg v">
+          <span class="msg-name">Victoria</span>
+          <div class="msg-bubble">"Aw, it's ok Lucifer. 😊"</div>
+        </div>
+      </div>
+    </div>
+
+    <p class="reveal">
+      Victoria's concern about Lucifer stemmed from the fact that he always kept in touch with her — expressing genuine interest in how her days were unfolding. Despite the casual nature of their conversations, his caring inquiries brought her a sense of comfort and connection. Although physical distance separated them, they were intricately linked in the virtual realm, sharing every moment through a dedicated forum.
+    </p>
+
+    <div class="scene-break reveal"><span>🌟</span></div>
+
+    <p class="reveal">
+      As the sun cast its first rays over the horizon the next morning, Lucifer logged into the forum, anticipation bubbling within him. Victoria, miles away, sipped her morning coffee — her thoughts already drifting to their next exchange. Little did they know, this day had marked the beginning of an adventure that would forever alter the course of their lives.
+    </p>
+
+    <!-- Bond summary -->
+    <div class="bond-card reveal">
+      <span class="bond-label">✦ The Bond — Virtual &amp; Real</span>
+      <div class="bond-rows">
+        <div class="bond-row">
+          <span class="bond-icon">🌐</span>
+          <span class="bond-text">Over four years of online interaction — shared interests in art and gaming, supporting each other through life's ups and downs, communicating openly about dreams and fears.</span>
+        </div>
+        <div class="bond-row">
+          <span class="bond-icon">🤝</span>
+          <span class="bond-text">When they finally met in Evervale, their bond seamlessly transitioned into the real world — spontaneous adventures, ziplines, cafés, and the quiet joy of simply being present together.</span>
+        </div>
+        <div class="bond-row">
+          <span class="bond-icon">💛</span>
+          <span class="bond-text">Their complementary personalities — Lucifer's introverted calmness and Victoria's imaginative enthusiasm — created a balanced dynamic that enriched their connection beautifully.</span>
+        </div>
+        <div class="bond-row">
+          <span class="bond-icon">✨</span>
+          <span class="bond-text">Their friendship proved that true understanding and companionship can bridge any distance — a testament to the power of genuine connection.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chapter finale -->
+    <div class="chapter-close reveal">
+      <span class="the-end">— Chapter One · Complete —</span>
+      <p class="closing">
+        "Their bond, now strengthened by shared memories and future plans, is a testament to the power of genuine connection — and the magic that happens when two souls finally find each other."
+      </p>
+      <div class="btn-group">
+        <a href="Chapter_One.html" class="return-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+          Return to Chapter One
+        </a>
+        <a href="Homepage.html" class="return-btn ghost">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+          Back to Home
+        </a>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); }
+      });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+  </script>
+
+</body>
+</html>

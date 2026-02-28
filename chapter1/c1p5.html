@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Connections in Pixels — An Arcade to Console Journey</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:         #f4f1ff;
+      --bg2:        #ebe5ff;
+      --surface:    #ffffff;
+      --indigo:     #4a3aaa;
+      --indigo-mid: #6d5dc7;
+      --indigo-soft:#d6d0f5;
+      --violet:     #7c3aed;
+      --teal:       #0d9488;
+      --teal-soft:  #ccfaf5;
+      --amber:      #d97706;
+      --ink:        #12101e;
+      --ink-mid:    #3a3650;
+      --ink-dim:    #8880a8;
+      --border:     rgba(74,58,170,0.1);
+      --shadow:     rgba(18,16,30,0.07);
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Jost', sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      overflow-x: hidden;
+    }
+
+    body::after {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.02'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 9999;
+    }
+
+    /* ══ NAV ══ */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      height: 58px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 48px;
+      background: rgba(244,241,255,0.93);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-brand {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem; font-style: italic;
+      color: var(--ink); text-decoration: none;
+    }
+    .nav-links { display: flex; gap: 30px; }
+    .nav-links a {
+      font-size: 0.68rem; font-weight: 500;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--ink-dim); text-decoration: none;
+      transition: color 0.25s;
+    }
+    .nav-links a:hover { color: var(--indigo); }
+    .nav-links a.active {
+      color: var(--indigo);
+      border-bottom: 1.5px solid var(--indigo); padding-bottom: 2px;
+    }
+
+    /* ══ HERO ══ */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center;
+      padding: 80px 24px 70px;
+      position: relative;
+      background: url('ph5.jpg') center/cover no-repeat;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom,
+        rgba(244,241,255,0.85) 0%,
+        rgba(235,229,255,0.72) 50%,
+        rgba(244,241,255,0.93) 100%);
+    }
+
+    /* ── pixel grid overlay on hero only ── */
+    .hero::after {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(74,58,170,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(74,58,170,0.04) 1px, transparent 1px);
+      background-size: 32px 32px;
+      pointer-events: none;
+    }
+
+    /* ── blinking pixel dots ── */
+    .pixel-dot {
+      position: absolute;
+      width: 5px; height: 5px;
+      border-radius: 1px;
+      animation: pixelBlink 2.5s step-start infinite;
+      z-index: 1;
+    }
+    .pixel-dot:nth-child(1) { background: var(--indigo);     top: 18%; left: 10%; animation-delay: 0s; }
+    .pixel-dot:nth-child(2) { background: var(--teal);       top: 28%; left: 85%; animation-delay: 0.5s; }
+    .pixel-dot:nth-child(3) { background: var(--violet);     top: 65%; left: 12%; animation-delay: 1s; }
+    .pixel-dot:nth-child(4) { background: var(--amber);      top: 72%; left: 82%; animation-delay: 1.5s; }
+    .pixel-dot:nth-child(5) { background: var(--indigo-mid); top: 42%; left: 92%; animation-delay: 0.8s; }
+    .pixel-dot:nth-child(6) { background: var(--teal);       top: 55%; left: 6%;  animation-delay: 1.8s; }
+
+    @keyframes pixelBlink {
+      0%, 49% { opacity: 1; transform: scale(1); }
+      50%, 100%{ opacity: 0; transform: scale(0.5); }
+    }
+
+    /* ── floating game icons ── */
+    .floatie {
+      position: absolute; font-size: 1.4rem;
+      opacity: 0; pointer-events: none;
+      animation: floatUp 8s ease-in-out infinite;
+      z-index: 1;
+    }
+    .floatie:nth-child(7)  { left: 8%;   bottom: 20%; animation-delay: 0s;   animation-duration: 9s; }
+    .floatie:nth-child(8)  { left: 20%;  bottom: 35%; animation-delay: 2s;   animation-duration: 7s; }
+    .floatie:nth-child(9)  { right: 9%;  bottom: 22%; animation-delay: 1s;   animation-duration: 8s; }
+    .floatie:nth-child(10) { right: 22%; bottom: 38%; animation-delay: 3.5s; animation-duration: 9s; }
+    .floatie:nth-child(11) { left: 52%;  bottom: 16%; animation-delay: 4.5s; animation-duration: 7s; }
+
+    @keyframes floatUp {
+      0%   { opacity: 0; transform: translateY(0); }
+      20%  { opacity: 0.28; }
+      60%  { opacity: 0.2; }
+      100% { opacity: 0; transform: translateY(-70px); }
+    }
+
+    .hero-inner { position: relative; z-index: 2; max-width: 680px; }
+
+    .hero-tag {
+      display: inline-flex; align-items: center; gap: 12px;
+      font-size: 0.6rem; font-weight: 500;
+      letter-spacing: 0.5em; text-transform: uppercase;
+      color: var(--indigo); margin-bottom: 22px;
+      animation: riseIn 0.9s ease both;
+    }
+    .hero-tag::before, .hero-tag::after {
+      content: ''; width: 24px; height: 1px;
+      background: var(--indigo); opacity: 0.5;
+    }
+
+    .hero h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.6rem, 7vw, 5rem);
+      font-weight: 300; font-style: italic;
+      color: var(--ink); line-height: 1.1;
+      animation: riseIn 0.9s ease 0.12s both;
+    }
+    .hero h1 strong {
+      font-style: normal; font-weight: 600;
+      color: var(--indigo); display: block;
+    }
+
+    /* score counter — retro pixel font */
+    .score-display {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--indigo-mid);
+      letter-spacing: 0.2em;
+      margin: 18px auto 0;
+      opacity: 0.7;
+      animation: riseIn 0.9s ease 0.24s both;
+    }
+    .score-display span {
+      color: var(--teal);
+      animation: scoreCount 4s steps(1) infinite;
+    }
+    @keyframes scoreCount {
+      0%   { content: '0000'; }
+      25%  { color: var(--amber); }
+      50%  { color: var(--violet); }
+      75%  { color: var(--teal); }
+      100% { color: var(--indigo); }
+    }
+
+    .hero-divider {
+      display: flex; align-items: center; justify-content: center; gap: 14px;
+      margin: 22px auto;
+      animation: riseIn 0.9s ease 0.3s both;
+    }
+    .hero-divider::before, .hero-divider::after {
+      content: ''; width: 50px; height: 1px;
+      background: var(--ink-dim); opacity: 0.25;
+    }
+    .hero-divider span { font-size: 0.85rem; opacity: 0.5; }
+
+    .hero-desc {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem; font-weight: 300;
+      line-height: 1.85; color: var(--ink-mid);
+      max-width: 500px; margin: 0 auto;
+      animation: riseIn 0.9s ease 0.36s both;
+    }
+
+    .hero-pills {
+      display: flex; gap: 10px; justify-content: center;
+      margin-top: 26px; flex-wrap: wrap;
+      animation: riseIn 0.9s ease 0.48s both;
+    }
+    .pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 14px;
+      background: rgba(255,255,255,0.72);
+      backdrop-filter: blur(6px);
+      border: 1px solid rgba(74,58,170,0.14);
+      border-radius: 50px;
+      font-size: 0.68rem; font-weight: 500;
+      letter-spacing: 0.07em; color: var(--indigo);
+    }
+
+    .scroll-cue {
+      position: absolute; bottom: 36px; left: 50%;
+      transform: translateX(-50%); z-index: 2;
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+      animation: riseIn 0.9s ease 0.8s both;
+    }
+    .scroll-cue span {
+      font-size: 0.58rem; letter-spacing: 0.35em;
+      text-transform: uppercase; color: var(--ink-dim);
+    }
+    .arr {
+      width: 18px; height: 18px;
+      border-right: 1.5px solid var(--indigo);
+      border-bottom: 1.5px solid var(--indigo);
+      transform: rotate(45deg);
+      animation: bounceDown 1.8s ease-in-out infinite;
+    }
+
+    /* ══ STORY ══ */
+    .story {
+      max-width: 720px; margin: 0 auto;
+      padding: 90px 32px 110px;
+    }
+
+    .chapter-header { text-align: center; margin-bottom: 60px; }
+    .chapter-header .label {
+      font-size: 0.6rem; font-weight: 500;
+      letter-spacing: 0.5em; text-transform: uppercase;
+      color: var(--indigo); display: block; margin-bottom: 12px;
+    }
+    .chapter-header h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem; font-weight: 400; font-style: italic; color: var(--ink);
+    }
+    .chapter-header .rule {
+      display: flex; align-items: center; gap: 16px;
+      justify-content: center; margin-top: 20px;
+    }
+    .chapter-header .rule::before,
+    .chapter-header .rule::after {
+      content: ''; width: 60px; height: 1px; background: var(--border);
+    }
+    .chapter-header .rule span { font-size: 0.85rem; color: var(--indigo-mid); opacity: 0.5; }
+
+    /* paragraphs */
+    .story p {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.12rem; font-weight: 300;
+      line-height: 2; color: var(--ink-mid);
+      margin-bottom: 1.9em; text-align: justify; hyphens: auto;
+    }
+    .drop-cap::first-letter {
+      font-size: 4.8rem; font-weight: 600;
+      color: var(--indigo); float: left;
+      line-height: 0.78; margin: 0.06em 0.12em 0 0; font-style: italic;
+    }
+
+    /* dialogue */
+    .dialogue-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--indigo-mid);
+      border-radius: 0 10px 10px 0;
+      padding: 28px 32px; margin: 2.2em 0;
+      box-shadow: 0 4px 20px var(--shadow);
+    }
+    .d-row {
+      display: grid; grid-template-columns: 86px 1fr;
+      gap: 14px; margin-bottom: 18px; align-items: start;
+    }
+    .d-row:last-child { margin-bottom: 0; }
+    .d-name {
+      font-size: 0.6rem; font-weight: 500;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      text-align: right; padding-right: 14px;
+      border-right: 1.5px solid var(--border);
+      padding-top: 4px; line-height: 1.4;
+    }
+    .d-name.v { color: var(--violet); }
+    .d-name.l { color: var(--indigo); }
+    .d-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.05rem; font-style: italic;
+      line-height: 1.75; color: var(--ink-mid);
+    }
+
+    /* scene break */
+    .scene-break {
+      display: flex; align-items: center; gap: 18px; margin: 48px 0;
+    }
+    .scene-break::before, .scene-break::after {
+      content: ''; flex: 1; height: 1px;
+      background: linear-gradient(to right, transparent, var(--border), transparent);
+    }
+    .scene-break span { font-size: 1rem; opacity: 0.4; }
+
+    /* arcade score board */
+    .score-board {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px 28px; margin: 2.5em 0;
+      box-shadow: 0 4px 20px var(--shadow);
+    }
+    .score-board .sb-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.6rem; letter-spacing: 0.4em;
+      text-transform: uppercase; color: var(--ink-dim);
+      display: block; margin-bottom: 18px;
+    }
+    .sb-rows { display: flex; flex-direction: column; gap: 12px; }
+    .sb-row {
+      display: flex; align-items: center;
+      gap: 14px; padding: 10px 14px;
+      background: var(--bg2);
+      border-radius: 8px;
+    }
+    .sb-rank {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.75rem; color: var(--ink-dim);
+      min-width: 24px;
+    }
+    .sb-game {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.05rem; font-weight: 600;
+      color: var(--ink); flex: 1;
+    }
+    .sb-tag {
+      font-size: 0.6rem; font-weight: 500;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      padding: 3px 10px; border-radius: 50px;
+    }
+    .tag-win  { background: rgba(13,148,136,0.12); color: var(--teal); }
+    .tag-draw { background: rgba(74,58,170,0.1);   color: var(--indigo-mid); }
+    .tag-loss { background: rgba(217,119,6,0.12);  color: var(--amber); }
+
+    /* game feature card — for Journey */
+    .game-card {
+      background: linear-gradient(135deg, var(--indigo-soft), var(--bg2));
+      border: 1px solid rgba(74,58,170,0.18);
+      border-radius: 12px;
+      padding: 32px 36px; margin: 2.5em 0;
+      position: relative; overflow: hidden;
+    }
+    .game-card::after {
+      content: '🎮';
+      position: absolute; right: 22px; bottom: 14px;
+      font-size: 3.5rem; opacity: 0.08;
+    }
+    .game-card .gc-tag {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.6rem; letter-spacing: 0.3em;
+      text-transform: uppercase; color: var(--indigo-mid);
+      display: block; margin-bottom: 10px;
+    }
+    .game-card .gc-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem; font-weight: 600;
+      color: var(--ink); margin-bottom: 12px;
+    }
+    .game-card p {
+      font-style: italic; text-align: left;
+      margin-bottom: 0;
+    }
+
+    /* pull quote */
+    .pull-quote {
+      margin: 3em 0; padding: 26px 32px;
+      border-top: 2px solid var(--indigo);
+      border-bottom: 2px solid var(--indigo);
+      text-align: center;
+    }
+    .pull-quote p {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.28rem; font-style: italic;
+      color: var(--ink); text-align: center;
+      margin-bottom: 0; line-height: 1.65;
+    }
+
+    /* closing reflection */
+    .reflection-card {
+      background: linear-gradient(135deg, var(--teal-soft), var(--bg2));
+      border: 1px solid rgba(13,148,136,0.15);
+      border-radius: 12px;
+      padding: 32px 36px; margin: 2.5em 0;
+    }
+    .reflection-card p {
+      font-style: italic; text-align: left;
+      margin-bottom: 1.1em;
+    }
+    .reflection-card p:last-child { margin-bottom: 0; }
+
+    /* story end */
+    .story-end {
+      text-align: center; margin-top: 72px;
+      padding-top: 48px; border-top: 1px solid var(--border);
+    }
+    .story-end .phase-tag {
+      font-size: 0.6rem; font-weight: 500;
+      letter-spacing: 0.45em; text-transform: uppercase;
+      color: var(--indigo); display: block; margin-bottom: 14px;
+    }
+    .story-end .closing {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic; font-size: 1.15rem;
+      color: var(--ink-dim); line-height: 1.8;
+      max-width: 440px; margin: 0 auto 32px;
+    }
+    .return-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 28px;
+      border: 1.5px solid var(--indigo);
+      border-radius: 50px;
+      color: var(--indigo); text-decoration: none;
+      font-size: 0.7rem; font-weight: 500;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      transition: all 0.25s;
+    }
+    .return-btn:hover {
+      background: var(--indigo); color: white;
+      box-shadow: 0 6px 24px rgba(74,58,170,0.25);
+      transform: translateY(-2px);
+    }
+    .return-btn svg { width: 13px; height: 13px; transition: transform 0.25s; }
+    .return-btn:hover svg { transform: translateX(-3px); }
+
+    /* ANIMATIONS */
+    @keyframes riseIn {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes bounceDown {
+      0%, 100% { transform: rotate(45deg) translateY(0); }
+      50%       { transform: rotate(45deg) translateY(5px); }
+    }
+    .reveal {
+      opacity: 0; transform: translateY(22px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+    .reveal.in { opacity: 1; transform: none; }
+
+    @media (max-width: 580px) {
+      nav { padding: 0 18px; }
+      .story { padding: 60px 18px 80px; }
+      .d-row { grid-template-columns: 66px 1fr; gap: 10px; }
+      .dialogue-card { padding: 20px 16px; }
+      .game-card, .reflection-card { padding: 22px 18px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="Chapter_One.html" class="nav-brand">Whispers of Caring</a>
+    <div class="nav-links">
+      <a href="Homepage.html">Home</a>
+      
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <!-- pixel dots -->
+    <div class="pixel-dot"></div>
+    <div class="pixel-dot"></div>
+    <div class="pixel-dot"></div>
+    <div class="pixel-dot"></div>
+    <div class="pixel-dot"></div>
+    <div class="pixel-dot"></div>
+
+    <!-- floating game icons -->
+    <div class="floatie">🎮</div>
+    <div class="floatie">👾</div>
+    <div class="floatie">🕹️</div>
+    <div class="floatie">⭐</div>
+    <div class="floatie">🎯</div>
+
+    <div class="hero-inner">
+      <p class="hero-tag">Phase Five</p>
+      <h1>Connections<br><strong>in Pixels</strong></h1>
+      <p class="score-display">PLAYER 1 &nbsp;·&nbsp; PLAYER 2 &nbsp;·&nbsp; <span>CO-OP MODE</span></p>
+      <div class="hero-divider"><span>🕹️</span></div>
+      <p class="hero-desc">From the flashing lights of the arcade to the quiet glow of a console — a day of play that turned into something much more.</p>
+      <div class="hero-pills">
+        <span class="pill">🎮 Evervale Arcade</span>
+        <span class="pill">🕹️ Co-op Gaming</span>
+        <span class="pill">✨ Journey</span>
+      </div>
+    </div>
+
+    <div class="scroll-cue">
+      <span>Play</span>
+      <div class="arr"></div>
+    </div>
+  </section>
+
+  <!-- STORY -->
+  <main class="story">
+
+    <div class="chapter-header reveal">
+      <span class="label">Chapter One · Phase V</span>
+      <h2>An Arcade to Console Journey</h2>
+      <div class="rule"><span>❧</span></div>
+    </div>
+
+    <p class="drop-cap reveal">
+      After their delightful meal at the café, Lucifer and Victoria decided to continue their day of bonding by indulging in some leisurely gaming at a nearby arcade. As they strolled through the bustling streets of Evervale, the anticipation of their next adventure filled the air with excitement.
+    </p>
+
+    <p class="reveal">
+      Upon arriving at the arcade, they were greeted by the flashing lights and lively sounds of video games. Lucifer's eyes lit up with a childlike enthusiasm as he scanned the array of arcade cabinets and consoles.
+    </p>
+
+    <div class="dialogue-card reveal">
+      <div class="d-row">
+        <span class="d-name l">Lucifer</span>
+        <span class="d-text">"This place brings back memories."</span>
+      </div>
+      <div class="d-row">
+        <span class="d-name v">Victoria</span>
+        <span class="d-text">"I know, right? It's like stepping into a portal to our childhood. Shall we see who's the reigning champion in some classic arcade games?"</span>
+      </div>
+      <div class="d-row">
+        <span class="d-name l">Lucifer</span>
+        <span class="d-text">"You're on!"</span>
+      </div>
+    </div>
+
+    <!-- Arcade scoreboard -->
+    <div class="score-board reveal">
+      <span class="sb-label">▶ Arcade Results — Evervale Game Center</span>
+      <div class="sb-rows">
+        <div class="sb-row">
+          <span class="sb-rank">01</span>
+          <span class="sb-game">Racing Games</span>
+          <span class="sb-tag tag-draw">Draw</span>
+        </div>
+        <div class="sb-row">
+          <span class="sb-rank">02</span>
+          <span class="sb-game">Fighting Games</span>
+          <span class="sb-tag tag-win">Victoria Wins</span>
+        </div>
+        <div class="sb-row">
+          <span class="sb-rank">03</span>
+          <span class="sb-game">Classic Arcade</span>
+          <span class="sb-tag tag-loss">Lucifer Wins</span>
+        </div>
+      </div>
+    </div>
+
+    <p class="reveal">
+      For the next few hours, they immersed themselves in a whirlwind of gaming — from intense rounds of racing games to exhilarating matches of fighting games. With each victory and defeat, their laughter echoed through the arcade, forging an unbreakable bond of camaraderie and shared experience.
+    </p>
+
+    <div class="scene-break reveal"><span>🎮</span></div>
+
+    <p class="reveal">
+      As the afternoon waned into evening, they decided to take a break from the arcade and head back to Lucifer's place for some console gaming. Armed with snacks and drinks, they settled in front of the television, ready to embark on their next adventure.
+    </p>
+
+    <div class="dialogue-card reveal">
+      <div class="d-row">
+        <span class="d-name l">Lucifer</span>
+        <span class="d-text">"How about we dive into some cooperative gaming this time? I have just the game in mind."</span>
+      </div>
+      <div class="d-row">
+        <span class="d-name v">Victoria</span>
+        <span class="d-text">"I'm all for it! What do you have in store for us?"</span>
+      </div>
+    </div>
+
+    <!-- Journey game card -->
+    <div class="game-card reveal">
+      <span class="gc-tag">▶ Now Loading — PlayStation</span>
+      <div class="gc-title">"Journey"</div>
+      <p>A beautiful and immersive experience where two players embark on a mystical journey together — exploring stunning landscapes and unravelling the mysteries of an ancient civilization. No words. Just movement, music, and connection.</p>
+    </div>
+
+    <div class="dialogue-card reveal">
+      <div class="d-row">
+        <span class="d-name l">Lucifer</span>
+        <span class="d-text">"It's called Journey. It's a beautiful and immersive experience where we embark on a mystical journey together, exploring stunning landscapes and unravelling the mysteries of an ancient civilization."</span>
+      </div>
+      <div class="d-row">
+        <span class="d-name v">Victoria</span>
+        <span class="d-text">"That sounds wonderful."</span>
+      </div>
+    </div>
+
+    <p class="reveal">
+      Victoria's excitement mirrored his own as they embarked on their virtual journey, their controllers guiding them through breathtaking vistas and awe-inspiring landscapes. With each step they took in the game, they felt a sense of wonder and adventure that mirrored the bond they were forming in real life.
+    </p>
+
+    <div class="pull-quote reveal">
+      <p>"They were not just two individuals playing a video game — but kindred spirits on a shared quest for connection and companionship."</p>
+    </div>
+
+    <div class="reflection-card reveal">
+      <p>As evening descended outside, they found themselves completely engrossed in the game — their laughter and conversation blending seamlessly with the ethereal soundtrack of Journey.</p>
+      <p>As the credits rolled on the screen, marking the end of their virtual journey, Lucifer and Victoria shared a moment of quiet reflection. The day had been filled with laughter, adventure, and newfound friendship — and they knew it was only the beginning of many more memorable moments to come.</p>
+    </div>
+
+    <div class="story-end reveal">
+      <span class="phase-tag">Phase Five · Complete</span>
+      <p class="closing">Some of the most real connections happen in the most virtual of worlds.</p>
+      <a href="Chapter_One.html" class="return-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+        Return to Chapter One
+      </a>
+    </div>
+
+  </main>
+
+  <script>
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); }
+      });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+  </script>
+
+</body>
+</html>

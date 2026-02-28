@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Savoring Moments — Exploring Tastes & Tales</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --cream:       #fdf8f2;
+      --parchment:   #f5ede0;
+      --mocha:       #6b4226;
+      --mocha-mid:   #8b5e3c;
+      --mocha-soft:  #e8d5c0;
+      --caramel:     #c4873a;
+      --caramel-soft:#f5e4c5;
+      --ink:         #1e1509;
+      --ink-mid:     #4a3520;
+      --ink-dim:     #9a8572;
+      --border:      rgba(107,66,38,0.1);
+      --shadow:      rgba(30,21,9,0.07);
+    }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Jost', sans-serif;
+      background: var(--cream);
+      color: var(--ink);
+      overflow-x: hidden;
+    }
+    body::after {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 9999;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      height: 58px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 48px;
+      background: rgba(253,248,242,0.93);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-brand {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem; font-style: italic;
+      color: var(--ink); text-decoration: none;
+    }
+    .nav-links { display: flex; gap: 30px; }
+    .nav-links a {
+      font-size: 0.68rem; font-weight: 500;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--ink-dim); text-decoration: none;
+      transition: color 0.25s;
+    }
+    .nav-links a:hover { color: var(--caramel); }
+    .nav-links a.active { color: var(--caramel); border-bottom: 1.5px solid var(--caramel); padding-bottom: 2px; }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center;
+      padding: 80px 24px 70px;
+      position: relative;
+      background: url('ph444.jpg') center/cover no-repeat;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom,
+        rgba(253,248,242,0.82) 0%,
+        rgba(245,237,224,0.72) 50%,
+        rgba(253,248,242,0.93) 100%);
+    }
+
+    /* steam wisps */
+    .steam {
+      position: absolute;
+      bottom: 44%;
+      width: 3px;
+      border-radius: 50px;
+      background: linear-gradient(to top, rgba(255,255,255,0.65), transparent);
+      opacity: 0;
+      animation: steamRise 3.5s ease-in-out infinite;
+    }
+    .steam:nth-child(1) { left: 44%; height: 34px; animation-delay: 0s; }
+    .steam:nth-child(2) { left: 50%; height: 26px; animation-delay: 0.9s; }
+    .steam:nth-child(3) { left: 56%; height: 30px; animation-delay: 1.8s; }
+
+    @keyframes steamRise {
+      0%   { opacity: 0; transform: translateY(0) scaleX(1); }
+      30%  { opacity: 0.55; }
+      100% { opacity: 0; transform: translateY(-55px) scaleX(2); }
+    }
+
+    /* floating food */
+    .floatie {
+      position: absolute; font-size: 1.4rem;
+      opacity: 0; pointer-events: none;
+      animation: floatUp 7s ease-in-out infinite;
+    }
+    .floatie:nth-child(4) { left: 7%;   bottom: 20%; animation-delay: 0s;   animation-duration: 8s; }
+    .floatie:nth-child(5) { left: 17%;  bottom: 32%; animation-delay: 2s;   animation-duration: 6s; }
+    .floatie:nth-child(6) { right: 8%;  bottom: 24%; animation-delay: 1s;   animation-duration: 9s; }
+    .floatie:nth-child(7) { right: 19%; bottom: 36%; animation-delay: 3.5s; animation-duration: 7s; }
+    .floatie:nth-child(8) { left: 52%;  bottom: 16%; animation-delay: 4.5s; animation-duration: 8s; }
+
+    @keyframes floatUp {
+      0%   { opacity: 0; transform: translateY(0); }
+      20%  { opacity: 0.28; }
+      60%  { opacity: 0.22; }
+      100% { opacity: 0; transform: translateY(-65px); }
+    }
+
+    .hero-inner { position: relative; z-index: 2; max-width: 660px; }
+    .hero-tag {
+      display: inline-flex; align-items: center; gap: 12px;
+      font-size: 0.6rem; font-weight: 500;
+      letter-spacing: 0.5em; text-transform: uppercase;
+      color: var(--mocha); margin-bottom: 22px;
+      animation: riseIn 0.9s ease both;
+    }
+    .hero-tag::before, .hero-tag::after {
+      content: ''; width: 24px; height: 1px;
+      background: var(--mocha); opacity: 0.5;
+    }
+    .hero h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.8rem, 7.5vw, 5.2rem);
+      font-weight: 300; font-style: italic;
+      color: var(--ink); line-height: 1.08;
+      animation: riseIn 0.9s ease 0.12s both;
+    }
+    .hero h1 strong {
+      font-style: normal; font-weight: 600;
+      color: var(--mocha); display: block;
+    }
+    .hero-divider {
+      display: flex; align-items: center; justify-content: center; gap: 14px;
+      margin: 26px auto;
+      animation: riseIn 0.9s ease 0.24s both;
+    }
+    .hero-divider::before, .hero-divider::after {
+      content: ''; width: 55px; height: 1px;
+      background: var(--ink-dim); opacity: 0.25;
+    }
+    .hero-divider span { font-size: 0.85rem; opacity: 0.6; }
+    .hero-desc {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem; font-weight: 300;
+      line-height: 1.85; color: var(--ink-mid);
+      max-width: 490px; margin: 0 auto;
+      animation: riseIn 0.9s ease 0.36s both;
+    }
+    .hero-pills {
+      display: flex; gap: 10px; justify-content: center;
+      margin-top: 28px; flex-wrap: wrap;
+      animation: riseIn 0.9s ease 0.48s both;
+    }
+    .pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 14px;
+      background: rgba(255,255,255,0.7);
+      backdrop-filter: blur(6px);
+      border: 1px solid rgba(107,66,38,0.14);
+      border-radius: 50px;
+      font-size: 0.68rem; font-weight: 500;
+      letter-spacing: 0.07em; color: var(--mocha);
+    }
+    .scroll-cue {
+      position: absolute; bottom: 36px; left: 50%;
+      transform: translateX(-50%); z-index: 2;
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+      animation: riseIn 0.9s ease 0.8s both;
+    }
+    .scroll-cue span {
+      font-size: 0.58rem; letter-spacing: 0.35em;
+      text-transform: uppercase; color: var(--ink-dim);
+    }
+    .arr {
+      width: 18px; height: 18px;
+      border-right: 1.5px solid var(--caramel);
+      border-bottom: 1.5px solid var(--caramel);
+      transform: rotate(45deg);
+      animation: bounceDown 1.8s ease-in-out infinite;
+    }
+
+    /* STORY */
+    .story { max-width: 720px; margin: 0 auto; padding: 90px 32px 110px; }
+
+    .chapter-header { text-align: center; margin-bottom: 60px; }
+    .chapter-header .label {
+      font-size: 0.6rem; font-weight: 500;
+      letter-spacing: 0.5em; text-transform: uppercase;
+      color: var(--caramel); display: block; margin-bottom: 12px;
+    }
+    .chapter-header h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem; font-weight: 400; font-style: italic; color: var(--ink);
+    }
+    .chapter-header .rule {
+      display: flex; align-items: center; gap: 16px;
+      justify-content: center; margin-top: 20px;
+    }
+    .chapter-header .rule::before,
+    .chapter-header .rule::after {
+      content: ''; width: 60px; height: 1px; background: var(--border);
+    }
+    .chapter-header .rule span { font-size: 0.85rem; color: var(--caramel); opacity: 0.6; }
+
+    .story p {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.12rem; font-weight: 300;
+      line-height: 2; color: var(--ink-mid);
+      margin-bottom: 1.9em; text-align: justify; hyphens: auto;
+    }
+    .drop-cap::first-letter {
+      font-size: 4.8rem; font-weight: 600;
+      color: var(--mocha); float: left;
+      line-height: 0.78; margin: 0.06em 0.12em 0 0; font-style: italic;
+    }
+
+    /* dialogue */
+    .dialogue-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--mocha-mid);
+      border-radius: 0 10px 10px 0;
+      padding: 28px 32px; margin: 2.2em 0;
+      box-shadow: 0 4px 20px var(--shadow);
+    }
+    .d-row {
+      display: grid; grid-template-columns: 86px 1fr;
+      gap: 14px; margin-bottom: 18px; align-items: start;
+    }
+    .d-row:last-child { margin-bottom: 0; }
+    .d-name {
+      font-size: 0.6rem; font-weight: 500;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      text-align: right; padding-right: 14px;
+      border-right: 1.5px solid var(--border);
+      padding-top: 4px; line-height: 1.4;
+    }
+    .d-name.v { color: var(--caramel); }
+    .d-name.l { color: var(--mocha); }
+    .d-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.05rem; font-style: italic;
+      line-height: 1.75; color: var(--ink-mid);
+    }
+
+    /* scene break */
+    .scene-break {
+      display: flex; align-items: center; gap: 18px; margin: 48px 0;
+    }
+    .scene-break::before, .scene-break::after {
+      content: ''; flex: 1; height: 1px;
+      background: linear-gradient(to right, transparent, var(--border), transparent);
+    }
+    .scene-break span { font-size: 1rem; opacity: 0.45; }
+
+    /* order cards */
+    .order-card { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 2.5em 0; }
+    .order-item {
+      background: white; border: 1px solid var(--border);
+      border-radius: 12px; padding: 22px 24px;
+      position: relative; overflow: hidden;
+    }
+    .order-item::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    }
+    .order-item.v-order::before { background: var(--caramel); }
+    .order-item.l-order::before { background: var(--mocha); }
+    .order-item .who {
+      font-size: 0.58rem; font-weight: 500;
+      letter-spacing: 0.3em; text-transform: uppercase;
+      margin-bottom: 8px; display: block;
+    }
+    .v-order .who { color: var(--caramel); }
+    .l-order .who { color: var(--mocha); }
+    .order-item .dish {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem; font-weight: 600;
+      color: var(--ink); margin-bottom: 6px; line-height: 1.3;
+    }
+    .order-item .desc { font-size: 0.8rem; font-weight: 300; color: var(--ink-dim); line-height: 1.5; }
+    .order-item .icon { position: absolute; right: 14px; bottom: 10px; font-size: 1.8rem; opacity: 0.12; }
+
+    /* dessert duo */
+    .dessert-duo { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 2.5em 0; }
+    .dessert-item {
+      background: var(--parchment); border: 1px solid var(--border);
+      border-radius: 12px; padding: 22px 24px; text-align: center;
+    }
+    .dessert-item .d-icon { font-size: 2rem; margin-bottom: 10px; display: block; }
+    .dessert-item .d-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem; font-weight: 600; color: var(--ink); margin-bottom: 4px;
+    }
+    .dessert-item .d-for {
+      font-size: 0.62rem; font-weight: 500;
+      letter-spacing: 0.2em; text-transform: uppercase;
+    }
+    .dessert-item.v-d .d-for { color: var(--caramel); }
+    .dessert-item.l-d .d-for { color: var(--mocha); }
+
+    /* pull quote */
+    .pull-quote {
+      margin: 3em 0; padding: 26px 32px;
+      border-top: 2px solid var(--caramel);
+      border-bottom: 2px solid var(--caramel);
+      text-align: center;
+    }
+    .pull-quote p {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.28rem; font-style: italic;
+      color: var(--ink); text-align: center;
+      margin-bottom: 0; line-height: 1.65;
+    }
+
+    /* cozy card */
+    .cozy-card {
+      background: linear-gradient(135deg, var(--caramel-soft), var(--parchment));
+      border: 1px solid rgba(196,135,58,0.18);
+      border-radius: 12px; padding: 32px 36px; margin: 2.5em 0;
+      position: relative; overflow: hidden;
+    }
+    .cozy-card::after {
+      content: '☕'; position: absolute; right: 22px; bottom: 12px;
+      font-size: 3.5rem; opacity: 0.08;
+    }
+    .cozy-card p { font-style: italic; text-align: left; margin-bottom: 1.1em; }
+    .cozy-card p:last-child { margin-bottom: 0; }
+
+    /* story end */
+    .story-end {
+      text-align: center; margin-top: 72px;
+      padding-top: 48px; border-top: 1px solid var(--border);
+    }
+    .story-end .phase-tag {
+      font-size: 0.6rem; font-weight: 500;
+      letter-spacing: 0.45em; text-transform: uppercase;
+      color: var(--caramel); display: block; margin-bottom: 14px;
+    }
+    .story-end .closing {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic; font-size: 1.15rem;
+      color: var(--ink-dim); line-height: 1.8;
+      max-width: 440px; margin: 0 auto 32px;
+    }
+    .return-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 28px;
+      border: 1.5px solid var(--mocha);
+      border-radius: 50px;
+      color: var(--mocha); text-decoration: none;
+      font-size: 0.7rem; font-weight: 500;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      transition: all 0.25s;
+    }
+    .return-btn:hover {
+      background: var(--mocha); color: white;
+      box-shadow: 0 6px 24px rgba(107,66,38,0.22);
+      transform: translateY(-2px);
+    }
+    .return-btn svg { width: 13px; height: 13px; transition: transform 0.25s; }
+    .return-btn:hover svg { transform: translateX(-3px); }
+
+    /* ANIMATIONS */
+    @keyframes riseIn {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes bounceDown {
+      0%, 100% { transform: rotate(45deg) translateY(0); }
+      50%       { transform: rotate(45deg) translateY(5px); }
+    }
+    .reveal {
+      opacity: 0; transform: translateY(22px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+    .reveal.in { opacity: 1; transform: none; }
+
+    @media (max-width: 580px) {
+      nav { padding: 0 18px; }
+      .story { padding: 60px 18px 80px; }
+      .order-card, .dessert-duo { grid-template-columns: 1fr; }
+      .d-row { grid-template-columns: 66px 1fr; gap: 10px; }
+      .dialogue-card { padding: 20px 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="Chapter_One.html" class="nav-brand">Whispers of Caring</a>
+    <div class="nav-links">
+      <a href="Homepage.html">Home</a>
+      
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="steam"></div>
+    <div class="steam"></div>
+    <div class="steam"></div>
+    <div class="floatie">☕</div>
+    <div class="floatie">🍜</div>
+    <div class="floatie">🍰</div>
+    <div class="floatie">🧁</div>
+    <div class="floatie">🫖</div>
+
+    <div class="hero-inner">
+      <p class="hero-tag">Phase Four</p>
+      <h1>Savoring<br><strong>Moments</strong></h1>
+      <div class="hero-divider"><span>☕</span></div>
+      <p class="hero-desc">In the warm heart of Evervale's coziest café — where every bite deepens a bond and every sip sweetens the story.</p>
+      <div class="hero-pills">
+        <span class="pill">☕ Evervale Café</span>
+        <span class="pill">🍜 Comfort Food</span>
+        <span class="pill">🍰 Sweet Endings</span>
+      </div>
+    </div>
+
+    <div class="scroll-cue">
+      <span>Read</span>
+      <div class="arr"></div>
+    </div>
+  </section>
+
+  <!-- STORY -->
+  <main class="story">
+
+    <div class="chapter-header reveal">
+      <span class="label">Chapter One · Phase IV</span>
+      <h2>Exploring Tastes &amp; Tales</h2>
+      <div class="rule"><span>❧</span></div>
+    </div>
+
+    <p class="drop-cap reveal">
+      In the cozy confines of the quaint café, nestled in the heart of Evervale, Lucifer and Victoria found themselves seated by the window — their steaming cups of coffee warming their hands. The aroma of freshly brewed coffee mingled with the tantalizing scent of pastries, creating an atmosphere of comfort and relaxation. As they sipped their drinks and savoured the moment, their conversation flowed effortlessly, weaving through memories of their zipline adventure and dreams of future escapades. With each word exchanged and each shared smile, their bond deepened, solidifying their friendship amidst the cozy ambiance of the café.
+    </p>
+
+    <div class="scene-break reveal"><span>🍃</span></div>
+
+    <div class="order-card reveal">
+      <div class="order-item v-order">
+        <span class="who">Victoria's Pick</span>
+        <div class="dish">Miso Ramen</div>
+        <div class="desc">Extra pork belly, soft-boiled egg — her ultimate go-to comfort food.</div>
+        <span class="icon">🍜</span>
+      </div>
+      <div class="order-item l-order">
+        <span class="who">Lucifer's Pick</span>
+        <div class="dish">Beef Stew</div>
+        <div class="desc">Hearty and slow-cooked with a side of garlic bread — warm for a chilly day.</div>
+        <span class="icon">🥘</span>
+      </div>
+    </div>
+
+    <div class="dialogue-card reveal">
+      <div class="d-row">
+        <span class="d-name l">Lucifer</span>
+        <span class="d-text">"Ramen, huh? That's a classic choice. Any specific kind you're craving?"</span>
+      </div>
+      <div class="d-row">
+        <span class="d-name v">Victoria</span>
+        <span class="d-text">"Oh, definitely the miso ramen with extra pork belly and a soft-boiled egg. It's my go-to comfort food."</span>
+      </div>
+      <div class="d-row">
+        <span class="d-name l">Lucifer</span>
+        <span class="d-text">"Sounds delicious. I've heard great things about their ramen here. I might have to try it myself."</span>
+      </div>
+      <div class="d-row">
+        <span class="d-name v">Victoria</span>
+        <span class="d-text">"You won't be disappointed. And if you're feeling adventurous, you can always add some extra chili paste for a spicy kick."</span>
+      </div>
+      <div class="d-row">
+        <span class="d-name l">Lucifer</span>
+        <span class="d-text">"I'll keep that in mind. Though I have to admit, I'm more of a mild spice kind of guy."</span>
+      </div>
+      <div class="d-row">
+        <span class="d-name v">Victoria</span>
+        <span class="d-text">"Fair enough. To each their own. So, what are you thinking of ordering?"</span>
+      </div>
+      <div class="d-row">
+        <span class="d-name l">Lucifer</span>
+        <span class="d-text">"I'm in the mood for something comforting — and you can never go wrong with a good stew."</span>
+      </div>
+      <div class="d-row">
+        <span class="d-name v">Victoria</span>
+        <span class="d-text">"Solid choice. Can't go wrong with comfort food, especially on a chilly day like today."</span>
+      </div>
+    </div>
+
+    <p class="reveal">
+      As they awaited their meals, their conversation drifted to lighter topics — favorite books, upcoming events in Evervale, the small things that make a town feel like home. The cozy atmosphere of the café, coupled with the anticipation of delicious food, made for the perfect setting for their continued camaraderie.
+    </p>
+
+    <div class="scene-break reveal"><span>🍰</span></div>
+
+    <p class="reveal">
+      After finishing their main courses, Lucifer glanced at the dessert menu with interest.
+    </p>
+
+    <div class="dialogue-card reveal">
+      <div class="d-row">
+        <span class="d-name l">Lucifer</span>
+        <span class="d-text">"So, Victoria, do you have a sweet tooth? Any desserts catching your eye?"</span>
+      </div>
+      <div class="d-row">
+        <span class="d-name v">Victoria</span>
+        <span class="d-text">"Oh, absolutely! I have a weakness for anything chocolate. Maybe a rich chocolate lava cake or a decadent brownie sundae."</span>
+      </div>
+      <div class="d-row">
+        <span class="d-name l">Lucifer</span>
+        <span class="d-text">"Chocolate, huh? Can't go wrong with that. Personally, I'm more of a fruit dessert kind of guy. Something light and refreshing, like a fruit tart or a berry crumble."</span>
+      </div>
+      <div class="d-row">
+        <span class="d-name v">Victoria</span>
+        <span class="d-text">"Those sound delightful too! You can't beat the combination of sweet, juicy fruit and buttery pastry."</span>
+      </div>
+    </div>
+
+    <div class="dessert-duo reveal">
+      <div class="dessert-item v-d">
+        <span class="d-icon">🍫</span>
+        <div class="d-title">Chocolate Lava Cake</div>
+        <div class="d-for">Victoria's Choice</div>
+      </div>
+      <div class="dessert-item l-d">
+        <span class="d-icon">🫐</span>
+        <div class="d-title">Berry Fruit Tart</div>
+        <div class="d-for">Lucifer's Choice</div>
+      </div>
+    </div>
+
+    <div class="cozy-card reveal">
+      <p>When the desserts finally arrived, Lucifer and Victoria couldn't help but admire the artful presentation. Lucifer's fruit tart glistened with vibrant berries atop a delicate crust, while Victoria's chocolate lava cake oozed with molten richness — adorned with a scoop of creamy vanilla ice cream.</p>
+      <p>They savored each bite, alternating between their own desserts and stealing tastes from each other's plates. With each indulgent spoonful, their laughter and conversation only grew warmer, weaving a tapestry of shared experiences and newfound connection.</p>
+    </div>
+
+    <div class="pull-quote reveal">
+      <p>"It's not every day you find someone who shares your love for good food and great conversation."</p>
+    </div>
+
+    <div class="dialogue-card reveal">
+      <div class="d-row">
+        <span class="d-name l">Lucifer</span>
+        <span class="d-text">"I have to say, Victoria, this has been quite the culinary adventure."</span>
+      </div>
+      <div class="d-row">
+        <span class="d-name v">Victoria</span>
+        <span class="d-text">"Indeed it has, Lucifer. It's not every day you find someone who shares your love for good food and great conversation."</span>
+      </div>
+    </div>
+
+    <p class="reveal">
+      With a sense of contentment settling over them, they lingered in the café a little while longer — basking in the warmth of the moment and the quiet promise of many more shared experiences to come.
+    </p>
+
+    <div class="story-end reveal">
+      <span class="phase-tag">Phase Four · Complete</span>
+      <p class="closing">The best conversations are the ones that leave you full — in more ways than one.</p>
+      <a href="Chapter_One.html" class="return-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+        Return to Chapter One
+      </a>
+    </div>
+
+  </main>
+
+  <script>
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); }
+      });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+  </script>
+
+</body>
+</html>

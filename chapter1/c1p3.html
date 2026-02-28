@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Skyward Bonds — A Zipline Adventure</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --sky:        #e8f4f8;
+      --sky2:       #d0eaf5;
+      --forest:     #2d5a3d;
+      --forest-mid: #4a7c5f;
+      --forest-soft:#c8dfd0;
+      --amber:      #c97b2a;
+      --amber-soft: #f5e4ca;
+      --ink:        #1a2420;
+      --ink-mid:    #3d4f45;
+      --ink-dim:    #7a8f82;
+      --white:      #ffffff;
+      --border:     rgba(45,90,61,0.12);
+      --shadow:     rgba(26,36,32,0.07);
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Jost', sans-serif;
+      background: var(--sky);
+      color: var(--ink);
+      overflow-x: hidden;
+    }
+
+    /* paper grain */
+    body::after {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 9999;
+    }
+
+    /* ══ NAV ══ */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      height: 58px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 48px;
+      background: rgba(232,244,248,0.93);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-brand {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem; font-style: italic;
+      color: var(--ink); text-decoration: none;
+    }
+
+    .nav-links { display: flex; gap: 30px; }
+    .nav-links a {
+      font-size: 0.68rem; font-weight: 500;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--ink-dim); text-decoration: none;
+      transition: color 0.25s;
+    }
+    .nav-links a:hover { color: var(--forest); }
+    .nav-links a.active { color: var(--forest); border-bottom: 1.5px solid var(--forest); padding-bottom: 2px; }
+
+    /* ══ HERO ══ */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center;
+      padding: 80px 24px 70px;
+      position: relative;
+      background: url('sky1.jpg') center/cover no-repeat;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom,
+        rgba(232,244,248,0.78) 0%,
+        rgba(208,234,245,0.65) 45%,
+        rgba(200,223,208,0.88) 100%);
+    }
+
+    /* ── Zipline wire animation ── */
+    .zipline-wire {
+      position: absolute;
+      top: 38%;
+      left: -5%;
+      width: 110%;
+      height: 2px;
+      background: linear-gradient(to right, transparent 0%, var(--forest-mid) 15%, var(--forest-mid) 85%, transparent 100%);
+      opacity: 0.25;
+      transform: rotate(-4deg);
+      z-index: 0;
+    }
+
+    /* the rider that slides along the wire */
+    .zipline-rider {
+      position: absolute;
+      top: calc(38% - 18px);
+      left: -60px;
+      font-size: 1.4rem;
+      z-index: 1;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+      animation: slideZip 8s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
+      transform: rotate(-4deg);
+    }
+
+    @keyframes slideZip {
+      0%   { left: -60px; opacity: 0; }
+      8%   { opacity: 1; }
+      88%  { opacity: 1; }
+      100% { left: 108%; opacity: 0; }
+    }
+
+    /* floating tree particles */
+    .tree {
+      position: absolute;
+      bottom: 0;
+      font-size: 2.5rem;
+      opacity: 0;
+      animation: treeSway 6s ease-in-out infinite;
+    }
+    .tree:nth-child(1) { left: 3%;   font-size: 3rem;   animation-delay: 0s;   animation-duration: 7s; }
+    .tree:nth-child(2) { left: 12%;  font-size: 2rem;   animation-delay: 1s;   animation-duration: 5s; }
+    .tree:nth-child(3) { left: 22%;  font-size: 2.8rem; animation-delay: 2.5s; animation-duration: 8s; }
+    .tree:nth-child(4) { right: 4%;  font-size: 3.2rem; animation-delay: 0.5s; animation-duration: 6s; }
+    .tree:nth-child(5) { right: 14%; font-size: 2.2rem; animation-delay: 1.8s; animation-duration: 7s; }
+    .tree:nth-child(6) { right: 25%; font-size: 2.6rem; animation-delay: 3s;   animation-duration: 5s; }
+
+    @keyframes treeSway {
+      0%   { opacity: 0;    transform: translateY(10px) rotate(-1deg); }
+      20%  { opacity: 0.55; }
+      50%  { transform: translateY(0)   rotate(1.5deg); }
+      80%  { opacity: 0.45; }
+      100% { opacity: 0;    transform: translateY(8px)  rotate(-1deg); }
+    }
+
+    /* wind lines */
+    .wind {
+      position: absolute;
+      height: 1px;
+      background: linear-gradient(to right, transparent, rgba(255,255,255,0.6), transparent);
+      opacity: 0;
+      animation: windBlow 4s ease-in-out infinite;
+    }
+    .wind:nth-child(7)  { top: 30%; left: 10%; width: 80px; animation-delay: 0s; }
+    .wind:nth-child(8)  { top: 45%; left: 60%; width: 50px; animation-delay: 1.2s; }
+    .wind:nth-child(9)  { top: 60%; left: 25%; width: 65px; animation-delay: 2.4s; }
+
+    @keyframes windBlow {
+      0%   { opacity: 0; transform: translateX(-20px); }
+      40%  { opacity: 0.8; }
+      100% { opacity: 0; transform: translateX(40px); }
+    }
+
+    .hero-inner {
+      position: relative; z-index: 2;
+      max-width: 680px;
+    }
+
+    .hero-tag {
+      display: inline-flex; align-items: center; gap: 12px;
+      font-size: 0.6rem; font-weight: 500;
+      letter-spacing: 0.5em; text-transform: uppercase;
+      color: var(--forest);
+      margin-bottom: 22px;
+      animation: riseIn 0.9s ease both;
+    }
+    .hero-tag::before, .hero-tag::after {
+      content: ''; width: 24px; height: 1px;
+      background: var(--forest); opacity: 0.5;
+    }
+
+    .hero h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.8rem, 7.5vw, 5.5rem);
+      font-weight: 300; font-style: italic;
+      color: var(--ink);
+      line-height: 1.08;
+      animation: riseIn 0.9s ease 0.12s both;
+    }
+
+    .hero h1 strong {
+      font-style: normal; font-weight: 600;
+      color: var(--forest); display: block;
+    }
+
+    .hero-divider {
+      display: flex; align-items: center; justify-content: center; gap: 14px;
+      margin: 26px auto;
+      animation: riseIn 0.9s ease 0.24s both;
+    }
+    .hero-divider::before, .hero-divider::after {
+      content: ''; width: 55px; height: 1px;
+      background: var(--ink-dim); opacity: 0.3;
+    }
+    .hero-divider span { font-size: 0.8rem; color: var(--forest); opacity: 0.7; }
+
+    .hero-desc {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem; font-weight: 300;
+      line-height: 1.85; color: var(--ink-mid);
+      max-width: 500px; margin: 0 auto;
+      animation: riseIn 0.9s ease 0.36s both;
+    }
+
+    /* meta pills */
+    .hero-pills {
+      display: flex; gap: 10px; justify-content: center;
+      margin-top: 28px;
+      flex-wrap: wrap;
+      animation: riseIn 0.9s ease 0.48s both;
+    }
+    .pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 14px;
+      background: rgba(255,255,255,0.65);
+      backdrop-filter: blur(6px);
+      border: 1px solid rgba(45,90,61,0.15);
+      border-radius: 50px;
+      font-size: 0.68rem; font-weight: 500;
+      letter-spacing: 0.08em;
+      color: var(--forest);
+    }
+
+    .scroll-cue {
+      position: absolute; bottom: 36px; left: 50%;
+      transform: translateX(-50%); z-index: 2;
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+      animation: riseIn 0.9s ease 0.8s both;
+    }
+    .scroll-cue span {
+      font-size: 0.58rem; letter-spacing: 0.35em;
+      text-transform: uppercase; color: var(--ink-dim);
+    }
+    .arr {
+      width: 18px; height: 18px;
+      border-right: 1.5px solid var(--forest);
+      border-bottom: 1.5px solid var(--forest);
+      transform: rotate(45deg);
+      animation: bounceDown 1.8s ease-in-out infinite;
+    }
+
+    /* ══ STORY ══ */
+    .story {
+      max-width: 720px; margin: 0 auto;
+      padding: 88px 32px 110px;
+    }
+
+    /* chapter header */
+    .chapter-header {
+      text-align: center; margin-bottom: 60px;
+    }
+    .chapter-header .label {
+      font-size: 0.6rem; font-weight: 500;
+      letter-spacing: 0.5em; text-transform: uppercase;
+      color: var(--forest); display: block; margin-bottom: 12px;
+    }
+    .chapter-header h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem; font-weight: 400; font-style: italic;
+      color: var(--ink);
+    }
+    .chapter-header .rule {
+      display: flex; align-items: center; gap: 16px;
+      justify-content: center; margin-top: 20px;
+    }
+    .chapter-header .rule::before,
+    .chapter-header .rule::after {
+      content: ''; width: 60px; height: 1px;
+      background: var(--border);
+    }
+    .chapter-header .rule span { font-size: 0.85rem; color: var(--forest-mid); opacity: 0.6; }
+
+    /* paragraphs */
+    .story p {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.12rem; font-weight: 300;
+      line-height: 2; color: var(--ink-mid);
+      margin-bottom: 1.9em;
+      text-align: justify; hyphens: auto;
+    }
+
+    .drop-cap::first-letter {
+      font-size: 4.8rem; font-weight: 600;
+      color: var(--forest); float: left;
+      line-height: 0.78; margin: 0.06em 0.12em 0 0;
+      font-style: italic;
+    }
+
+    /* dialogue card */
+    .dialogue-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--forest-mid);
+      border-radius: 0 10px 10px 0;
+      padding: 28px 32px;
+      margin: 2.2em 0;
+      box-shadow: 0 4px 20px var(--shadow);
+    }
+
+    .d-row {
+      display: grid;
+      grid-template-columns: 86px 1fr;
+      gap: 14px; margin-bottom: 18px; align-items: start;
+    }
+    .d-row:last-child { margin-bottom: 0; }
+
+    .d-name {
+      font-size: 0.6rem; font-weight: 500;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      text-align: right; padding-right: 14px;
+      border-right: 1.5px solid var(--border);
+      padding-top: 4px; line-height: 1.4;
+    }
+    .d-name.v { color: var(--amber); }
+    .d-name.l { color: var(--forest); }
+
+    .d-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.05rem; font-style: italic;
+      line-height: 1.75; color: var(--ink-mid);
+    }
+
+    /* scene break */
+    .scene-break {
+      display: flex; align-items: center; gap: 18px;
+      margin: 48px 0;
+    }
+    .scene-break::before, .scene-break::after {
+      content: ''; flex: 1; height: 1px;
+      background: linear-gradient(to right, transparent, var(--border), transparent);
+    }
+    .scene-break span { font-size: 1rem; opacity: 0.5; }
+
+    /* adventure stat bar — shows progression through the course */
+    .course-progress {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px 28px;
+      margin: 2.5em 0;
+      box-shadow: 0 4px 20px var(--shadow);
+    }
+    .course-progress .cp-label {
+      font-size: 0.6rem; font-weight: 500;
+      letter-spacing: 0.35em; text-transform: uppercase;
+      color: var(--ink-dim); margin-bottom: 16px; display: block;
+    }
+    .cp-steps {
+      display: flex; align-items: center; gap: 0;
+    }
+    .cp-step {
+      flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px;
+      position: relative;
+    }
+    .cp-step:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      top: 14px; left: 50%; width: 100%; height: 2px;
+      background: var(--forest-soft);
+      z-index: 0;
+    }
+    .cp-dot {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: var(--forest-soft);
+      border: 2px solid var(--forest-mid);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem; z-index: 1;
+      transition: background 0.4s, transform 0.4s;
+    }
+    .cp-step.done .cp-dot {
+      background: var(--forest-mid);
+      color: white; transform: scale(1.1);
+    }
+    .cp-name {
+      font-size: 0.58rem; font-weight: 500;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--ink-dim); text-align: center;
+      line-height: 1.3;
+    }
+
+    /* pull quote */
+    .pull-quote {
+      margin: 3em 0;
+      padding: 26px 34px;
+      border-top: 2px solid var(--forest-mid);
+      border-bottom: 2px solid var(--forest-mid);
+      text-align: center;
+    }
+    .pull-quote p {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem; font-style: italic;
+      font-weight: 400; color: var(--ink);
+      text-align: center; margin-bottom: 0;
+      line-height: 1.65;
+    }
+
+    /* highlight moment */
+    .moment-card {
+      background: linear-gradient(135deg, var(--forest-soft), var(--sky2));
+      border: 1px solid rgba(45,90,61,0.15);
+      border-radius: 12px;
+      padding: 32px 36px; margin: 2.5em 0;
+      position: relative; overflow: hidden;
+    }
+    .moment-card::after {
+      content: '🌲';
+      position: absolute; right: 22px; bottom: 14px;
+      font-size: 3rem; opacity: 0.1;
+    }
+    .moment-card p {
+      font-style: italic; text-align: left;
+      margin-bottom: 1.1em;
+    }
+    .moment-card p:last-child { margin-bottom: 0; }
+
+    /* sunset ending */
+    .sunset-card {
+      background: linear-gradient(135deg, var(--amber-soft), var(--sky));
+      border: 1px solid rgba(201,123,42,0.15);
+      border-radius: 12px;
+      padding: 32px 36px; margin: 2.5em 0;
+      text-align: center;
+    }
+    .sunset-card .sun-icon { font-size: 2rem; margin-bottom: 12px; display: block; }
+    .sunset-card p {
+      font-style: italic; text-align: center;
+      margin-bottom: 0;
+    }
+
+    /* story end */
+    .story-end {
+      text-align: center; margin-top: 72px;
+      padding-top: 48px; border-top: 1px solid var(--border);
+    }
+    .story-end .phase-tag {
+      font-size: 0.6rem; font-weight: 500;
+      letter-spacing: 0.45em; text-transform: uppercase;
+      color: var(--forest); display: block; margin-bottom: 14px;
+    }
+    .story-end .closing {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic; font-size: 1.15rem;
+      color: var(--ink-dim); line-height: 1.8;
+      max-width: 440px; margin: 0 auto 32px;
+    }
+
+    .return-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 28px;
+      border: 1.5px solid var(--forest);
+      border-radius: 50px;
+      color: var(--forest); text-decoration: none;
+      font-size: 0.7rem; font-weight: 500;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      transition: all 0.25s;
+    }
+    .return-btn:hover {
+      background: var(--forest); color: white;
+      box-shadow: 0 6px 24px rgba(45,90,61,0.25);
+      transform: translateY(-2px);
+    }
+    .return-btn svg { width: 13px; height: 13px; transition: transform 0.25s; }
+    .return-btn:hover svg { transform: translateX(-3px); }
+
+    /* ══ ANIMATIONS ══ */
+    @keyframes riseIn {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes bounceDown {
+      0%, 100% { transform: rotate(45deg) translateY(0); }
+      50%       { transform: rotate(45deg) translateY(5px); }
+    }
+
+    .reveal {
+      opacity: 0; transform: translateY(22px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+    .reveal.in { opacity: 1; transform: none; }
+
+    @media (max-width: 580px) {
+      nav { padding: 0 18px; }
+      .story { padding: 60px 18px 80px; }
+      .d-row { grid-template-columns: 64px 1fr; gap: 10px; }
+      .dialogue-card { padding: 20px 16px; }
+      .cp-name { font-size: 0.5rem; }
+      .hero h1 { font-size: 2.6rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══ Nav ══ -->
+  <nav>
+    <a href="Chapter_One.html" class="nav-brand">Whispers of Caring</a>
+    <div class="nav-links">
+      <a href="Homepage.html">Home</a>
+      <a href="Chapter_One.html">Chapter 1</a>
+      <a href="Echoes_Of_Evervale_A_Walk_Down_Memory_Lane.html">Phase 2</a>
+      <a href="#" class="active">Phase 3</a>
+    </div>
+  </nav>
+
+  <!-- ══ Hero ══ -->
+  <section class="hero">
+    <!-- animated forest elements -->
+    <div class="tree">🌲</div>
+    <div class="tree">🌿</div>
+    <div class="tree">🌳</div>
+    <div class="tree">🌲</div>
+    <div class="tree">🌿</div>
+    <div class="tree">🌳</div>
+
+    <!-- zipline wire + rider -->
+    <div class="zipline-wire"></div>
+    <div class="zipline-rider">🪂</div>
+
+    <!-- wind streaks -->
+    <div class="wind"></div>
+    <div class="wind"></div>
+    <div class="wind"></div>
+
+    <div class="hero-inner">
+      <p class="hero-tag">Phase Three</p>
+      <h1>A Zipline<br><strong>Adventure</strong></h1>
+      <div class="hero-divider"><span>🌲</span></div>
+      <p class="hero-desc">High above the forest canopy of Evervale — where a leap of faith becomes the bridge between two hearts.</p>
+      <div class="hero-pills">
+        <span class="pill">🏔 Evervale Forest</span>
+        <span class="pill">🪂 Zipline Course</span>
+        <span class="pill">🌅 Golden Hour</span>
+      </div>
+    </div>
+
+    <div class="scroll-cue">
+      <span>Begin</span>
+      <div class="arr"></div>
+    </div>
+  </section>
+
+  <!-- ══ Story ══ -->
+  <main class="story">
+
+    <div class="chapter-header reveal">
+      <span class="label">Chapter One · Phase III</span>
+      <h2>Skyward Bonds</h2>
+      <div class="rule"><span>❧</span></div>
+    </div>
+
+    <p class="drop-cap reveal">
+      The day was still young, and they felt a renewed sense of connection and curiosity about each other's lives. Victoria suggested an adventure that would push them both out of their comfort zones: a zipline journey over the lush forests of Evervale.
+    </p>
+
+    <div class="dialogue-card reveal">
+      <div class="d-row">
+        <span class="d-name v">Victoria</span>
+        <span class="d-text">"Have you ever tried ziplining?"</span>
+      </div>
+      <div class="d-row">
+        <span class="d-name l">Lucifer</span>
+        <span class="d-text">"No, I haven't. But it sounds like a thrilling experience."</span>
+      </div>
+      <div class="d-row">
+        <span class="d-name v">Victoria</span>
+        <span class="d-text">"Perfect! There's a new zipline course just outside town. Breathtaking views of the forest. What do you say we give it a try?"</span>
+      </div>
+      <div class="d-row">
+        <span class="d-name l">Lucifer</span>
+        <span class="d-text">"Alright, let's do it."</span>
+      </div>
+    </div>
+
+    <p class="reveal">
+      They made their way to the edge of Evervale, where the dense forest began. The zipline course was nestled within the towering trees, promising an exhilarating adventure. As they approached the check-in area, the sound of laughter and excited chatter filled the air.
+    </p>
+
+    <!-- Course progress tracker -->
+    <div class="course-progress reveal">
+      <span class="cp-label">The Zipline Course — Five Segments</span>
+      <div class="cp-steps">
+        <div class="cp-step done">
+          <div class="cp-dot">✓</div>
+          <span class="cp-name">Gear Up</span>
+        </div>
+        <div class="cp-step done">
+          <div class="cp-dot">✓</div>
+          <span class="cp-name">Launch</span>
+        </div>
+        <div class="cp-step done">
+          <div class="cp-dot">✓</div>
+          <span class="cp-name">Canopy</span>
+        </div>
+        <div class="cp-step done">
+          <div class="cp-dot">✓</div>
+          <span class="cp-name">Summit</span>
+        </div>
+        <div class="cp-step done">
+          <div class="cp-dot">✓</div>
+          <span class="cp-name">Landing</span>
+        </div>
+      </div>
+    </div>
+
+    <p class="reveal">
+      After signing the necessary waivers and gearing up with harnesses and helmets, Lucifer and Victoria were led to the starting platform. The instructor gave them a brief overview of the safety procedures and the course ahead.
+    </p>
+
+    <div class="dialogue-card reveal">
+      <div class="d-row">
+        <span class="d-name v">Victoria</span>
+        <span class="d-text">"Ready?"</span>
+      </div>
+      <div class="d-row">
+        <span class="d-name l">Lucifer</span>
+        <span class="d-text">"As ready as I'll ever be."</span>
+      </div>
+    </div>
+
+    <p class="reveal">
+      Victoria went first, leaping off the platform with a whoop of joy. She soared through the air, her laughter echoing through the trees. Lucifer watched her — a mixture of awe and admiration on his face. When it was his turn, he took a deep breath and stepped off the platform, the rush of wind and the sensation of flying overwhelming his senses.
+    </p>
+
+    <div class="moment-card reveal">
+      <p>The forest below spread out like a verdant carpet, and the distant mountains framed the horizon. Lucifer felt a surge of adrenaline mixed with a profound sense of freedom.</p>
+      <p>As he glided through the canopy, he spotted Victoria ahead — her auburn hair streaming behind her like a banner in the wind.</p>
+    </div>
+
+    <div class="dialogue-card reveal">
+      <div class="d-row">
+        <span class="d-name v">Victoria</span>
+        <span class="d-text">"That was incredible! What did you think?"</span>
+      </div>
+      <div class="d-row">
+        <span class="d-name l">Lucifer</span>
+        <span class="d-text">"I think I might be losing my mind. This is amazing."</span>
+      </div>
+    </div>
+
+    <p class="reveal">
+      They continued along the zipline course, each segment offering new perspectives and challenges. Between the ziplines, they crossed suspension bridges and climbed rope ladders — their conversations filled with laughter and shared wonder. With each leap and glide, their bond deepened, the adventure serving as a quiet metaphor for their own journey of reconnection.
+    </p>
+
+    <div class="scene-break reveal"><span>🌿</span></div>
+
+    <div class="pull-quote reveal">
+      <p>"Life has a funny way of bringing people together — sometimes all it takes is the courage to let go."</p>
+    </div>
+
+    <p class="reveal">
+      At one point, they paused on a particularly high platform, taking in the panoramic view of Evervale's sprawling forests stretching out endlessly below them.
+    </p>
+
+    <div class="dialogue-card reveal">
+      <div class="d-row">
+        <span class="d-name v">Victoria</span>
+        <span class="d-text">"You know, I never imagined we'd reconnect like this. Life has a funny way of bringing people together."</span>
+      </div>
+      <div class="d-row">
+        <span class="d-name l">Lucifer</span>
+        <span class="d-text">"I'm grateful for it. This has been… unexpectedly wonderful."</span>
+      </div>
+    </div>
+
+    <p class="reveal">
+      As they completed the final zipline and returned to solid ground, they felt a shared sense of accomplishment and camaraderie. The adventure had not only been thrilling — it was a testament to their evolving friendship.
+    </p>
+
+    <div class="scene-break reveal"><span>🌅</span></div>
+
+    <div class="dialogue-card reveal">
+      <div class="d-row">
+        <span class="d-name v">Victoria</span>
+        <span class="d-text">"What's next on our adventure list?"</span>
+      </div>
+      <div class="d-row">
+        <span class="d-name l">Lucifer</span>
+        <span class="d-text">"I think I'll leave that up to your imagination. You've got a knack for making life exciting."</span>
+      </div>
+      <div class="d-row">
+        <span class="d-name v">Victoria</span>
+        <span class="d-text">"Deal. But first — how about we grab some coffee? I know a great little café just around the corner."</span>
+      </div>
+      <div class="d-row">
+        <span class="d-name l">Lucifer</span>
+        <span class="d-text">"Sounds perfect."</span>
+      </div>
+    </div>
+
+    <div class="sunset-card reveal">
+      <span class="sun-icon">🌇</span>
+      <p>As they made their way to the café, the sun began to set — casting a golden glow over Evervale. The day's adventure had brought them closer. And as they sat down with their coffees, they knew it was just the beginning of many more shared experiences to come.</p>
+    </div>
+
+    <!-- story end -->
+    <div class="story-end reveal">
+      <span class="phase-tag">Phase Three · Complete</span>
+      <p class="closing">Some heights are worth the fear — especially when you're not climbing alone.</p>
+      <a href="Chapter_One.html" class="return-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+        Return to Chapter One
+      </a>
+    </div>
+
+  </main>
+
+  <script>
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); }
+      });
+    }, { threshold: 0.08 });
+
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+  </script>
+
+</body>
+</html>
