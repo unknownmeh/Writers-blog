@@ -2,339 +2,687 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <title>WOC LV Journey</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+
     <style>
-        
-           
-        body, html {
+        :root {
+            --gold: #c9a84c;
+            --gold-light: #f0d080;
+            --dark: #0a0805;
+            --text-shadow: 2px 3px 12px rgba(0,0,0,0.9);
+            --transition: 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            height: 100%;
-            
-            flood-opacity: 0%;
-            
-            background-attachment: initial;
-            
         }
 
-           
-        .background-image {
-            background-image: url("bg2e.jpg");
-            background-attachment: initial;
-            background-size: cover;
-            background-position: 100%;
-            height: 100%;
-            display: auto;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            color: rgb(255, 255, 255);
-            background-repeat: no-repeat;
-            
-            
-            
-            
-        }
-        .background-image2 {
-            background-image: url("lu3.png");
-            background-attachment: initial;
-            background-size: cover;
-            background-position: 100%;
-            height: 100%;
-            display: cover;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            color: rgb(255, 255, 255);
-            background-repeat: no-repeat;
-            
-            
-            
-        }
-        .background-image3 {
-            background-image: url("p3.jpg");
-            background-attachment: initial;
-            background-size: cover;
-            background-position: 100%;
-            height: 100%;
-            display: cover;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            color: rgb(255, 255, 255);
-            background-repeat: no-repeat;
-            
+        html {
+            scroll-behavior: smooth;
+            overflow-x: hidden;
         }
 
-        .background-image4 {
-            background-image: url("p444.jpg");
-            background-attachment: initial;
-            background-size: cover;
-            background-position: 100%;
-            height: 100%;
+        body {
+            font-family: 'EB Garamond', serif;
+            background: var(--dark);
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        /* ─── NAV ─── */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 18px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.85) 0%, transparent 100%);
+            backdrop-filter: blur(2px);
+            transition: background var(--transition);
+        }
+
+        nav.scrolled {
+            background: rgba(5,3,1,0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(201,168,76,0.2);
+        }
+
+        .nav-logo {
+            font-family: 'Cinzel Decorative', serif;
+            font-size: clamp(0.75rem, 2vw, 1rem);
+            color: var(--gold);
+            letter-spacing: 0.15em;
+            text-shadow: 0 0 20px rgba(201,168,76,0.5);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            font-family: 'Cinzel', serif;
+            font-size: 0.78rem;
+            color: rgba(255,255,255,0.75);
+            text-decoration: none;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            transition: color var(--transition);
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--gold);
+            transition: width var(--transition);
+        }
+
+        .nav-links a:hover { color: var(--gold-light); }
+        .nav-links a:hover::after { width: 100%; }
+
+        .nav-hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .nav-hamburger span {
             display: block;
+            width: 24px;
+            height: 2px;
+            background: var(--gold);
+            transition: var(--transition);
+        }
+
+        /* ─── SECTIONS ─── */
+        section {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
             flex-direction: column;
             justify-content: center;
-            align-items: center;
-            text-align: center;
-            color: rgb(255, 255, 255);
-            background-repeat: no-repeat;
-            
+            overflow: hidden;
         }
-        .background-image5 {
-            background-image: url("v55.jpg");
-            background-attachment: initial;
+
+        .bg-layer {
+            position: absolute;
+            inset: 0;
             background-size: cover;
-            background-position: 100%;
-            height: 100%;
-            display: cover;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            color: rgb(255, 255, 255);
+            background-position: center;
             background-repeat: no-repeat;
-            
+            z-index: 0;
+            transform: scale(1.05);
+            transition: transform 8s ease;
         }
-        .welcome-text {
-            font-size: 3em;
-            font-weight: bold;
+
+        section:hover .bg-layer { transform: scale(1); }
+
+        .bg-overlay {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+        }
+
+        .section-content {
+            position: relative;
+            z-index: 2;
+            padding: clamp(80px, 12vw, 140px) clamp(20px, 6vw, 90px) clamp(60px, 8vw, 100px);
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        /* ─── HERO ─── */
+        #hero .bg-layer { background-image: url("images/bg2e.jpg"); }
+
+        #hero .bg-overlay {
+            background: linear-gradient(
+                160deg,
+                rgba(0,0,0,0.75) 0%,
+                rgba(10,5,2,0.55) 50%,
+                rgba(0,0,0,0.8) 100%
+            );
+        }
+
+        .hero-eyebrow {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(0.6rem, 1.5vw, 0.85rem);
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            color: var(--gold);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeUp 0.9s 0.3s forwards;
+            margin-bottom: 22px;
+        }
+
+        .hero-title {
+            font-family: 'Cinzel Decorative', serif;
+            font-size: clamp(1.6rem, 5.5vw, 4rem);
+            font-weight: 700;
+            line-height: 1.15;
+            text-shadow: var(--text-shadow);
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeUp 1s 0.55s forwards;
             margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-            
-            
-        }
-        .sub-text {
-            font-size: 2em;
-            font-weight: bold;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-        }
-        .arrow {
-            margin-top: 50px;
-            
-        }
-        .arrow img {
-            width: 20px;
-            transition: transform 0.3s ;
-            
-        }
-        .arrow img:hover {
-            transform: translateX(30px);
-        }
-        .content{
-            font-family: 'Cinzel Decorative';
-            font-size: medium;
-            font-size: 2em;
-            font-weight: normal;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-        }
-        .paragraph1{
-            padding-top: 0%;
-            padding-right: 40px;
-            padding-left: 40px;
-            padding-bottom: 120px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-            text-align: justify;
-            font-size: 18px;   
-            font-family: " Garamond";
-            display: block;
-            animation: 3s infinite alternate slidein;
-            
-        }
-        .paragraph2{
-            padding-top: 15px;
-            padding-right: 650px;
-            padding-left: 15px;
-            padding-bottom: 0px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-            text-align: justify;
-            font-size: 18px;
-            font-family: "Times New Roman", Times, serif;
-            display: block;
-            overflow: auto;
-        }
-        .paragraph3{
-            padding-top: 15px;
-            padding-right: 20px;
-            padding-left: 20px;
-            padding-bottom: 0px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-            text-align: justify;
-            font-size: 18px;
-            font-family: "Cinzel Decorative", Times, serif;
-            display: block;
-        }
-        .paragraph4{
-            padding-top: 15px;
-            padding-right: 150px;
-            padding-left: 150px;
-            padding-bottom: 0px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-            text-align: justify;
-            font-size: 20px;
-            font-family: "Cinzel Decorative", Times, serif;
-            display: block;
-            
-        }
-        .paragraph5{
-            padding-top: 15px;
-            padding-right: 150px;
-            padding-left: 150px;
-            padding-bottom: 05px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-            text-align: justify;
-            font-size: 20px;
-            font-family: "Cinzel Decorative", Times, serif;
-            display: block;
-        
-        }
-        .readnow
-        {
-            padding-top: 15px;
-            padding-right: 50px;
-            padding-left: 350px;
-            padding-bottom: 0px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-            text-align: justify;
-            font-size: 20px;
-            font-family: "Cinzel Decorative", Times, serif;
-            display: block;  
-        }
-        .lowerthird{
-            padding-bottom: 0px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-            text-align: justify;
-            font-size: 20px;
-            font-family: "Cinzel Decorative", Times, serif;
-            display: cover;
-            color: black;
-            padding-left: 400px;
-            padding-right: 300px;
-            padding-top: 0%;
-            background-color: rgb(124, 209, 26);
         }
 
-    
-        
+        .hero-sub {
+            font-family: 'Cinzel Decorative', serif;
+            font-size: clamp(0.9rem, 2.5vw, 1.4rem);
+            color: rgba(255,255,255,0.85);
+            text-shadow: var(--text-shadow);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeUp 1s 0.75s forwards;
+            margin-bottom: 40px;
+        }
+
+        .divider {
+            width: 80px;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--gold), transparent);
+            margin: 32px 0;
+            opacity: 0;
+            animation: fadeIn 1s 1s forwards;
+        }
+
+        .hero-intro {
+            font-family: 'EB Garamond', serif;
+            font-size: clamp(1rem, 1.8vw, 1.2rem);
+            line-height: 1.9;
+            color: rgba(255,255,255,0.88);
+            text-shadow: 1px 2px 8px rgba(0,0,0,0.8);
+            text-align: justify;
+            max-width: 850px;
+            opacity: 0;
+            animation: fadeIn 1s 1.2s forwards;
+            margin-bottom: 40px;
+        }
+
+        /* ─── CHAPTER LIST ─── */
+        .chapter-list-title {
+            font-family: 'Cinzel Decorative', serif;
+            font-size: clamp(1.1rem, 2.5vw, 1.6rem);
+            color: var(--gold-light);
+            text-shadow: var(--text-shadow);
+            margin-bottom: 22px;
+            opacity: 0;
+            animation: fadeUp 0.8s 1.4s forwards;
+        }
+
+        .chapter-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            opacity: 0;
+            animation: fadeUp 0.8s 1.55s forwards;
+        }
+
+        .chapter-list li {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(0.78rem, 1.5vw, 0.95rem);
+            letter-spacing: 0.08em;
+            color: rgba(255,255,255,0.8);
+            padding: 10px 16px;
+            border-left: 2px solid rgba(201,168,76,0.35);
+            transition: all var(--transition);
+            position: relative;
+        }
+
+        .chapter-list li:hover {
+            border-left-color: var(--gold);
+            color: #fff;
+            padding-left: 24px;
+            background: rgba(201,168,76,0.07);
+        }
+
+        .chapter-list a {
+            color: inherit;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .chapter-list a:hover { color: var(--gold-light); }
+
+        .read-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Cinzel', serif;
+            font-size: clamp(0.7rem, 1.4vw, 0.82rem);
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--gold);
+            border: 1px solid var(--gold);
+            padding: 8px 22px;
+            margin-top: 6px;
+            text-decoration: none;
+            transition: all var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .read-badge::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--gold);
+            transform: translateX(-101%);
+            transition: transform var(--transition);
+            z-index: -1;
+        }
+
+        .read-badge:hover {
+            color: #000;
+        }
+
+        .read-badge:hover::before { transform: translateX(0); }
+
+        /* ─── SECTIONS 2–5 ─── */
+        #ch1 .bg-layer { background-image: url("images/digital dawn.jpg"); background-position: center top; }
+        #ch2 .bg-layer { background-image: url("images/p3.jpg"); }
+        #ch3 .bg-layer { background-image: url("images/p444.jpg"); }
+        #ch4 .bg-layer { background-image: url("images/v55.jpg"); }
+
+        #ch1 .bg-overlay  { background: linear-gradient(135deg, rgba(0,0,0,0.8) 0%, rgba(20,10,5,0.6) 60%, rgba(0,0,0,0.75) 100%); }
+        #ch2 .bg-overlay  { background: linear-gradient(160deg, rgba(0,0,0,0.75) 0%, rgba(5,15,25,0.55) 60%, rgba(0,0,0,0.8) 100%); }
+        #ch3 .bg-overlay  { background: linear-gradient(120deg, rgba(0,0,0,0.7) 0%, rgba(15,5,20,0.5) 60%, rgba(0,0,0,0.85) 100%); }
+        #ch4 .bg-overlay  { background: linear-gradient(145deg, rgba(0,0,0,0.8) 0%, rgba(10,10,20,0.6) 60%, rgba(0,0,0,0.75) 100%); }
+
+        .chapter-header {
+            font-family: 'Cinzel Decorative', serif;
+            font-size: clamp(0.75rem, 1.8vw, 1rem);
+            color: var(--gold);
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .chapter-title {
+            font-family: 'Cinzel Decorative', serif;
+            font-size: clamp(1.3rem, 3.5vw, 2.4rem);
+            line-height: 1.2;
+            text-shadow: var(--text-shadow);
+            margin-bottom: 12px;
+        }
+
+        .chapter-subtitle {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(0.95rem, 2vw, 1.3rem);
+            color: rgba(255,255,255,0.85);
+            margin-bottom: 28px;
+        }
+
+        .chapter-excerpt {
+            font-family: 'EB Garamond', serif;
+            font-size: clamp(1rem, 1.8vw, 1.2rem);
+            font-style: italic;
+            line-height: 1.85;
+            color: rgba(255,255,255,0.88);
+            text-shadow: 1px 2px 8px rgba(0,0,0,0.7);
+            max-width: 780px;
+            margin-bottom: 30px;
+            padding-left: 18px;
+            border-left: 3px solid var(--gold);
+        }
+
+        .scene-list {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 8px 24px;
+            margin-top: 24px;
+        }
+
+        .scene-list li {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(0.65rem, 1.2vw, 0.8rem);
+            letter-spacing: 0.1em;
+            color: rgba(255,255,255,0.7);
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(201,168,76,0.15);
+            transition: color var(--transition), border-color var(--transition);
+        }
+
+        .scene-list li:hover {
+            color: var(--gold-light);
+            border-bottom-color: rgba(201,168,76,0.5);
+        }
+
+        /* ─── SCROLL REVEAL ─── */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s ease, transform 0.9s ease;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal-delay-1 { transition-delay: 0.15s; }
+        .reveal-delay-2 { transition-delay: 0.3s; }
+        .reveal-delay-3 { transition-delay: 0.45s; }
+        .reveal-delay-4 { transition-delay: 0.6s; }
+
+        /* ─── FOOTER ─── */
+        footer {
+            background: #060402;
+            border-top: 1px solid rgba(201,168,76,0.25);
+            text-align: center;
+            padding: 30px 20px;
+        }
+
+        footer p {
+            font-family: 'Cinzel', serif;
+            font-size: 0.75rem;
+            letter-spacing: 0.2em;
+            color: rgba(201,168,76,0.55);
+        }
+
+        /* ─── SCROLL PROGRESS ─── */
+        #progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 2px;
+            background: linear-gradient(to right, var(--gold), var(--gold-light));
+            z-index: 200;
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+
+        /* ─── ANIMATIONS ─── */
+        @keyframes fadeUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        /* ─── MOBILE NAV ─── */
+        @media (max-width: 700px) {
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: fixed;
+                inset: 0;
+                background: rgba(5,3,1,0.97);
+                justify-content: center;
+                align-items: center;
+                gap: 32px;
+                z-index: 99;
+            }
+
+            .nav-links.open { display: flex; }
+            .nav-links a { font-size: 1.1rem; }
+            .nav-hamburger { display: flex; z-index: 101; }
+
+            .nav-hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px,5px); }
+            .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+            .nav-hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px,-5px); }
+
+            .scene-list {
+                grid-template-columns: 1fr;
+            }
+
+            nav { padding: 14px 20px; }
+        }
+
+        @media (max-width: 480px) {
+            .chapter-excerpt { padding-left: 12px; font-size: 1rem; }
+        }
     </style>
 </head>
 <body>
-    <div class="background-image">
-        <div class="welcome-text">WELCOME TO THE WORLD OF LUCIFER WRITINGS...</div>
-        <div class="content">Lucifer Welcomes You :)</div>
-        <div class="arrow">
-            <img src="https://cdn-icons-png.flaticon.com/512/130/130882.png" alt="Arrow pointing to the left">
-           
-        </div>
-        
-            
-            
-        <div class="paragraph1">
-            
-            <article><h1>Whispers of Caring: Lucifer and Victoria's Journey...</h1>
-            <p>
-                Life is not a facile concept to grasp, especially when it comes to comprehending the presence of an individual before you through mere sight. It is, rather, a voyage shared by two individuals traversing the same path in tandem. However, not all journeys adhere to this pattern; at times, two people may be journeying along parallel paths but commencing from disparate origins. They connect their thoughts and emotions with someone situated afar, leveraging the marvels of technology. Technology, in this context, encompasses not only computer networks and artificial intelligence but also antiquated methods like sending postcards, which were considered technological marvels in our ancestors' era.
-                In this narrative, the paths of two individuals intersect at a singular point of destiny. They become intertwined through an online forum, forging a connection that transcends physical boundaries. To unravel the remainder of their tale, continue delving into "Whispers of Caring: The Journey of Lucifer and Victoria."
+
+<!-- Progress Bar -->
+<div id="progress-bar"></div>
+
+<!-- Navigation -->
+<nav id="navbar">
+    <a class="nav-logo" href="#">WOC LV JOURNEY</a>
+    <ul class="nav-links" id="navLinks">
+        <li><a href="#hero">Home</a></li>
+        <li><a href="#ch1">Chapter I</a></li>
+        <li><a href="#ch2">Chapter II</a></li>
+        <li><a href="#ch3">Chapter III</a></li>
+        <li><a href="#ch4">Chapter IV</a></li>
+    </ul>
+    <div class="nav-hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+    </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════════ HERO -->
+<section id="hero">
+    <div class="bg-layer"></div>
+    <div class="bg-overlay"></div>
+    <div class="section-content">
+        <p class="hero-eyebrow">An Epic of Distance &amp; Devotion</p>
+        <h1 class="hero-title">WELCOME TO THE<br>WORLD OF LUCIFER<br>WRITINGS…</h1>
+        <p class="hero-sub">Lucifer Welcomes You &nbsp;:)</p>
+        <div class="divider"></div>
+
+        <article>
+            <h2 class="chapter-list-title" style="animation-delay:1.3s;">Whispers of Caring: Lucifer &amp; Victoria's Journey</h2>
+            <p class="hero-intro">
+                Life is not a facile concept to grasp, especially when it comes to comprehending the presence of an individual before you through mere sight. It is, rather, a voyage shared by two individuals traversing the same path in tandem. They connect their thoughts and emotions with someone situated afar, leveraging the marvels of technology — not only computer networks and artificial intelligence, but also antiquated methods like sending postcards.
+                <br><br>
+                In this narrative, the paths of two individuals intersect at a singular point of destiny. To unravel the remainder of their tale, continue into <em>"Whispers of Caring: The Journey of Lucifer and Victoria."</em>
             </p>
         </article>
-        <article><h1>Read Now</h1></article>
-        <a href="file:///C:/Users/new/Pictures/Writings/Blog/Chapter%20One.html" style="text-decoration:none;"><ol style="color: orange;">Chapter One: The Digital Dawn</ol></a>
-        <ol style="color: orange;">Chapter Two: Aurora's Symphony</ol>
-        <ol style="color: orange;">Chapter Three: The Celestial Saga</ol>
-        <ol style="color: orange;">Chapter Four: From Solitary Shadows to Lucid Dreams</ol>
-    </div>
-            </div>
-   
-    
 
-            <div class="background-image2">
-            <div class="paragraph2">
-                <article style="font-size: 18px;"><h1>Whispers of Caring: Lucifer and Victoria's Journey...</h1>
-                    <h1>Chapter One : The Digital Dawn</h1>
-                  <br>  <p style="color: darkorange;">They stopped outside their old classrooms, memories flooding back. "Section B," Lucifer murmured, tracing the letters on the door. 
-                        "It was my little world for so long." "And Section A," Victoria added, her voice reflective. "We were so close, yet so far apart."
-                        <br>
-                        
-                        Lucifer turned to her, his expression thoughtful. "It's strange how life works. We spent years in the same school, but it took us this long to actually connect."
-                        </p>
-             
-           <a href="https://english.pratilipi.com/series/whispers-of-caring-lucifer-and-victorias-journey-chapter-one-by-aditya-afnal5emzb9d" style="text-decoration:none;"><h1 style="color: white;">Read Now</h1></a> </article>
-           <ol>1. SERENDIPITOUS REUNION</ol>
-            <ol>2. ECHOES OF EVERVALE: A WALK DOWN MEMORY LANE</ol>
-            <ol>3. SKYWARD BONDS: A ZIPLINE ADVENTURE</ol>
-            <ol>4. SAVORING MOMENTS: EXPLORING TASTES AND TALES</ol>
-            <ol>5. CONNECTIONS IN PIXELS: AN ARCADE TO CONSOLE JOURNEY</ol>
-            <ol>6. SUNSET SERENADE: A PARTING SYMPHONY FROM EVERVALE</ol>
-        </div>
-    
-    <br>
-    <br>
-    
-    <div class="background-image3">
-        <div class="paragraph3">
-            <article style="font-size:25px;"><h1 style="text-align: center;", ="color: rgb(250, 7, 230);">Whispers of Caring: Lucifer and Victoria's Journey...</h1>
-                <h2 style="text-align: center;">Chapter Two: Aurora's Symphony</h2>
-                <p style="text-align: center;">"Inspired by a dear friend's vivid tales of Aurora Vista, I've tried to capture the beauty and tranquillity of a snowy winter day. 
-                    <br>I hope it brings you as much peace and joy as it did to me while painting it." </p>
-            
-       <a href="https://english.pratilipi.com/series/whispers-of-caring-lucifer-and-victorias-journeychapter-twoauroras-symphony-by-aditya-jed3v4co6cw6" style="text-decoration:none;"><h1 style="color:rgb(226, 141, 44);" text-align="center">Read Now</h1></a> </article>
-        <ol>1. Aurora's Beauty: Lucifer's Haven</ol>
-        <ol>2. A Day in Paradise: Navigating Work and Friendship in Aurora Vista</ol>
-        <ol>3. The Masterpiece : Victoria’s Winter Vision of Aurora Vista</ol>
-        <ol>4. Twilight Talks: Heart and Art</ol>
-        <ol>5. A Sudden Silence : The Distance between Messages</ol>
-        <ol>6. Guild Guardians : The Tale of Unbreakable Unity</ol>
+        <p class="chapter-list-title" style="animation-delay:1.5s;">Read Now</p>
+        <ul class="chapter-list">
+            <li><a href="Chapter 1.html">Chapter One &mdash; The Digital Dawn <span style="color:var(--gold);margin-left:auto;">→</span></a></li>
+            <li><a href="file:///C:/Users/new/Pictures/Writings/Blog/Chapter%20One.html">Chapter Two &mdash; Aurora's Symphony <span style="color:var(--gold);margin-left:auto;">→</span></a></li>
+            <li>Chapter Three &mdash; The Celestial Saga</li>
+            <li>Chapter Four &mdash; From Solitary Shadows to Lucid Dreams</li>
+        </ul>
     </div>
-    </div>
-                    <div class="background-image4">
-                        <div class="paragraph4">
-                            <article style="font-size: 30px;"><h1 style="text-align: center;">Whispers of Caring: Lucifer and Victoria's Journey...</h1></article>
-                            <h2 style="text-align: center;">Chapter Three: The Celestial Saga</h2>
-                            <p style="text-align: justify;">Lucifer, you won't believe what I just saw!" Victoria's eyes sparkled with excitement, her voice bubbling with enthusiasm. "I was just sitting on my bed, enjoying the night sky, when I saw a star falling from the sky!"
-                                
-                                "Really?" Lucifer's eyes widened, his interest piqued. "Tell me more. What did it look like?"
-                                </p>
-                                <br>
-                               <a href="https://english.pratilipi.com/user/aditya-279f19ck30" style="text-decoration:none;"><h2 style="color: rgb(248, 248, 248);" style="border: color(from color srgb r g b);">Read Now</h2></a>
-                               
-                               <ol>1. Morning Musings</ol>
-                               <ol>2. Shooting Stars : Celestial Conversations</ol>
-                               <ol>3. Interior Monologue</ol>
-                               <ol>4. The Life before Encounter</ol>
-                               <ol>5. An Evening's Promise - The path to Aurora Vista</ol>
-                               <ol>6. Epic Battles: Nightshade and Starfire's Chronicles</ol>
-                                
-                                
-                        </div>
-                    </div>
-                                <div class="background-image5">
-                                    <div class="paragraph5">
-                                        <article style="font-size: 25px;"><h1 style="text-align: center;">Whispers of Caring: Lucifer and Victoria's Journey...</h1></article>
-                                        <h2 style="text-align: center;">Chapter Four: From Solitary Shadows to Lucid Dreams</h2>
-                                        <p style="text-align: justify;">
-“Victoria,” he typed hesitantly, “can I talk to you about something serious? I’ve been struggling with something since last night.”There was a brief pause in the game. Starfire stopped mid-action, and a moment later, Victoria’s reply appeared on the screen. “Of course, Lucifer. You can tell me anything. What’s going on?”
+</section>
 
-                                        </p>
-                                        <div class="readnow">
-                                    <a href="https://english.pratilipi.com/user/aditya-279f19ck30" style="text-decoration:none;"><h3 style="color: aliceblue;"">Read Now</h3></a>
-                                    
-                                    <ol>1. Solitary Shadows: The Lonely quests of Nightshade</ol>
-                                    <ol>2. The Mourning Veil: A Night of Endless Sorrow</ol>
-                                    <ol>3. Game On: Conquering work woes in the Digital Arena</ol>
-                                    <ol>4. Morning Musings and Evening Teasers between Lucifer and Victoria</ol>
-                                    <ol>5. Across the Miles: A Journey of Support and Care</ol>
-                                    <ol>6. Lucid Dreams of Friendship from Aurora Vista to Riverton</ol>
-                                </div>    
-                            </div>
-                                            <div class="lowerthird">
-                                                <p style="text-decoration-color: black;"> This website is owned by Lucifer © Lucifer Writings - LW@2024</p>
-                                            </div>
-                                        
-                                    </div>
+<!-- ═══════════════════════════════════════════════ CHAPTER 1 -->
+<section id="ch1">
+    <div class="bg-layer"></div>
+    <div class="bg-overlay"></div>
+    <div class="section-content">
+        <p class="chapter-header reveal">Whispers of Caring — Chapter One</p>
+        <h2 class="chapter-title reveal reveal-delay-1">The Digital Dawn</h2>
+        <div class="divider reveal reveal-delay-1" style="animation:none;opacity:0;"></div>
+
+        <blockquote class="chapter-excerpt reveal reveal-delay-2">
+            They stopped outside their old classrooms, memories flooding back. "Section B," Lucifer murmured, tracing the letters on the door. "It was my little world for so long." "And Section A," Victoria added, her voice reflective. "We were so close, yet so far apart."
+            <br><br>
+            "It's strange how life works. We spent years in the same school, but it took us this long to actually connect."
+        </blockquote>
+
+        <a class="read-badge reveal reveal-delay-3"
+           href="https://english.pratilipi.com/series/whispers-of-caring-lucifer-and-victorias-journey-chapter-one-by-aditya-afnal5emzb9d"
+           target="_blank" rel="noopener">
+           Read Full Chapter &rarr;
+        </a>
+
+        <ul class="scene-list reveal reveal-delay-4">
+            <li>I. Serendipitous Reunion</li>
+            <li>II. Echoes of Evervale: A Walk Down Memory Lane</li>
+            <li>III. Skyward Bonds: A Zipline Adventure</li>
+            <li>IV. Savoring Moments: Exploring Tastes and Tales</li>
+            <li>V. Connections in Pixels: An Arcade to Console Journey</li>
+            <li>VI. Sunset Serenade: A Parting Symphony from Evervale</li>
+        </ul>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ CHAPTER 2 -->
+<section id="ch2">
+    <div class="bg-layer"></div>
+    <div class="bg-overlay"></div>
+    <div class="section-content">
+        <p class="chapter-header reveal">Whispers of Caring — Chapter Two</p>
+        <h2 class="chapter-title reveal reveal-delay-1">Aurora's Symphony</h2>
+        <div class="divider reveal reveal-delay-1" style="animation:none;opacity:0;"></div>
+
+        <blockquote class="chapter-excerpt reveal reveal-delay-2">
+            "Inspired by a dear friend's vivid tales of Aurora Vista, I've tried to capture the beauty and tranquillity of a snowy winter day. I hope it brings you as much peace and joy as it did to me while painting it."
+        </blockquote>
+
+        <a class="read-badge reveal reveal-delay-3"
+           href="https://english.pratilipi.com/series/whispers-of-caring-lucifer-and-victorias-journeychapter-twoauroras-symphony-by-aditya-jed3v4co6cw6"
+           target="_blank" rel="noopener">
+           Read Full Chapter &rarr;
+        </a>
+
+        <ul class="scene-list reveal reveal-delay-4">
+            <li>I. Aurora's Beauty: Lucifer's Haven</li>
+            <li>II. A Day in Paradise: Navigating Work and Friendship</li>
+            <li>III. The Masterpiece: Victoria's Winter Vision</li>
+            <li>IV. Twilight Talks: Heart and Art</li>
+            <li>V. A Sudden Silence: The Distance between Messages</li>
+            <li>VI. Guild Guardians: The Tale of Unbreakable Unity</li>
+        </ul>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ CHAPTER 3 -->
+<section id="ch3">
+    <div class="bg-layer"></div>
+    <div class="bg-overlay"></div>
+    <div class="section-content">
+        <p class="chapter-header reveal">Whispers of Caring — Chapter Three</p>
+        <h2 class="chapter-title reveal reveal-delay-1">The Celestial Saga</h2>
+        <div class="divider reveal reveal-delay-1" style="animation:none;opacity:0;"></div>
+
+        <blockquote class="chapter-excerpt reveal reveal-delay-2">
+            "Lucifer, you won't believe what I just saw!" Victoria's eyes sparkled with excitement, her voice bubbling with enthusiasm. "I was just sitting on my bed, enjoying the night sky, when I saw a star falling from the sky!"
+            <br><br>
+            "Really?" Lucifer's eyes widened, his interest piqued. "Tell me more. What did it look like?"
+        </blockquote>
+
+        <a class="read-badge reveal reveal-delay-3"
+           href="https://english.pratilipi.com/user/aditya-279f19ck30"
+           target="_blank" rel="noopener">
+           Read Full Chapter &rarr;
+        </a>
+
+        <ul class="scene-list reveal reveal-delay-4">
+            <li>I. Morning Musings</li>
+            <li>II. Shooting Stars: Celestial Conversations</li>
+            <li>III. Interior Monologue</li>
+            <li>IV. The Life before Encounter</li>
+            <li>V. An Evening's Promise: The Path to Aurora Vista</li>
+            <li>VI. Epic Battles: Nightshade and Starfire's Chronicles</li>
+        </ul>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ CHAPTER 4 -->
+<section id="ch4">
+    <div class="bg-layer"></div>
+    <div class="bg-overlay"></div>
+    <div class="section-content">
+        <p class="chapter-header reveal">Whispers of Caring — Chapter Four</p>
+        <h2 class="chapter-title reveal reveal-delay-1">From Solitary Shadows<br>to Lucid Dreams</h2>
+        <div class="divider reveal reveal-delay-1" style="animation:none;opacity:0;"></div>
+
+        <blockquote class="chapter-excerpt reveal reveal-delay-2">
+            "Victoria," he typed hesitantly, "can I talk to you about something serious? I've been struggling with something since last night." There was a brief pause in the game. Starfire stopped mid-action, and a moment later, Victoria's reply appeared. "Of course, Lucifer. You can tell me anything. What's going on?"
+        </blockquote>
+
+        <a class="read-badge reveal reveal-delay-3"
+           href="https://english.pratilipi.com/user/aditya-279f19ck30"
+           target="_blank" rel="noopener">
+           Read Full Chapter &rarr;
+        </a>
+
+        <ul class="scene-list reveal reveal-delay-4">
+            <li>I. Solitary Shadows: The Lonely Quests of Nightshade</li>
+            <li>II. The Mourning Veil: A Night of Endless Sorrow</li>
+            <li>III. Game On: Conquering Work Woes in the Digital Arena</li>
+            <li>IV. Morning Musings and Evening Teasers</li>
+            <li>V. Across the Miles: A Journey of Support and Care</li>
+            <li>VI. Lucid Dreams of Friendship from Aurora Vista to Riverton</li>
+        </ul>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ FOOTER -->
+<footer>
+    <p>This website is owned by Lucifer &nbsp;&bull;&nbsp; © Lucifer Writings — LW@2024</p>
+</footer>
+
+<script>
+    // ── Nav scroll effect
+    const navbar = document.getElementById('navbar');
+    const progressBar = document.getElementById('progress-bar');
+
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 60) navbar.classList.add('scrolled');
+        else navbar.classList.remove('scrolled');
+
+        const scrollTop = document.documentElement.scrollTop;
+        const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        progressBar.style.width = (scrollTop / docHeight * 100) + '%';
+    });
+
+    // ── Hamburger
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.getElementById('navLinks');
+
+    hamburger.addEventListener('click', () => {
+        hamburger.classList.toggle('open');
+        navLinks.classList.toggle('open');
+    });
+
+    navLinks.querySelectorAll('a').forEach(a => {
+        a.addEventListener('click', () => {
+            hamburger.classList.remove('open');
+            navLinks.classList.remove('open');
+        });
+    });
+
+    // ── Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.12 });
+
+    reveals.forEach(el => observer.observe(el));
+
+    // ── Reveal dividers too
+    document.querySelectorAll('.divider.reveal').forEach(el => {
+        el.style.animation = 'none';
+    });
+</script>
 </body>
 </html>
