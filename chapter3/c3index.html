@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Chapter Three — The Celestial Saga · Whispers of Caring</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Sans:wght@300;400;500&family=Cinzel:wght@400;500;600&family=Fira+Code:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+
+/* ══════════════════════════════════════
+   TOKENS
+══════════════════════════════════════ */
+:root {
+  /* Full dark base */
+  --void:      #07080f;
+  --deep:      #0a0d1a;
+  --mid:       #0e1224;
+  --surface:   #121830;
+  --card:      #161e38;
+  --card2:     #1c2444;
+
+  /* Ink */
+  --ink:       #dce6f8;
+  --ink2:      #9aaac8;
+  --ink3:      #5a6a90;
+  --ink4:      #303a58;
+
+  /* Accents — per phase */
+  --sage:      #4ec48a;
+  --sage-g:    rgba(78,196,138,0.1);
+  --sage-b:    rgba(78,196,138,0.22);
+
+  --indigo:    #6080f0;
+  --indigo-g:  rgba(96,128,240,0.1);
+  --indigo-b:  rgba(96,128,240,0.22);
+
+  --violet:    #a060e8;
+  --violet-g:  rgba(160,96,232,0.1);
+  --violet-b:  rgba(160,96,232,0.22);
+
+  --amber:     #e0903a;
+  --amber-g:   rgba(224,144,58,0.1);
+  --amber-b:   rgba(224,144,58,0.22);
+
+  --teal:      #2ec4a4;
+  --teal-g:    rgba(46,196,164,0.1);
+  --teal-b:    rgba(46,196,164,0.22);
+
+  --rose:      #e05878;
+  --rose-g:    rgba(224,88,120,0.1);
+  --rose-b:    rgba(224,88,120,0.22);
+
+  --starlight: #88c0f8;
+  --sep:       rgba(255,255,255,0.07);
+  --sep2:      rgba(255,255,255,0.11);
+}
+
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--void);
+  color:var(--ink);
+  overflow-x:hidden;
+}
+
+/* noise grain */
+body::after{
+  content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='250'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='250' height='250' filter='url(%23g)' opacity='0.03'/%3E%3C/svg%3E");
+  opacity:.75;
+}
+
+/* ══ NAV ══ */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:400;
+  height:56px;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 clamp(18px,5vw,64px);
+  background:rgba(7,8,15,0.88);
+  backdrop-filter:blur(18px);
+  border-bottom:1px solid var(--sep);
+}
+nav::after{
+  content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--starlight),transparent);
+  opacity:.2;
+}
+.nav-brand{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.05rem;font-style:italic;
+  color:var(--ink);text-decoration:none;
+  letter-spacing:0.02em;transition:color .3s;
+}
+.nav-brand:hover{color:var(--starlight);}
+.nav-links{display:flex;gap:24px;align-items:center;}
+.nav-links a{
+  font-family:'DM Sans',sans-serif;
+  font-size:0.63rem;font-weight:500;
+  letter-spacing:0.22em;text-transform:uppercase;
+  color:var(--ink3);text-decoration:none;transition:color .25s;
+}
+.nav-links a:hover{color:var(--starlight);}
+
+/* ══ HERO ══ */
+.hero{
+  min-height:100vh;position:relative;overflow:hidden;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:90px 24px 80px;text-align:center;
+}
+.hero-bg{
+  position:absolute;inset:0;
+  background:linear-gradient(180deg,
+    #040510 0%,
+    #0d1228 22%,
+    #182044 44%,
+    #2a2860 60%,
+    #5a4080 73%,
+    #9a7060 83%,
+    #1a1c2e 100%
+  );
+}
+.hero-bg::before{
+  content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 55% 38% at 25% 28%,rgba(100,70,140,0.38) 0%,transparent 60%),
+    radial-gradient(ellipse 48% 32% at 76% 18%,rgba(40,50,100,0.45) 0%,transparent 55%),
+    radial-gradient(ellipse 65% 28% at 50% 58%,rgba(80,55,100,0.2) 0%,transparent 60%);
+}
+.hero-bg::after{
+  content:'';position:absolute;
+  bottom:19%;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,rgba(136,192,248,0.35),rgba(200,150,255,0.2),rgba(136,192,248,0.35),transparent);
+  animation:horizPulse 4s ease-in-out infinite alternate;
+}
+@keyframes horizPulse{0%{opacity:.25}100%{opacity:.75}}
+
+/* mountain silhouette */
+.hero-mtn{
+  position:absolute;bottom:0;left:0;right:0;height:30%;z-index:1;
+}
+
+#star-canvas{position:absolute;inset:0;pointer-events:none;z-index:1;}
+
+.sstar{
+  position:absolute;height:1px;pointer-events:none;z-index:2;opacity:0;
+  background:linear-gradient(90deg,transparent,rgba(255,251,232,0.9),rgba(255,251,232,0.15),transparent);
+  transform-origin:left center;
+}
+.sstar:nth-child(1){width:120px;top:17%;left:18%;transform:rotate(-22deg);animation:shoot 6s 0.5s ease-in-out infinite;}
+.sstar:nth-child(2){width:90px;top:11%;left:58%;transform:rotate(-17deg);animation:shoot 7.5s 3s ease-in-out infinite;}
+.sstar:nth-child(3){width:145px;top:30%;left:72%;transform:rotate(-27deg);animation:shoot 5.5s 6.5s ease-in-out infinite;}
+@keyframes shoot{
+  0%{opacity:0;transform:rotate(-22deg) translateX(-50px);}
+  7%{opacity:1;}28%{opacity:.85;transform:rotate(-22deg) translateX(190px);}
+  36%{opacity:0;transform:rotate(-22deg) translateX(240px);}
+  100%{opacity:0;}
+}
+
+.hero-inner{position:relative;z-index:3;max-width:680px;}
+
+.h-chap{
+  font-family:'Fira Code',monospace;
+  font-size:0.58rem;letter-spacing:0.28em;
+  color:rgba(136,192,248,0.5);
+  display:block;margin-bottom:14px;
+  animation:riseIn .8s ease .1s both;
+}
+.h-eyebrow{
+  display:inline-flex;align-items:center;gap:14px;
+  font-family:'Cinzel',serif;font-size:0.62rem;font-weight:500;
+  letter-spacing:0.5em;text-transform:uppercase;
+  color:var(--starlight);margin-bottom:20px;
+  animation:riseIn .8s ease .22s both;
+}
+.h-eyebrow::before,.h-eyebrow::after{
+  content:'';width:30px;height:1px;
+  background:var(--starlight);opacity:0.4;
+}
+.h-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(2.6rem,7.5vw,5.5rem);
+  font-weight:300;font-style:italic;
+  color:#fffbe8;line-height:1.07;letter-spacing:-0.01em;
+  animation:riseIn .9s ease .34s both;
+}
+.h-title strong{
+  font-style:normal;font-weight:600;display:block;
+  background:linear-gradient(135deg,#b0d0ff 0%,#d8b8ff 35%,#ffd8b0 65%,#b0d8ff 100%);
+  background-size:200% 200%;
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+  animation:titleShimmer 7s ease infinite 1.5s;
+  font-size:1.02em;
+}
+@keyframes titleShimmer{0%,100%{background-position:0% 50%;}50%{background-position:100% 50%;}}
+
+.h-rule{
+  display:flex;align-items:center;justify-content:center;gap:16px;
+  margin:24px auto;
+  animation:riseIn .8s ease .48s both;
+}
+.h-rule::before,.h-rule::after{content:'';width:52px;height:1px;background:rgba(255,251,232,0.18);}
+.h-rule span{font-size:0.9rem;color:rgba(255,251,232,0.45);}
+
+.h-desc{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1rem,2vw,1.18rem);font-weight:300;font-style:italic;
+  line-height:1.9;color:rgba(255,251,232,0.65);
+  max-width:500px;margin:0 auto 28px;
+  animation:riseIn .8s ease .6s both;
+}
+
+.h-teaser{
+  display:inline-block;
+  padding:14px 24px;
+  background:rgba(255,255,255,0.06);
+  backdrop-filter:blur(10px);
+  border:1px solid rgba(255,251,232,0.14);
+  border-radius:8px;
+  font-family:'Cormorant Garamond',serif;
+  font-size:1rem;font-style:italic;
+  color:rgba(255,251,232,0.72);
+  line-height:1.75;max-width:520px;margin:0 auto;
+  animation:riseIn .8s ease .72s both;
+}
+.h-speaker{
+  font-family:'Fira Code',monospace;
+  font-style:normal;font-size:0.52rem;letter-spacing:0.22em;
+  text-transform:uppercase;color:var(--starlight);
+  display:block;margin-bottom:7px;
+}
+
+.h-cta{
+  display:inline-flex;align-items:center;gap:9px;
+  margin-top:20px;padding:12px 30px;
+  background:rgba(136,192,248,0.1);
+  backdrop-filter:blur(8px);
+  border:1.5px solid rgba(136,192,248,0.4);
+  border-radius:40px;
+  font-family:'DM Sans',sans-serif;
+  font-size:0.68rem;font-weight:500;letter-spacing:0.2em;
+  text-transform:uppercase;text-decoration:none;
+  color:var(--starlight);
+  animation:riseIn .8s ease .88s both;
+  transition:all .28s;
+}
+.h-cta:hover{
+  background:rgba(136,192,248,0.2);
+  border-color:rgba(136,192,248,0.7);
+  color:#c8e8ff;transform:translateY(-2px);
+  box-shadow:0 8px 28px rgba(0,0,0,0.35);
+}
+.h-cta svg{width:13px;height:13px;transition:transform .25s;}
+.h-cta:hover svg{transform:translateX(3px);}
+
+.scroll-cue{
+  position:absolute;bottom:32px;left:50%;transform:translateX(-50%);
+  z-index:3;display:flex;flex-direction:column;align-items:center;gap:8px;
+  animation:riseIn .8s ease 1.2s both;
+}
+.scroll-cue span{
+  font-family:'Fira Code',monospace;font-size:0.5rem;
+  letter-spacing:0.4em;text-transform:uppercase;
+  color:rgba(255,251,232,0.3);
+}
+.scroll-arr{
+  width:1px;height:38px;
+  background:linear-gradient(180deg,rgba(136,192,248,0.7),transparent);
+  animation:lineGrow 2s ease-in-out infinite;
+}
+@keyframes lineGrow{0%,100%{opacity:.35;transform:scaleY(1);}50%{opacity:1;transform:scaleY(1.15);}}
+
+/* ══ TRANSITION BAND ══ */
+/* fades the hero into the dark content seamlessly */
+.hero-fade{
+  position:relative;z-index:2;
+  height:100px;margin-top:-100px;
+  background:linear-gradient(180deg,transparent 0%,var(--void) 100%);
+  pointer-events:none;
+}
+
+/* ══ MAIN ══ */
+.main{
+  background:var(--void);
+  max-width:760px;margin:0 auto;
+  padding:0 clamp(18px,5vw,48px) 110px;
+  position:relative;z-index:2;
+}
+
+/* decorative vertical glow line */
+.main::before{
+  content:'';
+  position:absolute;top:0;left:50%;
+  width:1px;height:120px;
+  background:linear-gradient(180deg,rgba(136,192,248,0.3),transparent);
+  transform:translateX(-50%);
+}
+
+/* ── chapter intro block ── */
+.ch-intro{
+  text-align:center;padding-top:50px;margin-bottom:64px;
+}
+.ch-intro-tag{
+  font-family:'Fira Code',monospace;
+  font-size:0.56rem;letter-spacing:0.28em;text-transform:uppercase;
+  color:var(--ink4);display:block;margin-bottom:16px;
+}
+.ch-intro-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1.6rem,3.5vw,2.4rem);
+  font-weight:300;font-style:italic;
+  color:var(--ink);margin-bottom:8px;
+}
+.ch-intro-rule{
+  display:flex;align-items:center;gap:14px;
+  margin:16px 0 20px;
+}
+.ch-intro-rule::before,.ch-intro-rule::after{
+  content:'';flex:1;height:1px;
+  background:linear-gradient(90deg,transparent,var(--sep2));
+}
+.ch-intro-rule::after{transform:scaleX(-1);}
+.ch-intro-rule span{font-size:0.5rem;letter-spacing:8px;color:var(--ink4);}
+
+/* ── story prose ── */
+.story-intro{margin-bottom:56px;}
+.story-intro p{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.1rem;font-weight:300;
+  line-height:2;color:var(--ink2);
+  text-align:justify;hyphens:auto;
+}
+.story-intro p::first-letter{
+  font-family:'Cormorant Garamond',serif;
+  font-size:3.8rem;font-weight:600;font-style:italic;
+  color:var(--starlight);float:left;
+  line-height:.82;margin:.05em .13em 0 0;
+}
+
+/* ── quote band ── */
+.quote-band{
+  margin:0 0 56px;padding:28px 0;
+  border-top:1px solid var(--sep);
+  border-bottom:1px solid var(--sep);
+  text-align:center;position:relative;
+}
+.quote-band::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--starlight),transparent);
+  opacity:.15;
+}
+.quote-band::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--starlight),transparent);
+  opacity:.15;
+}
+.quote-band p{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.18rem;font-style:italic;font-weight:300;
+  color:var(--ink2);line-height:1.75;
+}
+.quote-band p::before{content:'"';color:var(--starlight);font-size:1.4em;line-height:0;vertical-align:-0.15em;margin-right:4px;opacity:.5;}
+.quote-band p::after{content:'"';color:var(--starlight);font-size:1.4em;line-height:0;vertical-align:-0.15em;margin-left:4px;opacity:.5;}
+
+/* ── section label ── */
+.sec-label{
+  display:flex;align-items:center;gap:14px;margin-bottom:28px;
+}
+.sec-label span{
+  font-family:'Fira Code',monospace;
+  font-size:0.56rem;letter-spacing:0.28em;text-transform:uppercase;
+  color:var(--ink4);white-space:nowrap;
+}
+.sec-label::after{content:'';flex:1;height:1px;background:var(--sep);}
+
+/* ══ PHASE CARDS ══ */
+.phases { display:flex; flex-direction:column; gap:8px; margin-bottom:60px; }
+
+.phase-card {
+  display:flex;
+  align-items:center;
+  gap:0;
+  background: var(--surface);
+  border: 1px solid var(--sep);
+  border-radius: 10px;
+  text-decoration:none; color:inherit;
+  position:relative; overflow:hidden;
+  opacity:0; transform:translateY(14px);
+  transition: opacity .5s ease, transform .5s ease,
+              background .28s, border-color .28s, box-shadow .28s;
+  min-height: 76px;
+}
+
+/* color top-border per phase */
+.phase-card::before {
+  content:'';
+  position:absolute; top:0; left:0; right:0; height:2px;
+  opacity:0; transition:opacity .3s;
+}
+.phase-card:nth-child(1)::before { background: linear-gradient(90deg, var(--sage),   transparent 70%); }
+.phase-card:nth-child(2)::before { background: linear-gradient(90deg, var(--indigo), transparent 70%); }
+.phase-card:nth-child(3)::before { background: linear-gradient(90deg, var(--violet), transparent 70%); }
+.phase-card:nth-child(4)::before { background: linear-gradient(90deg, var(--amber),  transparent 70%); }
+.phase-card:nth-child(5)::before { background: linear-gradient(90deg, var(--teal),   transparent 70%); }
+.phase-card:nth-child(6)::before { background: linear-gradient(90deg, var(--rose),   transparent 70%); }
+
+/* ambient glow overlay */
+.phase-card::after {
+  content:'';
+  position:absolute; inset:0; opacity:0; pointer-events:none;
+  transition:opacity .35s;
+}
+.phase-card:nth-child(1)::after { background: radial-gradient(ellipse 50% 100% at 0% 50%, var(--sage-g),   transparent); }
+.phase-card:nth-child(2)::after { background: radial-gradient(ellipse 50% 100% at 0% 50%, var(--indigo-g), transparent); }
+.phase-card:nth-child(3)::after { background: radial-gradient(ellipse 50% 100% at 0% 50%, var(--violet-g), transparent); }
+.phase-card:nth-child(4)::after { background: radial-gradient(ellipse 50% 100% at 0% 50%, var(--amber-g),  transparent); }
+.phase-card:nth-child(5)::after { background: radial-gradient(ellipse 50% 100% at 0% 50%, var(--teal-g),   transparent); }
+.phase-card:nth-child(6)::after { background: radial-gradient(ellipse 50% 100% at 0% 50%, var(--rose-g),   transparent); }
+
+.phase-card:hover {
+  background: var(--card);
+  border-color: var(--sep2);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+.phase-card:hover::before { opacity:1; }
+.phase-card:hover::after  { opacity:1; }
+
+/* ─ Number block ─ */
+.ph-num {
+  flex-shrink: 0;
+  width: 72px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  align-self: stretch;
+  border-right: 1px solid var(--sep);
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2rem; font-weight: 300; font-style: italic;
+  color: var(--ink4);
+  user-select: none;
+  position: relative; z-index:1;
+  transition: color .28s, border-color .28s;
+}
+.phase-card:nth-child(1):hover .ph-num { color: var(--sage);   border-color: rgba(78,196,138,0.18); }
+.phase-card:nth-child(2):hover .ph-num { color: var(--indigo); border-color: rgba(96,128,240,0.18); }
+.phase-card:nth-child(3):hover .ph-num { color: var(--violet); border-color: rgba(160,96,232,0.18); }
+.phase-card:nth-child(4):hover .ph-num { color: var(--amber);  border-color: rgba(224,144,58,0.18); }
+.phase-card:nth-child(5):hover .ph-num { color: var(--teal);   border-color: rgba(46,196,164,0.18); }
+.phase-card:nth-child(6):hover .ph-num { color: var(--rose);   border-color: rgba(224,88,120,0.18); }
+
+/* ─ Info block ─ */
+.ph-info {
+  flex: 1;
+  padding: 18px 20px;
+  position: relative; z-index:1;
+}
+.ph-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.18rem; font-weight: 600;
+  color: var(--ink); line-height: 1.3; margin-bottom: 5px;
+  transition: color .28s;
+}
+.phase-card:nth-child(1):hover .ph-title { color: var(--sage); }
+.phase-card:nth-child(2):hover .ph-title { color: var(--indigo); }
+.phase-card:nth-child(3):hover .ph-title { color: var(--violet); }
+.phase-card:nth-child(4):hover .ph-title { color: var(--amber); }
+.phase-card:nth-child(5):hover .ph-title { color: var(--teal); }
+.phase-card:nth-child(6):hover .ph-title { color: var(--rose); }
+.ph-sub {
+  font-size: 0.78rem; font-weight: 300;
+  color: var(--ink3); line-height: 1.5; letter-spacing: 0.01em;
+}
+
+/* ─ Badge ─ */
+.ph-badge {
+  font-family: 'Fira Code', monospace;
+  font-size: 0.48rem; letter-spacing: 0.14em; text-transform: uppercase;
+  padding: 3px 9px; border-radius: 3px;
+  white-space: nowrap; flex-shrink: 0;
+  margin-right: 12px;
+  position: relative; z-index:1;
+}
+.badge-read { background: var(--sage-g);   color: var(--sage);   border: 1px solid var(--sage-b); }
+.badge-new  { background: var(--indigo-g); color: var(--indigo); border: 1px solid var(--indigo-b); }
+
+/* ─ Arrow ─ */
+.ph-arr {
+  width: 32px; height: 32px; border-radius: 50%;
+  border: 1px solid var(--sep2);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--ink4); flex-shrink: 0; margin-right: 18px;
+  position: relative; z-index:1;
+  transition: all .28s;
+}
+.ph-arr svg { width: 12px; height: 12px; }
+.phase-card:nth-child(1):hover .ph-arr { background:var(--sage);   border-color:var(--sage);   color:#fff; }
+.phase-card:nth-child(2):hover .ph-arr { background:var(--indigo); border-color:var(--indigo); color:#fff; }
+.phase-card:nth-child(3):hover .ph-arr { background:var(--violet); border-color:var(--violet); color:#fff; }
+.phase-card:nth-child(4):hover .ph-arr { background:var(--amber);  border-color:var(--amber);  color:#fff; }
+.phase-card:nth-child(5):hover .ph-arr { background:var(--teal);   border-color:var(--teal);   color:#fff; }
+.phase-card:nth-child(6):hover .ph-arr { background:var(--rose);   border-color:var(--rose);   color:#fff; }
+
+/* stagger in */
+.phases.in .phase-card:nth-child(1) { opacity:1; transform:none; transition-delay:.05s; }
+.phases.in .phase-card:nth-child(2) { opacity:1; transform:none; transition-delay:.13s; }
+.phases.in .phase-card:nth-child(3) { opacity:1; transform:none; transition-delay:.21s; }
+.phases.in .phase-card:nth-child(4) { opacity:1; transform:none; transition-delay:.29s; }
+.phases.in .phase-card:nth-child(5) { opacity:1; transform:none; transition-delay:.37s; }
+.phases.in .phase-card:nth-child(6) { opacity:1; transform:none; transition-delay:.45s; }
+
+/* ── back section ── */
+.back-wrap{
+  padding-top:40px;border-top:1px solid var(--sep);
+  display:flex;align-items:center;gap:16px;
+}
+.back-btn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:10px 24px;border-radius:6px;
+  border:1px solid var(--sep2);
+  color:var(--ink2);text-decoration:none;
+  font-size:0.65rem;font-weight:500;letter-spacing:0.2em;
+  text-transform:uppercase;transition:all .28s;
+}
+.back-btn svg{width:13px;height:13px;transition:transform .25s;}
+.back-btn:hover{border-color:var(--starlight);color:var(--starlight);background:rgba(136,192,248,0.07);}
+.back-btn:hover svg{transform:translateX(-3px);}
+.back-note{
+  font-family:'Cormorant Garamond',serif;
+  font-style:italic;font-size:0.92rem;color:var(--ink4);
+}
+
+/* ── animations ── */
+@keyframes riseIn{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:none;}}
+.reveal{opacity:0;transform:translateY(16px);transition:opacity .65s ease,transform .65s ease;}
+.reveal.in{opacity:1;transform:none;}
+
+/* ── responsive ── */
+@media(max-width:560px){
+  nav{padding:0 16px;}
+  .main{padding:0 16px 80px;}
+  .ph-num{padding-left:14px;font-size:1.5rem;}
+  .ph-info{padding-left:12px;}
+  .ph-badge{display:none;}
+  .ph-arr{margin-right:12px;}
+  .hero-title{font-size:2.4rem;}
+  .back-note{display:none;}
+}
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="Homepage.html" class="nav-brand">Whispers of Caring</a>
+  <div class="nav-links">
+    <a href="../index.html">Home</a>
+  </div>
+</nav>
+
+<!-- ════════════════ HERO ════════════════ -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <canvas id="star-canvas"></canvas>
+
+  <!-- CSS shooting stars -->
+  <div class="sstar"></div>
+  <div class="sstar"></div>
+  <div class="sstar"></div>
+
+  <!-- mountain silhouette -->
+  <svg class="hero-mtn" viewBox="0 0 1440 200" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="mtnG" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#1a1c2e" stop-opacity="0.9"/>
+        <stop offset="100%" stop-color="var(--void)" stop-opacity="1"/>
+      </linearGradient>
+    </defs>
+    <path d="M0,200 L0,140 L80,90 L160,130 L260,60 L360,110 L480,55 L580,100 L680,45 L780,95 L880,40 L980,90 L1080,50 L1180,95 L1280,60 L1360,105 L1440,80 L1440,200 Z" fill="url(#mtnG)"/>
+    <path d="M0,200 L0,170 L100,145 L220,168 L360,140 L500,165 L640,138 L780,165 L920,140 L1060,165 L1200,140 L1340,165 L1440,150 L1440,200 Z" fill="var(--void)" opacity="0.85"/>
+  </svg>
+
+  <div class="hero-inner">
+    
+    <p class="h-eyebrow">Chapter Three</p>
+    <h1 class="h-title">
+      The Celestial Saga
+      <strong>Aurora &amp; Evervale</strong>
+    </h1>
+    <div class="h-rule"><span>✦</span></div>
+    <p class="h-desc">Between two towns, across star-scattered nights and morning light — Lucifer and Victoria discover that some friendships are written in the sky.</p>
+
+    <div class="h-teaser">
+      <span class="h-speaker">Victoria · Evervale</span>
+      "Lucifer, you won't believe what I just saw! I was just sitting on my bed, enjoying the night sky, when I saw a star falling from the sky!"
+    </div>
+
+    <a href="c3p2.html" class="h-cta">
+      Read Full Chapter
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+    </a>
+  </div>
+
+  <div class="scroll-cue">
+    <span>Explore</span>
+    <div class="scroll-arr"></div>
+  </div>
+</section>
+
+<!-- seamless fade into dark content -->
+<div class="hero-fade"></div>
+
+<!-- ════════════════ MAIN ════════════════ -->
+<main class="main">
+
+  <div class="ch-intro reveal">
+    <span class="ch-intro-tag">// chapter iii · six phases · two towns //</span>
+    <div class="ch-intro-title">An Evening Written in Stars</div>
+    <div class="ch-intro-rule"><span>· · ·</span></div>
+  </div>
+
+  <div class="story-intro reveal">
+    <p>In the quiet spaces between messages and midnight skies, a new chapter of Lucifer and Victoria's story unfolds. The town of Aurora Vista and the village of Evervale are worlds apart — yet the distance dissolves with every conversation, every shared dream, every shooting star witnessed across separate windows. This is the celestial saga: where the cosmos becomes a canvas for connection.</p>
+  </div>
+
+  <div class="quote-band reveal">
+    <p>Some friendships are written in the stars — seen only by those who dare to look up.</p>
+  </div>
+
+  <div class="sec-label reveal">
+    <span>Chapter Three · Six Phases</span>
+  </div>
+
+  <!-- ════ PHASE CARDS ════ -->
+  <div class="phases">
+
+    <a href="c3p1.html" class="phase-card">
+      <span class="ph-num">01</span>
+      <div class="ph-div"></div>
+      <div class="ph-info">
+        <div class="ph-title">Morning Musings</div>
+        <div class="ph-sub">Of coffee, conversation and quiet friendship across two towns</div>
+      </div>
+      <span class="ph-badge badge-read">Read</span>
+      <div class="ph-arr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>
+    </a>
+
+    <a href="c3p2.html" class="phase-card">
+      <span class="ph-num">02</span>
+      <div class="ph-div"></div>
+      <div class="ph-info">
+        <div class="ph-title">Shooting Stars</div>
+        <div class="ph-sub">Celestial conversations — a falling star, a shared wonder</div>
+      </div>
+      <span class="ph-badge badge-new">New</span>
+      <div class="ph-arr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>
+    </a>
+
+    <a href="c3p3.html" class="phase-card">
+      <span class="ph-num">03</span>
+      <div class="ph-div"></div>
+      <div class="ph-info">
+        <div class="ph-title">Interior Monologue</div>
+        <div class="ph-sub">The unspoken thoughts that shape what is said aloud</div>
+      </div>
+      <div class="ph-arr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>
+    </a>
+
+    <a href="c3p4.html" class="phase-card">
+      <span class="ph-num">04</span>
+      <div class="ph-div"></div>
+      <div class="ph-info">
+        <div class="ph-title">The Life Before Encounter</div>
+        <div class="ph-sub">Who they were before they found each other</div>
+      </div>
+      <div class="ph-arr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>
+    </a>
+
+    <a href="c3p5.html" class="phase-card">
+      <span class="ph-num">05</span>
+      <div class="ph-div"></div>
+      <div class="ph-info">
+        <div class="ph-title">An Evening's Promise</div>
+        <div class="ph-sub">The path to Aurora Vista — a promise carried on evening air</div>
+      </div>
+      <div class="ph-arr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>
+    </a>
+
+    <a href="c3p6.html" class="phase-card">
+      <span class="ph-num">06</span>
+      <div class="ph-div"></div>
+      <div class="ph-info">
+        <div class="ph-title">Epic Battles</div>
+        <div class="ph-sub">Nightshade and Starfire's Chronicles — legends born from friendship</div>
+      </div>
+      <div class="ph-arr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>
+    </a>
+
+  </div>
+
+  <!-- Back -->
+  <div class="back-wrap reveal">
+    <a href="../index.html" class="back-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+      Back to Home
+    </a>
+    <span class="back-note">Return to the beginning of the story</span>
+  </div>
+
+</main>
+
+<script>
+/* ── Star canvas ── */
+(function(){
+  const canvas = document.getElementById('star-canvas');
+  const ctx = canvas.getContext('2d');
+  function resize(){ canvas.width = innerWidth; canvas.height = innerHeight; }
+  resize(); window.addEventListener('resize', resize);
+
+  const stars = Array.from({length:200}, () => ({
+    x: Math.random(),
+    y: Math.random() * 0.65,
+    r: Math.random() * 1.4 + 0.15,
+    a: Math.random() * 0.75 + 0.1,
+    sp: Math.random() * 0.55 + 0.2,
+    ph: Math.random() * Math.PI * 2,
+    hue: Math.random()
+  }));
+
+  let t = 0;
+  function draw(){
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const now = t * 0.007;
+    stars.forEach(s => {
+      const tw = s.a * (0.55 + 0.45 * Math.sin(now * s.sp + s.ph));
+      ctx.beginPath();
+      ctx.arc(s.x * canvas.width, s.y * canvas.height, s.r, 0, Math.PI * 2);
+      let c;
+      if (s.hue < 0.18)      c = `rgba(136,192,248,${tw})`;
+      else if (s.hue < 0.3)  c = `rgba(180,140,255,${tw * 0.8})`;
+      else if (s.hue < 0.42) c = `rgba(255,200,140,${tw * 0.6})`;
+      else                   c = `rgba(255,251,232,${tw})`;
+      ctx.fillStyle = c;
+      ctx.fill();
+    });
+    t++; requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+/* ── Scroll reveal ── */
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting){ e.target.classList.add('in'); obs.unobserve(e.target); }});
+}, { threshold: 0.08 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+/* ── Phases stagger ── */
+const phObs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting){ e.target.classList.add('in'); phObs.unobserve(e.target); }});
+}, { threshold: 0.04 });
+document.querySelectorAll('.phases').forEach(el => phObs.observe(el));
+</script>
+</body>
+</html>
