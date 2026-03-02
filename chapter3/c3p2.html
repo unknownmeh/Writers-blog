@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Shooting Stars — Whispers of Caring</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&family=Fira+Code:wght@300;400&display=swap" rel="stylesheet">
+<style>
+
+/* ══════════════════════════════════════
+   DESIGN TOKENS — No gold, editorial noir
+══════════════════════════════════════ */
+:root {
+  --bg:       #080b12;
+  --bg2:      #0c1020;
+  --bg3:      #10162a;
+  --panel:    #121830;
+  --panel2:   #16203a;
+  --card:     #1a2640;
+
+  --ink:      #dce6f5;
+  --ink2:     #9aaac5;
+  --ink3:     #5a6a8a;
+  --ink4:     #344060;
+
+  --teal:     #2ec4a4;
+  --teal2:    #1a9a80;
+  --teal-g:   rgba(46,196,164,0.12);
+  --teal-b:   rgba(46,196,164,0.22);
+
+  --rose:     #e05878;
+  --rose2:    #b03858;
+  --rose-g:   rgba(224,88,120,0.12);
+  --rose-b:   rgba(224,88,120,0.22);
+
+  --star:     #88c0f8;
+  --star2:    #508ccf;
+  --star-g:   rgba(136,192,248,0.1);
+  --star-b:   rgba(136,192,248,0.2);
+
+  --sep:      rgba(255,255,255,0.07);
+  --sep2:     rgba(255,255,255,0.12);
+
+  --sh:       0 4px 24px rgba(0,0,0,0.55);
+  --shl:      0 12px 48px rgba(0,0,0,0.65);
+}
+
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--bg);
+  color:var(--ink);
+  overflow-x:hidden;
+  line-height:1.65;
+}
+
+/* grain overlay */
+body::after{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  opacity:0.7;
+}
+
+/* ══ PROGRESS ══ */
+#prog{
+  position:fixed;top:0;left:0;height:2px;width:0%;
+  background:linear-gradient(90deg,var(--teal),var(--star),var(--rose));
+  z-index:600;transition:width .1s linear;
+}
+
+/* ══ NAV ══ */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:500;
+  height:56px;display:flex;align-items:center;justify-content:space-between;
+  padding:0 clamp(18px,4vw,64px);
+  background:rgba(8,11,18,0.9);
+  backdrop-filter:blur(18px);
+  border-bottom:1px solid var(--sep);
+}
+nav::after{
+  content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--teal),transparent);
+  opacity:0.3;
+}
+.n-brand{
+  font-family:'DM Serif Display',serif;
+  font-size:1rem;color:var(--ink);text-decoration:none;
+  letter-spacing:0.02em;
+}
+.n-brand span{color:var(--teal);}
+.n-right{display:flex;align-items:center;gap:20px;}
+.n-link{
+  font-size:0.62rem;letter-spacing:0.25em;text-transform:uppercase;
+  font-weight:500;color:var(--ink3);text-decoration:none;transition:color .25s;
+}
+.n-link:hover{color:var(--teal);}
+.n-chip{
+  font-family:'Fira Code',monospace;font-size:0.58rem;
+  color:var(--teal);border:1px solid var(--teal-b);
+  padding:3px 10px;border-radius:3px;letter-spacing:0.06em;
+}
+
+/* ══ HERO ══ */
+.hero{
+  position:relative;min-height:100vh;overflow:hidden;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  text-align:center;padding:100px 24px 80px;
+}
+#cvs{position:absolute;inset:0;z-index:0;pointer-events:none;}
+.hero-bg{
+  position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:
+    radial-gradient(ellipse 70% 60% at 50% 40%,rgba(136,192,248,0.05) 0%,transparent 60%),
+    radial-gradient(ellipse 40% 40% at 20% 60%,rgba(46,196,164,0.04) 0%,transparent 55%),
+    radial-gradient(ellipse 35% 35% at 80% 30%,rgba(224,88,120,0.04) 0%,transparent 50%);
+}
+
+/* shooting star CSS */
+.sstar{position:absolute;height:1px;pointer-events:none;z-index:2;opacity:0;
+  background:linear-gradient(90deg,transparent,rgba(136,192,248,0.9),rgba(136,192,248,0.2),transparent);
+  transform-origin:left center;}
+.sstar:nth-child(1){width:120px;top:16%;left:8%;transform:rotate(-18deg);animation:shoot 7s 1.5s ease-in-out infinite;}
+.sstar:nth-child(2){width:90px;top:32%;left:62%;transform:rotate(-14deg);animation:shoot 9s 5s ease-in-out infinite;}
+.sstar:nth-child(3){width:150px;top:55%;left:75%;transform:rotate(-22deg);animation:shoot 6s 8s ease-in-out infinite;}
+@keyframes shoot{
+  0%{opacity:0;transform:rotate(-18deg) translateX(-30px);}
+  6%{opacity:1;}28%{opacity:.8;transform:rotate(-18deg) translateX(200px);}
+  36%{opacity:0;transform:rotate(-18deg) translateX(250px);}
+  100%{opacity:0;}
+}
+
+/* hero content */
+.hero-inner{position:relative;z-index:3;max-width:680px;width:100%;}
+.h-tag{
+  font-family:'Fira Code',monospace;font-size:0.6rem;letter-spacing:0.2em;
+  color:var(--teal);display:block;margin-bottom:18px;
+  opacity:0;animation:fadeUp .7s ease .2s forwards;
+}
+.h-title{
+  font-family:'DM Serif Display',serif;
+  font-size:clamp(3rem,8vw,6.5rem);
+  font-weight:400;line-height:1.04;letter-spacing:-0.02em;
+  color:var(--ink);margin-bottom:12px;
+  opacity:0;animation:fadeUp .9s ease .4s forwards;
+}
+.h-title em{font-style:italic;color:var(--star);}
+.h-rule{
+  display:flex;align-items:center;justify-content:center;gap:14px;
+  margin:16px 0 20px;
+  opacity:0;animation:fadeUp .7s ease .6s forwards;
+}
+.h-rule::before,.h-rule::after{
+  content:'';width:48px;height:1px;
+  background:linear-gradient(90deg,transparent,var(--sep2));
+}
+.h-rule::after{transform:scaleX(-1);}
+.h-rule span{font-size:0.5rem;letter-spacing:12px;color:var(--sep2);}
+.h-sub{
+  font-family:'Libre Baskerville',serif;font-style:italic;
+  font-size:1.05rem;color:var(--ink3);line-height:1.8;
+  margin-bottom:30px;
+  opacity:0;animation:fadeUp .7s ease .75s forwards;
+}
+.h-scenes{
+  display:flex;flex-wrap:wrap;gap:8px;justify-content:center;
+  opacity:0;animation:fadeUp .7s ease .95s forwards;
+}
+.h-pill{
+  font-size:0.65rem;font-weight:400;letter-spacing:0.1em;
+  padding:6px 14px;border:1px solid var(--sep2);
+  color:var(--ink3);border-radius:3px;
+  transition:all .25s;cursor:default;
+}
+.h-pill:hover{border-color:var(--teal-b);color:var(--teal);background:var(--teal-g);}
+
+.scroll-h{
+  position:absolute;bottom:32px;left:50%;transform:translateX(-50%);
+  z-index:3;display:flex;flex-direction:column;align-items:center;gap:10px;
+  opacity:0;animation:fadeUp .7s ease 1.4s forwards;
+}
+.scroll-h span{font-size:0.55rem;letter-spacing:0.4em;text-transform:uppercase;color:var(--ink4);}
+.scroll-line{
+  width:1px;height:38px;
+  background:linear-gradient(180deg,var(--teal),transparent);
+  animation:lineGrow 2s ease-in-out infinite;
+}
+@keyframes lineGrow{0%,100%{opacity:.4;transform:scaleY(1);}50%{opacity:1;transform:scaleY(1.15);}}
+
+/* ══ PAGE ══ */
+.page{max-width:820px;margin:0 auto;padding:90px clamp(20px,5vw,60px) 120px;position:relative;z-index:1;}
+
+/* ── Chapter opener ── */
+.ch-opener{text-align:center;margin-bottom:80px;}
+.ch-opener-title{
+  font-family:'DM Serif Display',serif;
+  font-size:1.6rem;color:var(--ink);margin-bottom:8px;
+}
+.ch-opener-sub{
+  font-family:'Libre Baskerville',serif;font-style:italic;
+  font-size:0.9rem;color:var(--ink3);
+}
+.ch-opener-rule{
+  display:flex;align-items:center;gap:18px;margin:20px 0 0;
+}
+.ch-opener-rule::before,.ch-opener-rule::after{
+  content:'';flex:1;height:1px;
+  background:linear-gradient(90deg,transparent,var(--sep2));
+}
+.ch-opener-rule::after{transform:scaleX(-1);}
+.ch-opener-rule span{font-size:0.55rem;letter-spacing:8px;color:var(--ink4);}
+
+/* ── Scene header ── */
+.scene-h{
+  display:flex;align-items:stretch;gap:0;
+  margin:72px 0 32px;
+}
+.sc-num{
+  font-family:'DM Serif Display',serif;
+  font-size:4rem;font-weight:400;line-height:1;
+  padding:0 20px 0 0;
+  display:flex;align-items:center;
+  color:var(--ink4);letter-spacing:-0.03em;
+  border-right:1px solid var(--sep);
+  flex-shrink:0;
+}
+.sc-body{padding:4px 0 4px 20px;display:flex;flex-direction:column;justify-content:center;}
+.sc-tag{
+  font-family:'Fira Code',monospace;font-size:0.55rem;letter-spacing:0.2em;
+  color:var(--ink4);display:block;margin-bottom:6px;text-transform:uppercase;
+}
+.sc-title{
+  font-family:'DM Serif Display',serif;
+  font-size:1.3rem;letter-spacing:0.01em;
+}
+.s-storm .sc-title{color:var(--teal);}
+.s-game  .sc-title{color:#8090e8;}
+.s-pizza .sc-title{color:#e08850;}
+.s-star  .sc-title{color:var(--star);}
+.s-night .sc-title{color:var(--ink2);}
+
+.sc-accent{
+  display:block;width:3px;border-radius:2px;
+  margin-right:0;
+  align-self:stretch;
+  flex-shrink:0;
+}
+.s-storm .sc-accent{background:var(--teal);}
+.s-game  .sc-accent{background:#6070d8;}
+.s-pizza .sc-accent{background:#c06830;}
+.s-star  .sc-accent{background:var(--star);}
+.s-night .sc-accent{background:var(--ink3);}
+
+/* ── Prose ── */
+.prose p{
+  font-family:'Libre Baskerville',serif;
+  font-size:clamp(1rem,1.7vw,1.08rem);
+  font-weight:400;line-height:2;color:var(--ink2);
+  margin-bottom:1.8em;
+}
+.prose p.drop::first-letter{
+  font-family:'DM Serif Display',serif;
+  font-size:4rem;font-weight:400;color:var(--teal);
+  float:left;line-height:.82;margin:.05em .14em 0 0;
+}
+.prose em{font-style:italic;color:var(--ink);}
+
+/* ── Divider ── */
+.sep-rule{
+  display:flex;align-items:center;gap:16px;margin:52px 0;
+}
+.sep-rule::before,.sep-rule::after{
+  content:'';flex:1;height:1px;
+  background:linear-gradient(90deg,transparent,var(--sep));
+}
+.sep-rule::after{transform:scaleX(-1);}
+.sep-rule span{font-size:0.6rem;letter-spacing:10px;color:var(--ink4);}
+
+/* ── Atmosphere card ── */
+.atmo{
+  margin:2.4em 0;padding:24px 28px;
+  background:var(--panel);
+  border:1px solid var(--sep);
+  border-top:2px solid var(--teal);
+  border-radius:0 6px 6px 0;
+  position:relative;
+}
+.atmo-lbl{
+  font-family:'Fira Code',monospace;font-size:0.56rem;letter-spacing:0.2em;
+  text-transform:uppercase;color:var(--teal);display:block;margin-bottom:14px;
+}
+.atmo p{
+  font-family:'Libre Baskerville',serif;font-size:0.95rem;font-style:italic;
+  color:var(--ink2);line-height:1.85;margin-bottom:.9em;
+}
+.atmo p:last-child{margin-bottom:0;}
+
+/* ── Duo cards ── */
+.duo{
+  display:grid;grid-template-columns:1fr 1fr;gap:1px;
+  background:var(--sep);margin:2.4em 0;
+  border:1px solid var(--sep);border-radius:6px;overflow:hidden;
+}
+.duo-card{
+  background:var(--panel);padding:22px 24px;
+  position:relative;transition:background .25s;
+}
+.duo-card:hover{background:var(--panel2);}
+.duo-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
+.duo-card.luc::before{background:linear-gradient(90deg,var(--teal),transparent);}
+.duo-card.vic::before{background:linear-gradient(90deg,var(--rose),transparent);}
+.dc-who{
+  font-family:'Fira Code',monospace;font-size:0.54rem;letter-spacing:0.18em;
+  text-transform:uppercase;display:block;margin-bottom:10px;
+}
+.duo-card.luc .dc-who{color:var(--teal);}
+.duo-card.vic .dc-who{color:var(--rose);}
+.dc-icon{font-size:1.4rem;display:block;margin-bottom:10px;}
+.dc-text{
+  font-family:'Libre Baskerville',serif;font-size:0.9rem;font-style:italic;
+  color:var(--ink3);line-height:1.65;
+}
+
+/* ── Terminal / mission log ── */
+.terminal{
+  background:#040508;border:1px solid rgba(100,120,200,0.2);
+  border-radius:8px;margin:2.6em 0;overflow:hidden;
+  box-shadow:0 0 48px rgba(60,80,160,0.12);
+}
+.term-bar{
+  background:#060810;display:flex;align-items:center;gap:8px;
+  padding:10px 18px;border-bottom:1px solid rgba(100,120,200,0.15);
+}
+.tdots{display:flex;gap:5px;}
+.tdots span{width:9px;height:9px;border-radius:50%;}
+.td1{background:#ff605a;}.td2{background:#ffbc2c;}.td3{background:#28c840;}
+.term-ttl{
+  font-family:'Fira Code',monospace;font-size:0.58rem;
+  color:rgba(140,150,210,0.28);margin-left:10px;letter-spacing:0.08em;
+}
+.term-live{
+  margin-left:auto;display:flex;align-items:center;gap:6px;
+  font-family:'Fira Code',monospace;font-size:0.58rem;color:var(--teal);
+}
+.term-live::before{
+  content:'';width:6px;height:6px;border-radius:50%;
+  background:var(--teal);box-shadow:0 0 6px var(--teal);
+  animation:blink 2s infinite;
+}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:.2;}}
+.term-body{padding:22px 20px;}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:22px;}
+.stat-cell{
+  border:1px solid rgba(100,120,200,0.12);
+  background:rgba(255,255,255,0.02);padding:12px 14px;
+  border-radius:4px;
+}
+.sc-lbl{
+  font-family:'Fira Code',monospace;font-size:0.5rem;
+  color:rgba(140,150,210,0.35);display:block;margin-bottom:5px;
+  letter-spacing:0.1em;text-transform:uppercase;
+}
+.sc-val{font-family:'Fira Code',monospace;font-size:0.8rem;font-weight:400;color:rgba(180,190,255,0.8);}
+.log-hdr{
+  font-family:'Fira Code',monospace;font-size:0.52rem;
+  color:rgba(120,130,200,0.28);letter-spacing:0.18em;text-transform:uppercase;
+  border-top:1px solid rgba(100,120,200,0.1);
+  padding-top:14px;margin-bottom:12px;display:block;
+}
+.log-row{display:flex;gap:14px;margin-bottom:9px;font-family:'Fira Code',monospace;font-size:0.72rem;line-height:1.5;}
+.lt{color:rgba(100,110,180,0.35);flex-shrink:0;width:36px;}
+.lv{color:rgba(240,160,185,0.75);}
+.ll{color:rgba(140,195,255,0.75);}
+.ls{color:rgba(46,196,164,0.65);font-style:italic;}
+
+/* ── Pull quote ── */
+.pull{
+  margin:3em 0;padding:32px 36px;
+  position:relative;overflow:hidden;
+}
+.pull::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;width:3px;
+  background:linear-gradient(180deg,var(--star),transparent);
+}
+.pull::after{
+  content:'';position:absolute;top:0;left:3px;right:0;height:1px;
+  background:linear-gradient(90deg,var(--star-b),transparent);
+}
+.pull p{
+  font-family:'DM Serif Display',serif;font-style:italic;
+  font-size:clamp(1rem,2vw,1.2rem);color:var(--ink);
+  line-height:1.65;margin:0;
+}
+.pull cite{
+  display:block;margin-top:12px;
+  font-family:'Fira Code',monospace;font-style:normal;
+  font-size:0.56rem;letter-spacing:0.2em;color:var(--ink4);
+}
+
+/* ── Scene info card ── */
+.scene-card{
+  margin:2.4em 0;padding:24px 28px;
+  border:1px solid var(--sep);background:var(--panel);
+  border-radius:0 6px 6px 0;position:relative;
+}
+.scene-card.teal-c{border-left:3px solid var(--teal);}
+.scene-card.rose-c{border-left:3px solid var(--rose);}
+.scene-card.orange-c{border-left:3px solid #c06830;}
+.scene-card.blue-c{border-left:3px solid var(--star);}
+.scene-card.dim-c{border-left:3px solid var(--ink3);}
+.sc-card-lbl{
+  font-family:'Fira Code',monospace;font-size:0.54rem;letter-spacing:0.18em;
+  text-transform:uppercase;display:block;margin-bottom:12px;
+}
+.teal-c .sc-card-lbl{color:var(--teal);}
+.rose-c .sc-card-lbl{color:var(--rose);}
+.orange-c .sc-card-lbl{color:#e09050;}
+.blue-c .sc-card-lbl{color:var(--star);}
+.dim-c .sc-card-lbl{color:var(--ink3);}
+.scene-card p{
+  font-family:'Libre Baskerville',serif;font-size:0.95rem;font-style:italic;
+  color:var(--ink2);line-height:1.85;margin-bottom:.9em;
+}
+.scene-card p:last-child{margin-bottom:0;}
+
+/* ── Dialogue block ── */
+.d-block{
+  background:var(--panel);border:1px solid var(--sep);
+  border-radius:6px;margin:2.4em 0;padding:26px 28px;
+  position:relative;overflow:hidden;
+}
+.d-block::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--rose2),var(--teal2),transparent);
+}
+.db-lbl{
+  font-family:'Fira Code',monospace;font-size:0.54rem;letter-spacing:0.2em;
+  text-transform:uppercase;color:var(--ink4);display:block;margin-bottom:20px;
+}
+.d-row{
+  display:grid;grid-template-columns:72px 1fr;
+  gap:0 16px;margin-bottom:15px;align-items:start;
+}
+.d-row:last-of-type{margin-bottom:0;}
+.d-who{
+  font-family:'Fira Code',monospace;font-size:0.52rem;letter-spacing:0.14em;
+  text-transform:uppercase;text-align:right;
+  padding-right:14px;border-right:1px solid var(--sep2);padding-top:4px;
+  line-height:1.4;
+}
+.d-who.l{color:var(--teal);}
+.d-who.v{color:var(--rose);}
+.d-txt{
+  font-family:'Libre Baskerville',serif;font-size:0.95rem;font-style:italic;
+  color:var(--ink2);line-height:1.72;
+}
+.d-more{display:none;}
+.d-more.open{display:contents;}
+.d-toggle{
+  grid-column:1/-1;margin-top:14px;padding:9px 0;
+  background:none;border:none;border-top:1px solid var(--sep);
+  font-family:'Fira Code',monospace;font-size:0.56rem;
+  letter-spacing:0.22em;text-transform:uppercase;
+  color:var(--ink4);cursor:pointer;transition:color .2s;
+  width:100%;text-align:center;
+}
+.d-toggle:hover{color:var(--teal);}
+
+/* ── Messenger ── */
+.messenger{
+  background:var(--panel);border:1px solid var(--sep);
+  border-radius:8px;margin:2.4em 0;overflow:hidden;
+}
+.ms-bar{
+  display:flex;align-items:center;gap:8px;
+  padding:11px 20px;border-bottom:1px solid var(--sep);
+  background:var(--panel2);
+}
+.ms-dots{display:flex;gap:5px;}
+.ms-dots span{width:8px;height:8px;border-radius:50%;}
+.ms-ttl{
+  font-family:'Fira Code',monospace;font-size:0.56rem;
+  letter-spacing:0.18em;text-transform:uppercase;
+  color:var(--ink4);margin-left:8px;
+}
+.ms-online{
+  margin-left:auto;display:flex;align-items:center;gap:5px;
+  font-family:'Fira Code',monospace;font-size:0.56rem;color:var(--teal);
+}
+.ms-online::before{
+  content:'';width:5px;height:5px;border-radius:50%;
+  background:var(--teal);box-shadow:0 0 5px var(--teal);
+  animation:blink 2.2s infinite;
+}
+.ms-body{padding:20px;display:flex;flex-direction:column;gap:12px;}
+.ms-more{display:none;flex-direction:column;gap:12px;}
+.ms-more.open{display:flex;}
+.ms-toggle{
+  display:block;width:100%;padding:10px;
+  background:none;border:none;border-top:1px solid var(--sep);
+  font-family:'Fira Code',monospace;font-size:0.54rem;
+  letter-spacing:0.22em;text-transform:uppercase;
+  color:var(--ink4);cursor:pointer;transition:color .2s,background .2s;
+}
+.ms-toggle:hover{color:var(--teal);background:rgba(46,196,164,0.04);}
+.msg{display:flex;flex-direction:column;max-width:78%;}
+.msg.l{align-self:flex-end;align-items:flex-end;}
+.msg.v{align-self:flex-start;}
+.msg-who{
+  font-family:'Fira Code',monospace;font-size:0.5rem;letter-spacing:0.2em;
+  text-transform:uppercase;margin-bottom:5px;
+}
+.msg.l .msg-who{color:var(--teal);text-align:right;}
+.msg.v .msg-who{color:var(--rose);}
+.msg-bub{
+  padding:11px 16px;
+  font-family:'Libre Baskerville',serif;font-size:0.93rem;
+  font-style:italic;line-height:1.7;color:var(--ink2);
+}
+.msg.l .msg-bub{
+  background:var(--teal-g);border:1px solid var(--teal-b);
+  border-radius:10px 0 10px 10px;
+}
+.msg.v .msg-bub{
+  background:var(--rose-g);border:1px solid var(--rose-b);
+  border-radius:0 10px 10px 10px;
+}
+
+/* ── Star moment card ── */
+.star-moment{
+  margin:2.8em 0;padding:36px 40px;
+  background:var(--panel);
+  border:1px solid var(--sep);
+  border-top:2px solid var(--star);
+  border-radius:0 8px 8px 0;
+  position:relative;overflow:hidden;
+  box-shadow:0 0 40px rgba(136,192,248,0.05);
+}
+.star-moment::before{
+  content:'★';position:absolute;top:12px;right:20px;
+  font-size:6rem;color:var(--star);opacity:0.04;
+  pointer-events:none;
+  animation:starFade 4s ease-in-out infinite alternate;
+}
+@keyframes starFade{0%{opacity:.03;}100%{opacity:.08;};}
+.sm-lbl{
+  font-family:'Fira Code',monospace;font-size:0.56rem;letter-spacing:0.2em;
+  text-transform:uppercase;color:var(--star);display:block;margin-bottom:16px;
+}
+.star-moment blockquote{
+  font-family:'DM Serif Display',serif;font-style:italic;
+  font-size:1.05rem;color:var(--ink);line-height:1.9;
+}
+
+/* ── Night farewell card ── */
+.night-card{
+  background:linear-gradient(155deg,#06080e,#0c0e1c,#100c18);
+  border:1px solid rgba(136,192,248,0.1);
+  border-radius:8px;padding:34px 36px;margin:2.8em 0;
+  position:relative;overflow:hidden;
+  box-shadow:0 0 60px rgba(8,10,24,0.6);
+}
+.night-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--star-b),transparent);
+}
+.night-card::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--star-b),transparent);
+}
+.nc-stars{text-align:right;font-size:0.55rem;letter-spacing:10px;color:rgba(136,192,248,0.1);margin-bottom:18px;}
+.nc-lbl{
+  font-family:'Fira Code',monospace;font-size:0.52rem;letter-spacing:0.22em;
+  text-transform:uppercase;color:rgba(136,192,248,0.2);display:block;margin-bottom:20px;
+}
+.nc-msgs{display:flex;flex-direction:column;gap:14px;}
+.ncm{display:flex;flex-direction:column;max-width:80%;}
+.ncm.l{align-self:flex-end;align-items:flex-end;}
+.ncm.v{align-self:flex-start;}
+.ncm-who{
+  font-family:'Fira Code',monospace;font-size:0.5rem;letter-spacing:0.18em;
+  text-transform:uppercase;margin-bottom:5px;
+}
+.ncm.l .ncm-who{color:rgba(46,196,164,0.35);text-align:right;}
+.ncm.v .ncm-who{color:rgba(224,88,120,0.35);}
+.ncm-bub{padding:12px 17px;font-family:'Libre Baskerville',serif;font-size:0.93rem;font-style:italic;line-height:1.7;}
+.ncm.l .ncm-bub{background:rgba(46,196,164,0.08);border:1px solid rgba(46,196,164,0.12);border-radius:10px 0 10px 10px;color:rgba(160,230,215,0.7);}
+.ncm.v .ncm-bub{background:rgba(224,88,120,0.08);border:1px solid rgba(224,88,120,0.12);border-radius:0 10px 10px 10px;color:rgba(245,175,195,0.7);}
+.nc-sep{text-align:center;padding:14px 0;letter-spacing:14px;color:var(--sep);font-size:0.65rem;}
+.nc-outro{text-align:center;font-family:'Libre Baskerville',serif;font-size:0.9rem;font-style:italic;color:rgba(160,175,200,0.3);line-height:1.9;margin-top:16px;}
+
+/* ── Story End ── */
+.story-end{
+  text-align:center;margin-top:88px;padding-top:52px;
+  border-top:1px solid var(--sep);
+}
+.se-ornament{
+  display:flex;align-items:center;justify-content:center;gap:14px;
+  margin-bottom:28px;
+}
+.se-ornament::before,.se-ornament::after{
+  content:'';width:48px;height:1px;
+  background:linear-gradient(90deg,transparent,var(--sep2));
+}
+.se-ornament::after{transform:scaleX(-1);}
+.se-ornament span{font-size:0.5rem;letter-spacing:10px;color:var(--sep2);}
+.se-closing{
+  font-family:'Libre Baskerville',serif;font-style:italic;
+  font-size:1.05rem;color:var(--ink3);line-height:1.95;
+  max-width:460px;margin:0 auto 36px;
+}
+.btn-back{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:12px 32px;background:transparent;
+  border:1px solid var(--sep2);color:var(--ink2);
+  text-decoration:none;
+  font-family:'DM Sans',sans-serif;font-size:0.65rem;font-weight:500;
+  letter-spacing:0.22em;text-transform:uppercase;
+  border-radius:3px;transition:all .3s;
+}
+.btn-back svg{width:13px;height:13px;transition:transform .3s;}
+.btn-back:hover{border-color:var(--teal);color:var(--teal);background:var(--teal-g);}
+.btn-back:hover svg{transform:translateX(-3px);}
+
+/* ── Animations ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:none;}}
+.reveal{opacity:0;transform:translateY(16px);transition:opacity .7s ease,transform .7s ease;}
+.reveal.in{opacity:1;transform:none;}
+
+/* responsive */
+@media(max-width:640px){
+  nav{padding:0 16px;}.n-chip{display:none;}
+  .page{padding:60px 16px 80px;}
+  .duo{grid-template-columns:1fr;}
+  .stat-grid{grid-template-columns:1fr;}
+  .d-row{grid-template-columns:56px 1fr;}
+  .star-moment{padding:24px 22px;}
+  .night-card{padding:22px 16px;}
+  .pull{padding:22px 20px;}
+}
+</style>
+</head>
+<body>
+
+<div id="prog"></div>
+
+<nav>
+  <a href="../index.html" class="n-brand">Whispers<span> of Caring</span></a>
+  <div class="n-right">
+    <a href="c3index.html" class="n-link">HOME</a>
+   
+  </div>
+</nav>
+
+<!-- ════════════════════ HERO ════════════════════ -->
+<section class="hero" id="hero">
+  <canvas id="cvs"></canvas>
+  <div class="hero-bg"></div>
+  <div class="sstar"></div><div class="sstar"></div><div class="sstar"></div>
+
+  <div class="hero-inner">
+    <span class="h-tag">| WHISPERS OF CARING | CHAPTER III | PHASE II |</span>
+    <h1 class="h-title">Shooting<br><em>Stars</em></h1>
+    <div class="h-rule"><span>· · ·</span></div>
+    <p class="h-sub">A tempest rolls into Aurora Vista. A battle unfolds in the dark. A kitchen becomes a war zone. And then — one quiet moment beneath the stars rewrites everything.</p>
+    <div class="h-scenes">
+      <span class="h-pill">⛈ The Storm</span>
+      <span class="h-pill">⚔ The Battle</span>
+      <span class="h-pill">🍕 Pizza Night</span>
+      <span class="h-pill">🌠 Falling Star</span>
+      <span class="h-pill">🌙 Goodnight</span>
+    </div>
+  </div>
+
+  <div class="scroll-h">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ════════════════════ CONTENT ════════════════════ -->
+<main class="page">
+
+  <div class="ch-opener reveal">
+    <div class="ch-opener-rule"><span>· · ·</span></div>
+    <div class="ch-opener-title">An Evening Written in Stars</div>
+    <div class="ch-opener-sub">Aurora Vista &amp; Evervale — across the sky, across the screen</div>
+  </div>
+
+  <!-- ── SCENE I · THE STORM ── -->
+  <div class="scene-h s-storm reveal">
+    <div class="sc-accent"></div>
+    <div class="sc-num">I</div>
+    <div class="sc-body">
+      <span class="sc-tag">Aurora Vista · Evening</span>
+      <span class="sc-title">The Storm</span>
+    </div>
+  </div>
+
+  <div class="prose">
+    <p class="drop reveal">In the evening, there were minimal changes in the environment when an unexpected weather report was issued. It was very dark — the evening gave the impression that an evil god was entering the Earth with armies to fight someone. The sudden change was a little bit scary for everyone.</p>
+  </div>
+
+  <div class="atmo reveal">
+    <span class="atmo-lbl">📍 Aurora Vista · Atmospheric Conditions</span>
+    <p>The cool air touched the trees, causing it to circulate into numerous tornados. The children of Aurora Vista came out of their houses, running and screaming through the streets — their voices loud with the exhilaration of weather made dramatic.</p>
+    <p>Lucifer took a picture and sent it to Victoria in the online forum: <em>"Maybe it is the last day of Aurora Vista"</em> — accompanied by a string of funny emojis.</p>
+  </div>
+
+  <div class="duo reveal">
+    <div class="duo-card luc">
+      <span class="dc-who">Lucifer · Aurora Vista</span>
+      <span class="dc-icon">📸</span>
+      <span class="dc-text">Evening walk through the dramatic storm — retreating home when the weather turned. Texted Victoria immediately to play online.</span>
+    </div>
+    <div class="duo-card vic">
+      <span class="dc-who">Victoria · Evervale</span>
+      <span class="dc-icon">🌙</span>
+      <span class="dc-text">Replied with a photo of Evervale — cloudy, dark, moon visible. <em>"Is this really your hometown?"</em></span>
+    </div>
+  </div>
+
+  <div class="prose">
+    <p class="reveal">The landscapes of Aurora Vista looked even more beautiful in the storm. After seeing Victoria's image of Evervale, Lucifer replied: "It looks very cool!" — then asked, "Do you have time to play the game?" Victoria replied, <em>"Hold your horses; I'll be there in a few minutes."</em></p>
+  </div>
+
+  <!-- ── SCENE II · THE BATTLE ── -->
+  <div class="sep-rule reveal"><span>· · ·</span></div>
+
+  <div class="scene-h s-game reveal">
+    <div class="sc-accent"></div>
+    <div class="sc-num">II</div>
+    <div class="sc-body">
+      <span class="sc-tag">Evervale Online · Co-Op Mode</span>
+      <span class="sc-title">The Online Battle</span>
+    </div>
+  </div>
+
+  <div class="prose">
+    <p class="reveal">A few minutes later, Lucifer and Victoria logged in to play. They checked microphones and headphones. Once ready, they teamed up — the game challenging, requiring them to eliminate zombies and enemies within a short time frame while also tracking the enemies' count.</p>
+  </div>
+
+  <div class="terminal reveal">
+    <div class="term-bar">
+      <div class="tdots"><span class="td1"></span><span class="td2"></span><span class="td3"></span></div>
+      <span class="term-ttl">EVERVALE.ONLINE // DARK FOREST MISSION // CO-OP ACTIVE</span>
+      <span class="term-live">LIVE</span>
+    </div>
+    <div class="term-body">
+      <div class="stat-grid">
+        <div class="stat-cell"><span class="sc-lbl">Player 1 · Victoria</span><span class="sc-val">🏹 Archer Class</span></div>
+        <div class="stat-cell"><span class="sc-lbl">Player 2 · Lucifer</span><span class="sc-val">⚔ Sword / Armor Gun</span></div>
+        <div class="stat-cell"><span class="sc-lbl">Enemies Cleared</span><span class="sc-val">3+ → Active...</span></div>
+        <div class="stat-cell"><span class="sc-lbl">Special Move</span><span class="sc-val">🌫 Smoky Fog Arrow</span></div>
+      </div>
+      <span class="log-hdr">// MISSION LOG ──────────────────────────</span>
+      <div class="log-row"><span class="lt">00:42</span><span class="lv">VICTORIA → Footsteps at 4 o'clock — defend from the back!</span></div>
+      <div class="log-row"><span class="lt">00:45</span><span class="lv">VICTORIA fires arrow → Zombie eliminated. +1 point.</span></div>
+      <div class="log-row"><span class="lt">00:48</span><span class="ll">LUCIFER clears two enemies at 12 o'clock. +2 points.</span></div>
+      <div class="log-row"><span class="lt">01:12</span><span class="ls">⚡ THUNDERSTORM hits Aurora Vista — Lucifer shot, power lost.</span></div>
+      <div class="log-row"><span class="lt">01:14</span><span class="lv">VICTORIA shields Lucifer → Smoky Fog Arrow deployed.</span></div>
+      <div class="log-row"><span class="lt">01:18</span><span class="ll">LUCIFER transforms → Automated Armor Gun. Rapid fire.</span></div>
+      <div class="log-row"><span class="lt">01:25</span><span class="ls">✦ Area cleared. Combined assault. VICTORY.</span></div>
+    </div>
+  </div>
+
+  <div class="prose">
+    <p class="reveal">They both immersed themselves entirely — fingers flying across keys with precision and finesse. As evening transitioned into dinnertime, Lucifer marvelled at how swiftly the moments had flown by. What used to be a monotonous hour spent in solitude had transformed into an exhilarating experience.</p>
+  </div>
+
+  <div class="pull reveal">
+    <p>"What used to be a monotonous hour in solitude now transformed into an exhilarating experience — oblivious to the passage of time."</p>
+  </div>
+
+  <!-- ── SCENE III · PIZZA NIGHT ── -->
+  <div class="sep-rule reveal"><span>· · ·</span></div>
+
+  <div class="scene-h s-pizza reveal">
+    <div class="sc-accent"></div>
+    <div class="sc-num">III</div>
+    <div class="sc-body">
+      <span class="sc-tag">Both Kitchens · Simultaneously</span>
+      <span class="sc-title">Pizza Night</span>
+    </div>
+  </div>
+
+  <div class="scene-card orange-c reveal">
+    <span class="sc-card-lbl">🍕 Co-op Cooking · Spicy Chicken Pizza · Video Call</span>
+    <p>Both feeling famished after the intense gaming session, they decided to prepare a spicy chicken pizza at their respective locations. Connected via video call, amidst shared laughter and cringe-worthy memes, they savoured making pizza together — separated by miles, yet perfectly in sync.</p>
+  </div>
+
+  <div class="d-block reveal">
+    <span class="db-lbl">💬 The Great Kitchen Clean-Up — Video Call</span>
+    <div class="d-row"><span class="d-who v">Victoria</span><span class="d-txt">"Hey, Luci! You wouldn't believe how this pizza battle turned into a war zone in my kitchen. Did I cook or summon a greasy monster?"</span></div>
+    <div class="d-row"><span class="d-who l">Lucifer</span><span class="d-txt">"I hear you, Vicky! I've got pizza sauce on places I didn't even know existed. How does it end up on the ceiling fan?"</span></div>
+    <div class="d-row"><span class="d-who v">Victoria</span><span class="d-txt">"Look at this chaos! It's like the pizza decided to explode mid-cooking. I think it's forming a new country on my countertop."</span></div>
+    <div class="d-row"><span class="d-who l">Lucifer</span><span class="d-txt">"At least you don't have a pizza sauce art piece on your walls. I call it 'Sauce on the Rise.' A masterpiece, really."</span></div>
+    <div class="d-more" id="pizza-d">
+      <div class="d-row"><span class="d-who v">Victoria</span><span class="d-txt">"Ha! That's modern art. Or maybe I should frame this burnt crust — 'The Charred Remnants of a Pizza Dream.'"</span></div>
+      <div class="d-row"><span class="d-who v">Victoria</span><span class="d-txt">"I'm convinced this oil is from another dimension. It's like a battle between good and greasy."</span></div>
+      <div class="d-row"><span class="d-who l">Lucifer</span><span class="d-txt">"I've used half a bottle of dish soap and it's like the grease is winning. I feel like I need a pressure washer."</span></div>
+      <div class="d-row"><span class="d-who v">Victoria</span><span class="d-txt">"Or a magic wand. I'd trade my art supplies for a spell to clean this mess. Who knew pizza could be such a villain?"</span></div>
+      <div class="d-row"><span class="d-who v">Victoria</span><span class="d-txt">"We survived the great pizza clean-up of the century. I think we deserve a medal."</span></div>
+      <div class="d-row"><span class="d-who l">Lucifer</span><span class="d-txt">"Or at least another slice. Virtual toast to us — the grease-fighting champions!"</span></div>
+      <div class="d-row"><span class="d-who v">Victoria</span><span class="d-txt">"Cheers, Luci! Same time next week for pasta?"</span></div>
+      <div class="d-row"><span class="d-who l">Lucifer</span><span class="d-txt">"Absolutely. But let's keep the cheese on the pizza and off the ceiling fan next time."</span></div>
+    </div>
+    <button class="d-toggle" onclick="toggleD('pizza-d',this)">Read full conversation ↓</button>
+  </div>
+
+  <!-- ── SCENE IV · THE SHOOTING STAR ── -->
+  <div class="sep-rule reveal"><span>· · ·</span></div>
+
+  <div class="scene-h s-star reveal">
+    <div class="sc-accent"></div>
+    <div class="sc-num">IV</div>
+    <div class="sc-body">
+      <span class="sc-tag">Victoria's Window · Evervale · Night</span>
+      <span class="sc-title">The Shooting Star</span>
+    </div>
+  </div>
+
+  <div class="prose">
+    <p class="reveal">Lucifer and Victoria hastily cleaned up before retreating to their respective beds. Lucifer sprawled out with his mobile, catching up on forum discussions and light-hearted cartoons. Meanwhile, Victoria made herself comfortable, gazing out at the breathtaking scenery — savouring the refreshing breeze sweeping through the room.</p>
+    <p class="reveal">As she looked up at the night sky, she watched as passing clouds obscured the moon and stars, some of which glimmered with a myriad of colours. Suddenly, her attention was captivated by a star streaking across the sky — its radiant glow captivating her until it disappeared beyond the horizon.</p>
+  </div>
+
+  <div class="star-moment reveal">
+    <span class="sm-lbl">✦ The Moment — Victoria's Window · Evervale</span>
+    <blockquote>"It was magical! I was just gazing up, lost in thought, when out of nowhere, this brilliant streak of light shot across the sky. It was like the universe was painting a dazzling line of light on its dark canvas — and then, poof, it was gone. Just like that!"</blockquote>
+  </div>
+
+  <div class="messenger reveal">
+    <div class="ms-bar">
+      <div class="ms-dots"><span class="td1"></span><span class="td2"></span><span class="td3"></span></div>
+      <span class="ms-ttl">Evervale Forums · Late Night</span>
+      <span class="ms-online">Online</span>
+    </div>
+    <div class="ms-body">
+      <div class="msg l"><span class="msg-who">Lucifer</span><div class="msg-bub">"Hey, Vicky. You look like you've seen a unicorn or something."</div></div>
+      <div class="msg v"><span class="msg-who">Victoria</span><div class="msg-bub">"Lucifer, you won't believe what I just saw! I was sitting on my bed when I saw a star falling from the sky!"</div></div>
+      <div class="msg l"><span class="msg-who">Lucifer</span><div class="msg-bub">"Really? Tell me more. What did it look like?"</div></div>
+      <div class="msg v"><span class="msg-who">Victoria</span><div class="msg-bub">"It was magical! A brilliant streak of light — like the universe painting a dazzling line on its dark canvas."</div></div>
+      <div class="msg l"><span class="msg-who">Lucifer</span><div class="msg-bub">"Did you make a wish? Or were you too busy freaking out to remember?"</div></div>
+      <div class="msg v"><span class="msg-who">Victoria</span><div class="msg-bub">"Of course I made a wish! But I can't tell you what it is, or it won't come true."</div></div>
+    </div>
+    <div class="ms-more" id="star-ms">
+      <div class="msg l"><span class="msg-who">Lucifer</span><div class="msg-bub">"I wish I could have seen it. You always catch the cool stuff. Last week the owl, now a shooting star? The universe has a thing for you."</div></div>
+      <div class="msg v"><span class="msg-who">Victoria</span><div class="msg-bub">"Maybe. Or maybe it's because I actually go outside and look up at the sky instead of binge-watching space documentaries."</div></div>
+      <div class="msg l"><span class="msg-who">Lucifer</span><div class="msg-bub">"Hey, those are educational! Besides, the closest thing to a shooting star I see is the neighbour's cat jumping off the fence."</div></div>
+      <div class="msg v"><span class="msg-who">Victoria</span><div class="msg-bub">"Next time join me on a stargazing session. Just promise you won't wish for something boring like a new laptop."</div></div>
+      <div class="msg l"><span class="msg-who">Lucifer</span><div class="msg-bub">"Deal. Only if you promise not to wish for an endless supply of art supplies."</div></div>
+      <div class="msg v"><span class="msg-who">Victoria</span><div class="msg-bub">"Fair trade. But seriously — it was one of those moments that makes you realize how small we are. Humbling and beautiful all at once."</div></div>
+      <div class="msg l"><span class="msg-who">Lucifer</span><div class="msg-bub">"I'm glad you got to see it. I feel like I was part of it, even sitting here in my room."</div></div>
+      <div class="msg v"><span class="msg-who">Victoria</span><div class="msg-bub">"You're always part of my adventures, Luci. Even if it's just through a screen."</div></div>
+    </div>
+    <button class="ms-toggle" onclick="toggleMs('star-ms',this)">Read full conversation ↓</button>
+  </div>
+
+  <div class="pull reveal">
+    <p>"You're always part of my adventures, Luci — even if it's just through a screen."</p>
+    <cite>— Victoria · Evervale Forums</cite>
+  </div>
+
+  <!-- ── SCENE V · GOODNIGHT ── -->
+  <div class="sep-rule reveal"><span>· · ·</span></div>
+
+  <div class="scene-h s-night reveal">
+    <div class="sc-accent"></div>
+    <div class="sc-num">V</div>
+    <div class="sc-body">
+      <span class="sc-tag">Both Towns · End of Evening</span>
+      <span class="sc-title">Goodnight</span>
+    </div>
+  </div>
+
+  <div class="night-card reveal">
+    <div class="nc-stars">✦ ✧ ✦ ✧ ✦ ✧ ✦</div>
+    <span class="nc-lbl">Evervale Forums · End of Evening</span>
+    <div class="nc-msgs">
+      <div class="ncm l"><span class="ncm-who">Lucifer</span><div class="ncm-bub">"For now, I guess it's time to say goodnight, star gazer. Thanks for the story. Sweet dreams, Vicky."</div></div>
+      <div class="ncm v"><span class="ncm-who">Victoria</span><div class="ncm-bub">"Sweet dreams, Luci. Maybe tonight you'll dream of falling stars and magical adventures. Goodnight!"</div></div>
+    </div>
+    <div class="nc-sep">· · ·</div>
+    <div class="nc-outro">With that, they ended the call — both feeling a little closer despite the distance, their goodnight talk filled with laughter, wonder, and the promise of more shared moments under the stars.</div>
+  </div>
+
+  <div class="scene-card dim-c reveal">
+    <span class="sc-card-lbl">✦ In the Quiet After</span>
+    <p>In the depths of the night, as the world around them grew quiet, Lucifer and Victoria — possessed of pure souls — found themselves drawn into a private realm of introspection. Unbeknownst to each other, they pursued conversations with invisible companions, caring for themselves in solitary moments of profound self-reflection, akin to a series of poignant monologues.</p>
+  </div>
+
+  <!-- ── STORY END ── -->
+  <div class="story-end reveal">
+    <div class="se-ornament"><span>· · ·</span></div>
+    <p class="se-closing">From a storm-dark sky to a single falling star — one evening proved that even across the distance, some moments are shared by two souls at once.</p>
+    <a href="c3index.html" class="btn-back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+      Return to Chapter Three
+    </a>
+  </div>
+
+</main>
+
+<script>
+/* ── Progress bar ── */
+const prog = document.getElementById('prog');
+window.addEventListener('scroll', () => {
+  const t = document.documentElement.scrollHeight - window.innerHeight;
+  prog.style.width = (t > 0 ? window.scrollY / t * 100 : 0) + '%';
+}, { passive: true });
+
+/* ── Star canvas ── */
+(function(){
+  const c = document.getElementById('cvs'), ctx = c.getContext('2d');
+  const resize = () => { c.width = innerWidth; c.height = innerHeight; };
+  resize(); window.addEventListener('resize', resize);
+  const stars = Array.from({ length: 220 }, () => ({
+    x: Math.random(), y: Math.random(),
+    r: Math.random() * 1.3 + 0.1,
+    a: Math.random() * 0.55 + 0.08,
+    sp: Math.random() * 0.5 + 0.2,
+    ph: Math.random() * Math.PI * 2,
+    hue: Math.random()
+  }));
+  let t = 0;
+  (function draw(){
+    ctx.clearRect(0, 0, c.width, c.height);
+    stars.forEach(s => {
+      const tw = s.a * (0.35 + 0.65 * Math.sin(t * 0.006 * s.sp + s.ph));
+      ctx.beginPath();
+      ctx.arc(s.x * c.width, s.y * c.height, s.r, 0, Math.PI * 2);
+      // teal / rose / star-blue tinted stars
+      let color;
+      if (s.hue < 0.15)       color = `rgba(46,196,164,${tw})`;
+      else if (s.hue < 0.28)  color = `rgba(224,88,120,${tw * 0.7})`;
+      else if (s.hue < 0.4)   color = `rgba(136,192,248,${tw})`;
+      else                     color = `rgba(220,228,245,${tw})`;
+      ctx.fillStyle = color;
+      ctx.fill();
+    });
+    t++;
+    requestAnimationFrame(draw);
+  })();
+})();
+
+/* ── Scroll reveal ── */
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); } });
+}, { threshold: 0.07 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+/* ── Stagger chat messages ── */
+document.querySelectorAll('.ms-body .msg, .nc-msgs .ncm').forEach((m, i) => {
+  m.style.transitionDelay = (i * 0.06) + 's';
+});
+
+/* ── Toggles ── */
+function toggleD(id, btn){
+  const el = document.getElementById(id);
+  const o = el.classList.toggle('open');
+  btn.textContent = o ? 'Collapse ↑' : 'Read full conversation ↓';
+}
+function toggleMs(id, btn){
+  const el = document.getElementById(id);
+  const o = el.classList.toggle('open');
+  btn.textContent = o ? 'Collapse ↑' : 'Read full conversation ↓';
+}
+</script>
+</body>
+</html>

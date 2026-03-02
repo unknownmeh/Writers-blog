@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Morning Musings — Whispers of Caring</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Karla:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Petit+Formal+Script&family=Josefin+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+
+/* ══════════════════════════════════════════
+   TOKENS — Soft Organic Café Journal
+══════════════════════════════════════════ */
+:root {
+  /* base */
+  --bg:         #f8f5ef;
+  --bg2:        #f0ebe1;
+  --surface:    #fffdf8;
+  --parchment:  #ede6d5;
+
+  /* sage — Victoria / morning */
+  --sage:       #5a7a5c;
+  --sage-mid:   #7a9e7c;
+  --sage-soft:  #dcebd8;
+  --sage-faint: #eef5ec;
+
+  /* wheat — Lucifer / food */
+  --wheat:      #a0742a;
+  --wheat-mid:  #c49448;
+  --wheat-soft: #f5e8cc;
+  --wheat-faint:#fdf5e4;
+
+  /* terracotta — accents */
+  --terra:      #c06848;
+  --terra-soft: #f5e0d5;
+
+  /* sky — noon */
+  --sky:        #4a7898;
+  --sky-soft:   #ddeef8;
+  --sky-faint:  #eef6fc;
+
+  /* ink */
+  --ink:        #1e2820;
+  --ink-mid:    #3c4838;
+  --ink-dim:    #7a8878;
+  --ink-faint:  #aabaa8;
+
+  --border:     rgba(30,40,32,0.09);
+  --shadow-sm:  0 2px 14px rgba(30,40,32,0.06);
+  --shadow-md:  0 6px 32px rgba(30,40,32,0.09);
+  --r:          12px;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Karla', sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  overflow-x: hidden;
+}
+
+/* grain overlay */
+body::after {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.78' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='260' height='260' filter='url(%23g)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 9999;
+}
+
+/* ══ PROGRESS BAR ══ */
+#prog {
+  position: fixed; top: 0; left: 0; height: 2px; width: 0%;
+  background: linear-gradient(to right, var(--sage), var(--wheat-mid));
+  z-index: 300; transition: width .1s linear;
+}
+
+/* ══ NAV ══ */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  height: 58px; display: flex; align-items: center;
+  justify-content: space-between;
+  padding: 0 clamp(18px,5vw,60px);
+  background: rgba(248,245,239,0.93);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border);
+}
+.n-brand {
+  font-family: 'Petit Formal Script', cursive;
+  font-size: 1.3rem; color: var(--ink); text-decoration: none;
+  letter-spacing: 0.01em;
+}
+.n-links { display: flex; gap: 26px; align-items: center; }
+.n-links a {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.6rem; font-weight: 400;
+  letter-spacing: 0.25em; text-transform: uppercase;
+  color: var(--ink-dim); text-decoration: none; transition: color .25s;
+}
+.n-links a:hover { color: var(--sage); }
+.n-phase {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.58rem; letter-spacing: 0.22em;
+  color: var(--ink-faint);
+}
+
+/* ══ HERO ══ */
+.hero {
+  min-height: 100vh;
+  position: relative; overflow: hidden;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 100px 24px 80px; text-align: center;
+}
+
+/* layered morning background */
+.hero-bg {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 70% 55% at 30% 20%, rgba(90,122,92,0.1) 0%, transparent 65%),
+    radial-gradient(ellipse 60% 45% at 80% 70%, rgba(160,116,42,0.1) 0%, transparent 65%),
+    linear-gradient(180deg, #fefcf6 0%, var(--bg2) 55%, #eef3ec 100%);
+}
+
+/* subtle ruled-paper lines behind hero */
+.hero-lines {
+  position: absolute; inset: 0; pointer-events: none;
+  background-image: repeating-linear-gradient(
+    180deg,
+    transparent 0px,
+    transparent 39px,
+    rgba(90,122,92,0.045) 39px,
+    rgba(90,122,92,0.045) 40px
+  );
+}
+
+/* floating tea steam */
+.steam {
+  position: absolute; bottom: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 120px; pointer-events: none; z-index: 1;
+}
+.steam-line {
+  width: 2px; margin: 0 auto;
+  background: linear-gradient(to top, rgba(90,122,92,0.35), transparent);
+  border-radius: 2px;
+  animation: steamRise ease-in-out infinite alternate;
+}
+.steam-line:nth-child(1) { height: 60px; animation-duration: 2.2s; animation-delay: 0s;   margin-left: 30px; }
+.steam-line:nth-child(2) { height: 80px; animation-duration: 2.8s; animation-delay: .5s;  margin-left: 60px; margin-top: -60px; }
+.steam-line:nth-child(3) { height: 50px; animation-duration: 2.5s; animation-delay: 1s;   margin-left: 90px; margin-top: -50px; }
+@keyframes steamRise {
+  0%   { opacity: 0; transform: scaleX(1) translateY(0); }
+  40%  { opacity: 0.7; }
+  100% { opacity: 0; transform: scaleX(1.6) translateY(-40px); }
+}
+
+.hero-inner { position: relative; z-index: 2; max-width: 660px; }
+
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 14px;
+  font-family: 'Josefin Sans', sans-serif; font-size: 0.54rem;
+  letter-spacing: 0.55em; text-transform: uppercase;
+  color: var(--sage-mid); margin-bottom: 22px;
+  animation: riseIn .9s ease both;
+}
+.hero-eyebrow::before, .hero-eyebrow::after {
+  content: ''; width: 26px; height: 1px;
+  background: var(--sage-mid); opacity: 0.45;
+}
+
+.hero-script {
+  font-family: 'Petit Formal Script', cursive;
+  font-size: clamp(2.8rem, 8vw, 6rem);
+  color: var(--ink); line-height: 1.1;
+  letter-spacing: 0.02em;
+  animation: riseIn .9s ease .1s both;
+}
+
+.hero-subtitle {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.72rem; font-weight: 300;
+  letter-spacing: 0.38em; text-transform: uppercase;
+  color: var(--ink-dim); margin-top: 14px;
+  animation: riseIn .9s ease .2s both;
+}
+
+/* decorative rule */
+.deco-rule {
+  display: flex; align-items: center; justify-content: center;
+  gap: 12px; margin: 26px auto;
+  animation: riseIn .9s ease .3s both;
+}
+.deco-rule::before, .deco-rule::after {
+  content: ''; width: 48px; height: 1px; background: var(--border);
+}
+.deco-rule span { font-size: 1rem; opacity: 0.5; }
+
+.hero-desc {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 1rem; font-style: italic;
+  line-height: 1.9; color: var(--ink-mid);
+  max-width: 480px; margin: 0 auto 28px;
+  animation: riseIn .9s ease .4s both;
+}
+
+/* time badges */
+.time-badges {
+  display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;
+  animation: riseIn .9s ease .5s both;
+}
+.tbadge {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 7px 16px;
+  background: rgba(255,255,255,0.75); backdrop-filter: blur(6px);
+  border: 1px solid rgba(30,40,32,0.1);
+  border-radius: 40px; box-shadow: var(--shadow-sm);
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.62rem; font-weight: 400;
+  letter-spacing: 0.12em; color: var(--ink-mid);
+}
+
+.scroll-hint {
+  position: absolute; bottom: 34px; left: 50%;
+  transform: translateX(-50%); z-index: 2;
+  display: flex; flex-direction: column; align-items: center; gap: 7px;
+  animation: riseIn .9s ease .9s both;
+}
+.scroll-hint span {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.52rem; letter-spacing: 0.38em;
+  text-transform: uppercase; color: var(--ink-faint);
+}
+.caret {
+  width: 14px; height: 14px;
+  border-right: 1.5px solid var(--ink-faint);
+  border-bottom: 1.5px solid var(--ink-faint);
+  transform: rotate(45deg);
+  animation: bounce 2s ease-in-out infinite;
+}
+@keyframes bounce { 0%,100%{ transform:rotate(45deg) translateY(0); } 50%{ transform:rotate(45deg) translateY(5px); } }
+
+/* ══ PAGE BODY ══ */
+.page { max-width: 780px; margin: 0 auto; padding: 80px clamp(18px,5vw,48px) 120px; }
+
+/* ── CHAPTER HEADER ── */
+.ch-head { text-align: center; margin-bottom: 72px; }
+.ch-head .ch-label {
+  font-family: 'Josefin Sans', sans-serif; font-size: 0.54rem;
+  letter-spacing: 0.5em; text-transform: uppercase;
+  color: var(--ink-faint); display: block; margin-bottom: 12px;
+}
+.ch-head h2 {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 1.85rem; font-weight: 400; font-style: italic; color: var(--ink-mid);
+}
+.ch-rule {
+  display: flex; align-items: center; justify-content: center;
+  gap: 14px; margin-top: 20px;
+}
+.ch-rule::before, .ch-rule::after { content: ''; width: 65px; height: 1px; background: var(--border); }
+.ch-rule span { font-size: 0.85rem; color: var(--sage-mid); opacity: 0.5; }
+
+/* ── TIME BAND ── */
+.time-band {
+  display: flex; align-items: center; gap: 16px;
+  margin: 68px 0 32px;
+}
+.time-badge-lg {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 8px 18px;
+  border-radius: 40px;
+  font-family: 'Josefin Sans', sans-serif; font-size: 0.6rem;
+  font-weight: 600; letter-spacing: 0.28em; text-transform: uppercase;
+  white-space: nowrap;
+  box-shadow: var(--shadow-sm);
+}
+.time-badge-lg.morning {
+  background: var(--sage-soft); color: var(--sage);
+  border: 1px solid rgba(90,122,92,0.2);
+}
+.time-badge-lg.noon {
+  background: var(--sky-soft); color: var(--sky);
+  border: 1px solid rgba(74,120,152,0.2);
+}
+.time-band::after { content: ''; flex: 1; height: 1px; background: linear-gradient(to right, var(--border), transparent); }
+
+/* ── SCENE SETTING ── */
+.scene-card {
+  border-radius: var(--r); padding: 24px 28px; margin: 2em 0;
+  position: relative; overflow: hidden;
+}
+.scene-card.morning-scene {
+  background: linear-gradient(135deg, var(--sage-faint), var(--bg2));
+  border: 1px solid rgba(90,122,92,0.14);
+  border-left: 3px solid var(--sage-mid);
+}
+.scene-card.noon-scene {
+  background: linear-gradient(135deg, var(--sky-faint), var(--bg2));
+  border: 1px solid rgba(74,120,152,0.14);
+  border-left: 3px solid var(--sky);
+}
+.scene-card .sc-watermark {
+  position: absolute; right: 16px; bottom: 8px;
+  font-size: 3.2rem; opacity: 0.08;
+}
+.scene-card .sc-label {
+  font-family: 'Josefin Sans', sans-serif; font-size: 0.54rem;
+  font-weight: 600; letter-spacing: 0.38em; text-transform: uppercase;
+  color: var(--ink-dim); display: block; margin-bottom: 12px;
+}
+.scene-card p {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 0.97rem; font-style: italic;
+  line-height: 1.9; color: var(--ink-mid); margin-bottom: 1em;
+}
+.scene-card p:last-child { margin-bottom: 0; }
+
+/* ── PROSE ── */
+.prose p {
+  font-family: 'Libre Baskerville', serif;
+  font-size: clamp(0.97rem,1.7vw,1.08rem);
+  line-height: 2.05; color: var(--ink-mid);
+  margin-bottom: 1.8em; text-align: justify; hyphens: auto;
+}
+.prose p.drop::first-letter {
+  font-family: 'Petit Formal Script', cursive;
+  font-size: 4.8rem; color: var(--sage);
+  float: left; line-height: 0.75; margin: 0.1em 0.12em 0 0;
+}
+
+/* ── LOCATION CARDS (side by side) ── */
+.duo-cards {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 14px; margin: 2.5em 0;
+}
+.duo-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--r); padding: 20px 22px;
+  box-shadow: var(--shadow-sm); position: relative; overflow: hidden;
+  transition: transform .25s, box-shadow .25s;
+}
+.duo-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+.duo-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  border-radius: var(--r) var(--r) 0 0;
+}
+.duo-card.lucifer::before { background: linear-gradient(to right, var(--wheat-mid), var(--terra)); }
+.duo-card.victoria::before { background: linear-gradient(to right, var(--sage), var(--sage-mid)); }
+.duo-card .dc-who {
+  font-family: 'Josefin Sans', sans-serif; font-size: 0.54rem;
+  font-weight: 600; letter-spacing: 0.32em; text-transform: uppercase;
+  margin-bottom: 10px; display: block;
+}
+.duo-card.lucifer .dc-who { color: var(--wheat); }
+.duo-card.victoria .dc-who { color: var(--sage); }
+.duo-card .dc-where {
+  font-family: 'Petit Formal Script', cursive;
+  font-size: 1.3rem; color: var(--ink); margin-bottom: 10px; display: block;
+}
+.duo-card .dc-desc {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 0.9rem; font-style: italic;
+  color: var(--ink-dim); line-height: 1.65;
+}
+.duo-card .dc-icon { font-size: 1.4rem; margin-bottom: 8px; display: block; }
+
+/* ── CHAT UI ── */
+.chat-window {
+  background: var(--surface);
+  border: 1px solid var(--border); border-radius: var(--r);
+  overflow: hidden; margin: 2.5em 0;
+  box-shadow: var(--shadow-md);
+}
+.chat-bar {
+  display: flex; align-items: center; gap: 8px;
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--border);
+}
+.chat-bar.morning { background: var(--sage-faint); }
+.chat-bar.noon    { background: var(--sky-faint); }
+.chat-dots { display: flex; gap: 5px; }
+.chat-dots span {
+  width: 9px; height: 9px; border-radius: 50%;
+}
+.dot-r { background: #e87060; }
+.dot-y { background: #e8c060; }
+.dot-g { background: #60c890; }
+.chat-title {
+  font-family: 'Josefin Sans', sans-serif; font-size: 0.58rem;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--ink-dim); margin-left: 8px;
+}
+.online-dot {
+  margin-left: auto; display: flex; align-items: center; gap: 5px;
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.56rem; letter-spacing: 0.1em; color: #22c55e;
+}
+.online-dot::before {
+  content: ''; width: 6px; height: 6px; border-radius: 50%;
+  background: #22c55e; box-shadow: 0 0 6px #22c55e;
+  animation: blink 2s infinite;
+}
+@keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.2;} }
+
+.chat-body { padding: 22px 20px; display: flex; flex-direction: column; gap: 13px; }
+
+/* collapsible / truncated chat */
+.chat-more { display: none; flex-direction: column; gap: 13px; }
+.chat-more.open { display: flex; }
+
+.chat-toggle-btn {
+  display: block; width: 100%; padding: 10px;
+  background: none; border: none; border-top: 1px solid var(--border);
+  font-family: 'Josefin Sans', sans-serif; font-size: 0.6rem;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--ink-dim); cursor: pointer; transition: background .2s, color .2s;
+}
+.chat-toggle-btn:hover { background: var(--bg2); color: var(--ink-mid); }
+
+.msg {
+  display: flex; flex-direction: column;
+  max-width: 80%;
+}
+.msg.l { align-self: flex-end; align-items: flex-end; }
+.msg.v { align-self: flex-start; }
+.msg-who {
+  font-family: 'Josefin Sans', sans-serif; font-size: 0.5rem;
+  font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.msg.l .msg-who { color: var(--wheat); text-align: right; }
+.msg.v .msg-who { color: var(--sage); }
+.msg-bub {
+  padding: 11px 16px;
+  font-family: 'Karla', sans-serif; font-size: 0.95rem;
+  line-height: 1.65; color: var(--ink-mid);
+}
+.msg.l .msg-bub {
+  background: var(--wheat-soft);
+  border: 1px solid rgba(160,116,42,0.18);
+  border-radius: 14px 14px 4px 14px;
+}
+.msg.v .msg-bub {
+  background: var(--sage-soft);
+  border: 1px solid rgba(90,122,92,0.18);
+  border-radius: 14px 14px 14px 4px;
+}
+
+/* noon chat — sky blue theme */
+.msg.l.noon .msg-bub {
+  background: var(--sky-soft);
+  border-color: rgba(74,120,152,0.18);
+}
+.msg.l.noon .msg-who { color: var(--sky); }
+
+/* ── FOOD SPOTLIGHT ── */
+.food-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 12px; margin: 2.5em 0;
+}
+.food-item {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--r); padding: 18px 20px;
+  box-shadow: var(--shadow-sm);
+  transition: transform .25s;
+}
+.food-item:hover { transform: translateY(-3px); }
+.food-item .fi-icon { font-size: 1.6rem; display: block; margin-bottom: 9px; }
+.food-item .fi-who {
+  font-family: 'Josefin Sans', sans-serif; font-size: 0.52rem;
+  font-weight: 600; letter-spacing: 0.25em; text-transform: uppercase;
+  margin-bottom: 5px; display: block;
+}
+.food-item.l .fi-who { color: var(--wheat); }
+.food-item.v .fi-who { color: var(--sage); }
+.food-item .fi-dish {
+  font-family: 'Libre Baskerville', serif; font-size: 1rem;
+  font-weight: 700; color: var(--ink); margin-bottom: 6px; display: block;
+}
+.food-item .fi-desc {
+  font-family: 'Karla', sans-serif; font-size: 0.88rem;
+  font-style: italic; color: var(--ink-dim); line-height: 1.55;
+}
+
+/* favourite recipe highlight */
+.fave-strip {
+  background: linear-gradient(135deg, var(--wheat-faint), var(--parchment));
+  border: 1px solid rgba(160,116,42,0.15);
+  border-left: 3px solid var(--wheat-mid);
+  border-radius: 0 var(--r) var(--r) 0;
+  padding: 22px 28px; margin: 2.2em 0;
+  position: relative; overflow: hidden;
+}
+.fave-strip::after { content: '🍝'; position: absolute; right: 16px; bottom: 8px; font-size: 3rem; opacity: 0.1; }
+.fave-strip .fs-label {
+  font-family: 'Josefin Sans', sans-serif; font-size: 0.54rem;
+  font-weight: 600; letter-spacing: 0.36em; text-transform: uppercase;
+  color: var(--wheat-mid); display: block; margin-bottom: 10px;
+}
+.fave-strip p {
+  font-family: 'Libre Baskerville', serif; font-size: 0.97rem;
+  font-style: italic; color: var(--ink-mid); line-height: 1.8; margin: 0;
+}
+
+/* baking strip */
+.bake-strip {
+  background: linear-gradient(135deg, var(--terra-soft), var(--parchment));
+  border: 1px solid rgba(192,104,72,0.14);
+  border-left: 3px solid var(--terra);
+  border-radius: 0 var(--r) var(--r) 0;
+  padding: 22px 28px; margin: 2.2em 0;
+  position: relative; overflow: hidden;
+}
+.bake-strip::after { content: '🍪'; position: absolute; right: 16px; bottom: 8px; font-size: 3rem; opacity: 0.1; }
+.bake-strip .bs-label {
+  font-family: 'Josefin Sans', sans-serif; font-size: 0.54rem;
+  font-weight: 600; letter-spacing: 0.36em; text-transform: uppercase;
+  color: var(--terra); display: block; margin-bottom: 10px;
+}
+.bake-strip p {
+  font-family: 'Libre Baskerville', serif; font-size: 0.97rem;
+  font-style: italic; color: var(--ink-mid); line-height: 1.8; margin: 0;
+}
+
+/* ── PULL QUOTE ── */
+.pull {
+  border-top: 2px solid var(--sage-mid);
+  border-bottom: 2px solid var(--sage-mid);
+  padding: 22px 24px; margin: 3em 0;
+  text-align: center;
+}
+.pull p {
+  font-family: 'Libre Baskerville', serif;
+  font-size: clamp(1.05rem,2.3vw,1.28rem);
+  font-style: italic; color: var(--ink); line-height: 1.6; margin: 0;
+}
+
+/* ── SCENE DIVIDER ── */
+.div-break {
+  display: flex; align-items: center; gap: 18px; margin: 58px 0;
+}
+.div-break::before, .div-break::after {
+  content: ''; flex: 1; height: 1px;
+  background: linear-gradient(to right, transparent, var(--border), transparent);
+}
+.div-break span { font-size: 1.1rem; opacity: 0.3; }
+
+/* ── PLANS CARD (café plans) ── */
+.plans-card {
+  display: grid; grid-template-columns: auto 1fr;
+  gap: 16px 20px;
+  background: var(--surface);
+  border: 1px solid var(--border); border-radius: var(--r);
+  padding: 24px 26px; margin: 2.5em 0;
+  box-shadow: var(--shadow-sm);
+  align-items: start;
+}
+.plans-card .pc-icon { font-size: 2rem; padding-top: 2px; }
+.plans-card .pc-body {}
+.plans-card .pc-label {
+  font-family: 'Josefin Sans', sans-serif; font-size: 0.54rem;
+  font-weight: 600; letter-spacing: 0.32em; text-transform: uppercase;
+  color: var(--terra); display: block; margin-bottom: 8px;
+}
+.plans-card p {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 0.97rem; font-style: italic;
+  color: var(--ink-mid); line-height: 1.8; margin: 0;
+}
+
+/* ── CLOSING SUMMARY ── */
+.summary-card {
+  background: linear-gradient(135deg, var(--sage-faint), var(--wheat-faint));
+  border: 1px solid rgba(90,122,92,0.12);
+  border-radius: var(--r); padding: 28px 32px; margin: 2.8em 0;
+  position: relative; overflow: hidden;
+}
+.summary-card::after {
+  content: '☕'; position: absolute; right: 18px; bottom: 10px;
+  font-size: 4rem; opacity: 0.07;
+}
+.summary-card .sum-label {
+  font-family: 'Josefin Sans', sans-serif; font-size: 0.54rem;
+  font-weight: 600; letter-spacing: 0.38em; text-transform: uppercase;
+  color: var(--sage); display: block; margin-bottom: 12px;
+}
+.summary-card p {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 0.97rem; font-style: italic;
+  color: var(--ink-mid); line-height: 1.9; margin: 0;
+}
+
+/* ── STORY END ── */
+.story-end {
+  text-align: center; margin-top: 80px;
+  padding-top: 50px; border-top: 1px solid var(--border);
+}
+.end-label {
+  font-family: 'Josefin Sans', sans-serif; font-size: 0.54rem;
+  letter-spacing: 0.5em; text-transform: uppercase;
+  color: var(--ink-faint); display: block; margin-bottom: 16px;
+}
+.end-closing {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 1.1rem; font-style: italic;
+  color: var(--ink-mid); line-height: 1.9;
+  max-width: 460px; margin: 0 auto 36px;
+}
+.btn-return {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 12px 28px; border: 1.5px solid var(--ink-mid);
+  border-radius: 40px; color: var(--ink-mid); text-decoration: none;
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.63rem; font-weight: 400; letter-spacing: 0.22em;
+  text-transform: uppercase; transition: all .25s;
+}
+.btn-return:hover {
+  background: var(--ink); color: var(--bg);
+  border-color: var(--ink); transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(30,40,32,0.2);
+}
+.btn-return svg { width: 13px; height: 13px; transition: transform .25s; }
+.btn-return:hover svg { transform: translateX(-3px); }
+
+/* ── ANIMATIONS ── */
+@keyframes riseIn { from{opacity:0;transform:translateY(22px);} to{opacity:1;transform:none;} }
+.reveal { opacity:0; transform:translateY(20px); transition: opacity .65s ease, transform .65s ease; }
+.reveal.in { opacity:1; transform:none; }
+.reveal-d1 { transition-delay: .08s; }
+.reveal-d2 { transition-delay: .16s; }
+
+/* ── RESPONSIVE ── */
+@media(max-width:600px){
+  nav { padding:0 16px; }
+  .page { padding:56px 16px 80px; }
+  .duo-cards, .food-grid { grid-template-columns:1fr; }
+  .pull { padding:16px; }
+  .night-card { padding:22px 16px; }
+}
+</style>
+</head>
+<body>
+
+<div id="prog"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="../index.html" class="n-brand">Whispers of Caring</a>
+  <div class="n-links">
+    <a href="c3index.html">Home</a>
+    
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-lines"></div>
+  <div class="steam">
+    <div class="steam-line"></div>
+    <div class="steam-line"></div>
+    <div class="steam-line"></div>
+  </div>
+
+  <div class="hero-inner">
+    <p class="hero-eyebrow">Chapter Three &nbsp;·&nbsp; Phase One</p>
+    <h1 class="hero-script">Morning Musings</h1>
+    <p class="hero-subtitle">Two Towns &nbsp;·&nbsp; One Conversation</p>
+    <div class="deco-rule"><span>🍃</span></div>
+    <p class="hero-desc">A fresh morning in Aurora Vista, a sketchbook in Evervale — and the easy warmth of two friends finding each other across the miles.</p>
+    <div class="time-badges">
+      <span class="tbadge">🌅 Dawn Chat</span>
+      <span class="tbadge">☕ Coffee & Sketches</span>
+      <span class="tbadge">🍝 Lunch Break</span>
+      <span class="tbadge">🎨 Victoria's Art</span>
+    </div>
+  </div>
+
+  <div class="scroll-hint">
+    <span>Begin</span>
+    <div class="caret"></div>
+  </div>
+</section>
+
+<!-- PAGE CONTENT -->
+<main class="page">
+
+  <div class="ch-head reveal">
+    <span class="ch-label">Chapter Three · Morning Stories</span>
+    <h2>Of Coffee, Conversation &amp; Quiet Friendship</h2>
+    <div class="ch-rule"><span>❧</span></div>
+  </div>
+
+  <!-- ════ MORNING ════ -->
+  <div class="time-band reveal">
+    <span class="time-badge-lg morning">🌅 Early Morning</span>
+  </div>
+
+  <!-- Two locations side by side -->
+  <div class="duo-cards reveal">
+    <div class="duo-card lucifer">
+      <span class="dc-icon">☕</span>
+      <span class="dc-who">Lucifer · Aurora Vista</span>
+      <span class="dc-where">A Fresh Dawn</span>
+      <span class="dc-desc">Groggy and warm, sitting at his kitchen table with a laptop open and coffee in hand, catching up on the morning's messages.</span>
+    </div>
+    <div class="duo-card victoria">
+      <span class="dc-icon">🎨</span>
+      <span class="dc-who">Victoria · Evervale</span>
+      <span class="dc-where">Sketching by the Window</span>
+      <span class="dc-desc">The early morning sun casting a glow on her sketchbook, birds chirping outside, mid-doodle on a new painting idea.</span>
+    </div>
+  </div>
+
+  <div class="prose">
+    <p class="drop reveal">
+      It was a fresh morning in Aurora Vista, and the first light of dawn filtered through the curtains of Lucifer's modest apartment. The scent of freshly brewed coffee filled the air, adding comforting warmth to the room. Meanwhile, in Evervale, Victoria was sitting by her window — the early morning sun casting a gentle glow on her sketchbook. She was in the middle of doodling a new idea for her next painting when her phone buzzed with a message from Lucifer.
+    </p>
+  </div>
+
+  <!-- MORNING CHAT -->
+  <div class="chat-window reveal">
+    <div class="chat-bar morning">
+      <div class="chat-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div>
+      <span class="chat-title">Evervale Forums · Morning</span>
+      <span class="online-dot">Online</span>
+    </div>
+    <div class="chat-body">
+      <div class="msg l">
+        <span class="msg-who">Lucifer</span>
+        <div class="msg-bub">Good morning, Victoria! How's the weather over in Evervale today?</div>
+      </div>
+      <div class="msg v">
+        <span class="msg-who">Victoria</span>
+        <div class="msg-bub">Morning, Lucifer! It's a bit cloudy here, but the birds are singing, so that's a good sign. How about Aurora Vista?</div>
+      </div>
+      <div class="msg l">
+        <span class="msg-who">Lucifer</span>
+        <div class="msg-bub">It's pretty calm here. Had a little rain last night, so the air is fresh. I'm just waking up with some coffee. You?</div>
+      </div>
+      <div class="msg v">
+        <span class="msg-who">Victoria</span>
+        <div class="msg-bub">I'm up early, sketching by the window. Just made some tea. What's on your agenda for today?</div>
+      </div>
+      <div class="msg l">
+        <span class="msg-who">Lucifer</span>
+        <div class="msg-bub">Gotta tackle a few projects at work. My boss has been piling on the tasks. 😅 How about you? Any new art projects?</div>
+      </div>
+      <div class="msg v">
+        <span class="msg-who">Victoria</span>
+        <div class="msg-bub">Yeah, actually! I'm working on a new piece inspired by last night's dream. It's a bit abstract, but I'm excited to see where it goes.</div>
+      </div>
+    </div>
+
+    <!-- Expandable rest -->
+    <div class="chat-more" id="morning-more">
+      <div class="msg l">
+        <span class="msg-who">Lucifer</span>
+        <div class="msg-bub">That sounds awesome! 😄</div>
+      </div>
+      <div class="msg v">
+        <span class="msg-who">Victoria</span>
+        <div class="msg-bub">Aww, thanks! And I wish I had your focus. I don't know how you manage to stay so organized at work. 🤔</div>
+      </div>
+      <div class="msg l">
+        <span class="msg-who">Lucifer</span>
+        <div class="msg-bub">Ha-ha, it's all about making to-do lists and sticking to them. You should try it sometime. 😉</div>
+      </div>
+      <div class="msg v">
+        <span class="msg-who">Victoria</span>
+        <div class="msg-bub">I might just take you up on that. Oh, and guess what? I found this new café in town. They have the best pastries! We should check it out next time you visit.</div>
+      </div>
+      <div class="msg l">
+        <span class="msg-who">Lucifer</span>
+        <div class="msg-bub">Sounds like a plan! I'm always up for good pastries. 😋</div>
+      </div>
+      <div class="msg v">
+        <span class="msg-who">Victoria</span>
+        <div class="msg-bub">Great! Let's set a date soon. Anyway, I should get back to my sketch before the inspiration fades. Have a good day at work, Lucifer!</div>
+      </div>
+      <div class="msg l">
+        <span class="msg-who">Lucifer</span>
+        <div class="msg-bub">You too, Vicky! Have fun with your sketching. Talk to you later!</div>
+      </div>
+      <div class="msg v">
+        <span class="msg-who">Victoria</span>
+        <div class="msg-bub">Will do! Bye! 👋</div>
+      </div>
+    </div>
+    <button class="chat-toggle-btn" onclick="toggleChat('morning-more', this)">Show full conversation ↓</button>
+  </div>
+
+  <!-- Café plans card -->
+  <div class="plans-card reveal">
+    <span class="pc-icon">☕</span>
+    <div class="pc-body">
+      <span class="pc-label">📅 A Plan in the Making</span>
+      <p>"I found this new café in town — they have the best pastries! We should check it out next time you visit." A small, warm promise tucked into a morning chat. The kind that makes a future visit feel already real.</p>
+    </div>
+  </div>
+
+  <!-- DIVIDER -->
+  <div class="div-break reveal"><span>🍃</span></div>
+
+  <!-- ════ NOON ════ -->
+  <div class="time-band reveal">
+    <span class="time-badge-lg noon">🌤️ Around Noon</span>
+  </div>
+
+  <!-- Noon locations -->
+  <div class="duo-cards reveal">
+    <div class="duo-card lucifer">
+      <span class="dc-icon">🥗</span>
+      <span class="dc-who">Lucifer · Break Room</span>
+      <span class="dc-where">Lunchtime Pause</span>
+      <span class="dc-desc">Leftover pasta by the window, watching the bustle of Aurora Vista's streets, phone in hand to check if Victoria is free.</span>
+    </div>
+    <div class="duo-card victoria">
+      <span class="dc-icon">🥪</span>
+      <span class="dc-who">Victoria · Evervale Café</span>
+      <span class="dc-where">Her Favourite Spot</span>
+      <span class="dc-desc">Quaint wooden tables, a chalkboard menu, just ordered a turkey and avocado sandwich with a cup of tea.</span>
+    </div>
+  </div>
+
+  <!-- Scene setting cards -->
+  <div class="scene-card noon-scene reveal">
+    <span class="sc-label">🌤 Noon · Aurora Vista Office</span>
+    <p>Lucifer's office had large windows letting in plenty of natural light. In the break room — a cosy space with a few tables, a fridge, and a microwave — the smell of various lunch dishes being heated filled the air, creating a warm and inviting atmosphere.</p>
+    <div class="sc-watermark">🏢</div>
+  </div>
+
+  <!-- Food comparison -->
+  <div class="food-grid reveal">
+    <div class="food-item l">
+      <span class="fi-icon">🍝</span>
+      <span class="fi-who">Lucifer's Lunch</span>
+      <span class="fi-dish">Spaghetti Marinara</span>
+      <span class="fi-desc">Leftover spaghetti with marinara, mushrooms, and a dusting of parmesan. Simple, comfort food — his go-to.</span>
+    </div>
+    <div class="food-item v">
+      <span class="fi-icon">🥪</span>
+      <span class="fi-who">Victoria's Lunch</span>
+      <span class="fi-dish">Turkey & Avocado</span>
+      <span class="fi-desc">Whole grain bread, turkey, avocado, crispy lettuce and tomatoes. Fresh and full of flavour — just her style.</span>
+    </div>
+  </div>
+
+  <!-- NOON CHAT -->
+  <div class="chat-window reveal">
+    <div class="chat-bar noon">
+      <div class="chat-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div>
+      <span class="chat-title">Evervale Forums · Noon</span>
+      <span class="online-dot">Online</span>
+    </div>
+    <div class="chat-body">
+      <div class="msg l noon">
+        <span class="msg-who">Lucifer</span>
+        <div class="msg-bub">Hey Victoria, how's your lunch break going?</div>
+      </div>
+      <div class="msg v">
+        <span class="msg-who">Victoria</span>
+        <div class="msg-bub">Hey Luci! It's good, just grabbed a sandwich at my favourite café. You?</div>
+      </div>
+      <div class="msg l noon">
+        <span class="msg-who">Lucifer</span>
+        <div class="msg-bub">Nice! I'm having some leftover pasta I made last night. It's pretty simple but tasty. What kind of sandwich did you get?</div>
+      </div>
+      <div class="msg v">
+        <span class="msg-who">Victoria</span>
+        <div class="msg-bub">I got a turkey and avocado sandwich with some crispy lettuce and tomatoes. It's on whole grain bread. I love how fresh everything tastes here.</div>
+      </div>
+      <div class="msg l noon">
+        <span class="msg-who">Lucifer</span>
+        <div class="msg-bub">That sounds delicious! I've always liked turkey sandwiches, especially when they have avocado. It adds such a nice creamy texture.</div>
+      </div>
+      <div class="msg v">
+        <span class="msg-who">Victoria</span>
+        <div class="msg-bub">Exactly! Avocado makes everything better. What kind of pasta are you having?</div>
+      </div>
+      <div class="msg l noon">
+        <span class="msg-who">Lucifer</span>
+        <div class="msg-bub">It's spaghetti with marinara sauce. I added some mushrooms and a bit of parmesan on top. Nothing fancy, but it's my go-to comfort food.</div>
+      </div>
+      <div class="msg v">
+        <span class="msg-who">Victoria</span>
+        <div class="msg-bub">Yum, I love spaghetti! Mushrooms add such a nice earthy flavour. Do you cook a lot?</div>
+      </div>
+    </div>
+
+    <div class="chat-more" id="noon-more">
+      <div class="msg l noon">
+        <span class="msg-who">Lucifer</span>
+        <div class="msg-bub">I try to. I find it relaxing after a long day at work. Plus, it's fun to experiment with different recipes. What about you? Do you like cooking?</div>
+      </div>
+      <div class="msg v">
+        <span class="msg-who">Victoria</span>
+        <div class="msg-bub">I do, but I'm more of a baker. I love making cakes and cookies. There's something really satisfying about mixing ingredients and watching them turn into something sweet and delicious.</div>
+      </div>
+      <div class="msg l noon">
+        <span class="msg-who">Lucifer</span>
+        <div class="msg-bub">Baking is awesome! I'm not much of a baker myself, but I do enjoy eating baked goods. 😄 Do you have a favourite recipe?</div>
+      </div>
+      <div class="msg v">
+        <span class="msg-who">Victoria</span>
+        <div class="msg-bub">Probably my chocolate chip cookies. They're always a hit with my friends. What's your favourite dish to cook?</div>
+      </div>
+      <div class="msg l noon">
+        <span class="msg-who">Lucifer</span>
+        <div class="msg-bub">I think my favourite is a good old-fashioned Spicy Noodles. It takes a bit of time to make, but it's always worth it — what's not to love?</div>
+      </div>
+      <div class="msg v">
+        <span class="msg-who">Victoria</span>
+        <div class="msg-bub">Spicy Noodles is amazing! I haven't made it in a while, but now you're making me crave it. Maybe I'll give it a try this weekend.</div>
+      </div>
+      <div class="msg l noon">
+        <span class="msg-who">Lucifer</span>
+        <div class="msg-bub">You should! By the way, do you ever try out new cafés or restaurants in Evervale?</div>
+      </div>
+      <div class="msg v">
+        <span class="msg-who">Victoria</span>
+        <div class="msg-bub">All the time! There's this new place that just opened up, and they have the best homemade soups. I tried their tomato basil soup last week — it was heavenly.</div>
+      </div>
+      <div class="msg l noon">
+        <span class="msg-who">Lucifer</span>
+        <div class="msg-bub">That sounds great. We should meet up for lunch sometime and check out a new place together.</div>
+      </div>
+      <div class="msg v">
+        <span class="msg-who">Victoria</span>
+        <div class="msg-bub">Definitely! It would be so much fun to explore new food spots with you. Maybe we can find a place that serves amazing desserts too.</div>
+      </div>
+      <div class="msg l noon">
+        <span class="msg-who">Lucifer</span>
+        <div class="msg-bub">Now you're talking my language! I'm always up for good food and great company. Let's make it happen soon.</div>
+      </div>
+      <div class="msg v">
+        <span class="msg-who">Victoria</span>
+        <div class="msg-bub">For sure! Anyway, I should finish up my lunch and get back to my art project. Have a good rest of your workday, Luci!</div>
+      </div>
+      <div class="msg l noon">
+        <span class="msg-who">Lucifer</span>
+        <div class="msg-bub">You too, Vicky! Enjoy your sandwich and have fun with your project. Talk to you later! 😄</div>
+      </div>
+    </div>
+    <button class="chat-toggle-btn" onclick="toggleChat('noon-more', this)">Show full conversation ↓</button>
+  </div>
+
+  <!-- Favourite recipes highlight -->
+  <div class="fave-strip reveal">
+    <span class="fs-label">🍝 Lucifer's Favourite Dish</span>
+    <p>Spicy Noodles — "It takes a bit of time to make, but it's always worth it. What's not to love?" A dish that takes patience and gives comfort in return. Much like the friendship itself.</p>
+  </div>
+
+  <div class="bake-strip reveal">
+    <span class="bs-label">🍪 Victoria's Signature Recipe</span>
+    <p>Chocolate Chip Cookies — always a hit with her friends. There's something really satisfying about mixing ingredients and watching them turn into something sweet and delicious.</p>
+  </div>
+
+  <div class="pull reveal">
+    <p>"I'm always up for good food and great company. Let's make it happen soon."</p>
+  </div>
+
+  <!-- Closing summary -->
+  <div class="summary-card reveal">
+    <span class="sum-label">✦ The Heart of It</span>
+    <p>Lucifer and Victoria share a simple, friendly chat about their lunch choices and favourite dishes — their cooking habits, their food dreams, their plans to one day sit at the same table. Their conversation is light-hearted and casual, reflecting their close friendship and their shared enjoyment of the good, quiet things in life.</p>
+  </div>
+
+  <!-- Story end -->
+  <div class="story-end reveal">
+    <span class="end-label">Chapter Three · Phase One · Complete</span>
+    <p class="end-closing">Two towns, two meals, one easy conversation — and the quiet certainty that next time, they'll share the table.</p>
+    <a href="c3index.html" class="btn-return">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+      Return to Chapter Three
+    </a>
+  </div>
+
+</main>
+
+<script>
+/* ── progress ── */
+const prog = document.getElementById('prog');
+window.addEventListener('scroll', () => {
+  const s = window.scrollY;
+  const h = document.documentElement.scrollHeight - window.innerHeight;
+  prog.style.width = (h > 0 ? (s / h) * 100 : 0) + '%';
+}, { passive: true });
+
+/* ── scroll reveal ── */
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); }
+  });
+}, { threshold: 0.07 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+/* ── chat toggle ── */
+function toggleChat(id, btn) {
+  const el = document.getElementById(id);
+  const isOpen = el.classList.contains('open');
+  if (isOpen) {
+    el.classList.remove('open');
+    btn.textContent = 'Show full conversation ↓';
+  } else {
+    el.classList.add('open');
+    btn.textContent = 'Collapse ↑';
+  }
+}
+</script>
+
+</body>
+</html>

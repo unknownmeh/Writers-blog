@@ -1,0 +1,1183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Epic Battles: Nightshade & Starfire's Chronicles</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cinzel+Decorative:wght@400;700&family=Crimson+Pro:ital,wght@0,300;0,400;1,300;1,400&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+
+/* ══════════════════════════════════════
+   TOKENS
+══════════════════════════════════════ */
+:root {
+  --void:       #060810;
+  --abyss:      #0a0d18;
+  --cavern:     #0e1222;
+  --surface:    #131828;
+  --surface-2:  #182035;
+  --panel:      #1c2640;
+  --panel-2:    #202d48;
+  --border:     rgba(255,255,255,0.06);
+  --border-2:   rgba(255,255,255,0.1);
+  --border-3:   rgba(255,255,255,0.16);
+
+  --ink:        #e0e8f8;
+  --ink-2:      #a8b8d0;
+  --ink-3:      #6878a0;
+  --ink-4:      #404f70;
+
+  /* Nightshade — rogue: crimson/scarlet */
+  --rouge:      #e03850;
+  --rouge-2:    #b82838;
+  --rouge-glow: rgba(224,56,80,0.18);
+  --rouge-pale: rgba(224,56,80,0.08);
+  --rouge-bd:   rgba(224,56,80,0.25);
+
+  /* Starfire — sorceress: violet/arcane */
+  --arcane:     #9060e8;
+  --arcane-2:   #6838c0;
+  --arcane-glow:rgba(144,96,232,0.18);
+  --arcane-pale:rgba(144,96,232,0.08);
+  --arcane-bd:  rgba(144,96,232,0.25);
+
+  /* Victory: gold */
+  --gold:       #e8b840;
+  --gold-pale:  rgba(232,184,64,0.1);
+  --gold-bd:    rgba(232,184,64,0.3);
+
+  /* Health/energy */
+  --hp-green:   #40c880;
+  --hp-red:     #e04040;
+
+  --shadow:     0 4px 24px rgba(0,0,0,0.6);
+  --shadow-lg:  0 12px 48px rgba(0,0,0,0.7);
+}
+
+/* ══════════════════════════════════════
+   BASE
+══════════════════════════════════════ */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Crimson Pro', serif;
+  background: var(--void);
+  color: var(--ink);
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+/* Hex grid texture */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image:
+    radial-gradient(circle, rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size: 32px 32px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Particle field */
+#particles {
+  position: fixed; inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  animation: drift linear infinite;
+}
+@keyframes drift {
+  0%   { transform: translateY(0) translateX(0); opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 0.5; }
+  100% { transform: translateY(-100vh) translateX(var(--dx)); opacity: 0; }
+}
+
+/* ══════════════════════════════════════
+   NAV
+══════════════════════════════════════ */
+nav {
+  position: fixed; top: 0; left: 0; right: 0;
+  z-index: 500;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 52px;
+  background: rgba(6,8,16,0.92);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border-2);
+}
+.nav-brand {
+  font-family: 'Cinzel', serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--gold);
+  text-shadow: 0 0 20px rgba(232,184,64,0.4);
+}
+.nav-brand span { color: var(--ink-3); font-weight: 400; margin: 0 6px; }
+.nav-right { display: flex; align-items: center; gap: 12px; }
+.nav-badge {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.62rem;
+  color: var(--ink-3);
+  border: 1px solid var(--border-2);
+  padding: 4px 12px;
+  border-radius: 4px;
+  letter-spacing: 0.1em;
+}
+.nav-home {
+  font-family: 'Cinzel', serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-weight: 500;
+  color: var(--ink-3);
+  text-decoration: none;
+  border: 1px solid var(--border-2);
+  padding: 7px 18px;
+  border-radius: 4px;
+  transition: all 0.3s;
+}
+.nav-home:hover { border-color: var(--gold); color: var(--gold); background: var(--gold-pale); }
+
+/* ══════════════════════════════════════
+   HERO — Chronicle Cover
+══════════════════════════════════════ */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  overflow: hidden;
+  z-index: 1;
+  padding: 120px 40px 80px;
+}
+.hero-fog {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 30%, rgba(144,96,232,0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 20% 70%, rgba(224,56,80,0.06) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 40% at 80% 60%, rgba(232,184,64,0.05) 0%, transparent 55%);
+  pointer-events: none;
+}
+.hero-book-ornament {
+  font-size: 2rem;
+  margin-bottom: 18px;
+  opacity: 0;
+  animation: fadeUp 0.7s ease 0.2s forwards;
+  letter-spacing: 8px;
+  position: relative; z-index: 2;
+}
+.hero-chapter {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.3em;
+  color: var(--ink-3);
+  margin-bottom: 14px;
+  opacity: 0;
+  animation: fadeUp 0.7s ease 0.35s forwards;
+  position: relative; z-index: 2;
+}
+.hero-title {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: clamp(1.8rem, 5vw, 4rem);
+  font-weight: 700;
+  line-height: 1.12;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+  text-shadow: 0 0 40px rgba(144,96,232,0.3);
+  opacity: 0;
+  animation: fadeUp 1s ease 0.5s forwards;
+  position: relative; z-index: 2;
+  margin-bottom: 10px;
+}
+.hero-title .glow-gold {
+  color: var(--gold);
+  text-shadow: 0 0 30px rgba(232,184,64,0.5);
+}
+.hero-subtitle {
+  font-family: 'Cinzel', serif;
+  font-size: 1rem;
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  color: var(--ink-3);
+  opacity: 0;
+  animation: fadeUp 0.7s ease 0.75s forwards;
+  position: relative; z-index: 2;
+  margin-bottom: 36px;
+}
+.hero-chars {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+  opacity: 0;
+  animation: fadeUp 0.7s ease 1s forwards;
+  position: relative; z-index: 2;
+  margin-bottom: 40px;
+}
+.char-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 18px 10px 12px;
+  border-radius: 6px;
+  border: 1px solid;
+  font-family: 'Cinzel', serif;
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  position: relative;
+  overflow: hidden;
+}
+.char-card::before {
+  content: '';
+  position: absolute; inset: 0;
+  opacity: 0.06;
+}
+.char-card.nightshade {
+  border-color: var(--rouge-bd);
+  color: var(--rouge);
+}
+.char-card.nightshade::before { background: var(--rouge); }
+.char-card.starfire {
+  border-color: var(--arcane-bd);
+  color: var(--arcane);
+}
+.char-card.starfire::before { background: var(--arcane); }
+.char-class {
+  font-size: 0.56rem;
+  color: var(--ink-3);
+  font-family: 'Share Tech Mono', monospace;
+  letter-spacing: 0.15em;
+  display: block;
+}
+
+/* Scroll cue */
+.scroll-cue {
+  position: absolute; bottom: 30px; left: 50%;
+  transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  opacity: 0;
+  animation: fadeUp 0.7s ease 1.6s forwards;
+  z-index: 2;
+}
+.scroll-cue span { font-family: 'Share Tech Mono', monospace; font-size: 0.55rem; letter-spacing: 0.2em; color: var(--ink-4); }
+.scroll-bar { width: 1px; height: 38px; background: linear-gradient(180deg, var(--gold), transparent); animation: pulse 2s ease infinite; }
+@keyframes pulse { 0%,100%{opacity:0.3} 50%{opacity:1} }
+@keyframes fadeUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
+
+/* ══════════════════════════════════════
+   LAYOUT
+══════════════════════════════════════ */
+.content { position: relative; z-index: 2; max-width: 860px; margin: 0 auto; padding: 0 48px; }
+
+/* Section header */
+.sec-head {
+  display: flex; align-items: center; gap: 16px;
+  margin: 72px 0 36px;
+  opacity: 0; transform: translateY(12px);
+  transition: opacity 0.7s, transform 0.7s;
+}
+.sec-head.vis { opacity: 1; transform: translateY(0); }
+.sec-head-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem; letter-spacing: 0.28em; color: var(--gold);
+  white-space: nowrap;
+}
+.sec-head-line { flex: 1; height: 1px; background: var(--border-2); }
+.sec-head-icon { font-size: 0.85rem; opacity: 0.5; }
+
+/* Title */
+.sec-title {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(1.7rem, 4vw, 2.8rem);
+  font-weight: 500;
+  line-height: 1.18;
+  letter-spacing: 0.02em;
+  color: var(--ink);
+  margin-bottom: 26px;
+  opacity: 0; transform: translateY(14px);
+  transition: opacity 0.8s, transform 0.8s;
+}
+.sec-title.vis { opacity: 1; transform: translateY(0); }
+.sec-title .rc { color: var(--rouge); }
+.sec-title .ac { color: var(--arcane); }
+.sec-title .gc { color: var(--gold); }
+
+/* Prose */
+.prose {
+  font-size: 1.1rem; line-height: 1.95;
+  color: var(--ink-2); font-weight: 300;
+  margin-bottom: 20px;
+  opacity: 0; transform: translateY(12px);
+  transition: opacity 0.7s, transform 0.7s;
+}
+.prose.vis { opacity: 1; transform: translateY(0); }
+.prose em { font-style: italic; color: var(--ink); }
+
+/* ══════════════════════════════════════
+   CHARACTER HUD
+══════════════════════════════════════ */
+.hud {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin: 36px 0;
+  opacity: 0; transform: translateY(14px);
+  transition: opacity 0.8s, transform 0.8s;
+}
+.hud.vis { opacity: 1; transform: translateY(0); }
+.hud-card {
+  background: var(--surface);
+  border: 1px solid var(--border-2);
+  border-radius: 10px;
+  padding: 22px 24px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+.hud-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+}
+.hud-card.ns::before { background: linear-gradient(90deg, var(--rouge), transparent); }
+.hud-card.sf::before { background: linear-gradient(90deg, var(--arcane), transparent); }
+.hud-name {
+  font-family: 'Cinzel', serif;
+  font-size: 1rem; font-weight: 600;
+  letter-spacing: 0.08em;
+  margin-bottom: 3px;
+}
+.hud-card.ns .hud-name { color: var(--rouge); }
+.hud-card.sf .hud-name { color: var(--arcane); }
+.hud-class {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.58rem; letter-spacing: 0.2em;
+  color: var(--ink-4); margin-bottom: 14px;
+}
+.hud-stats { display: flex; flex-direction: column; gap: 8px; }
+.stat-row { display: flex; flex-direction: column; gap: 4px; }
+.stat-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.55rem; letter-spacing: 0.18em;
+  color: var(--ink-3); display: flex; justify-content: space-between;
+}
+.stat-bar {
+  height: 4px; border-radius: 2px;
+  background: var(--border-2); overflow: hidden;
+}
+.stat-fill {
+  height: 100%; border-radius: 2px;
+  width: 0%;
+  transition: width 1.2s cubic-bezier(0.4,0,0.2,1) 0.4s;
+}
+.hud.vis .stat-fill { width: var(--w); }
+.fill-hp  { background: linear-gradient(90deg, var(--hp-green), #70e8a0); }
+.fill-mp  { background: linear-gradient(90deg, #4080e0, #80b0ff); }
+.fill-sp  { background: linear-gradient(90deg, var(--rouge), #ff6080); }
+.fill-arc { background: linear-gradient(90deg, var(--arcane), #c090ff); }
+
+/* ══════════════════════════════════════
+   CHAT — Morning exchange
+══════════════════════════════════════ */
+.chat-block {
+  background: var(--surface);
+  border: 1px solid var(--border-2);
+  border-radius: 10px;
+  padding: 28px 32px;
+  margin: 32px 0;
+  box-shadow: var(--shadow);
+  opacity: 0; transform: translateY(14px);
+  transition: opacity 0.8s, transform 0.8s;
+  position: relative; overflow: hidden;
+}
+.chat-block::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--rouge), transparent 40%, var(--arcane));
+  opacity: 0.6;
+}
+.chat-block.vis { opacity: 1; transform: translateY(0); }
+.chat-header {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.58rem; letter-spacing: 0.25em; color: var(--ink-4);
+  margin-bottom: 20px;
+  display: flex; align-items: center; gap: 10px;
+}
+.chat-header::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.msgs { display: flex; flex-direction: column; gap: 10px; }
+.msg {
+  display: flex; flex-direction: column;
+  max-width: 70%;
+  opacity: 0;
+  transition: opacity 0.45s, transform 0.45s;
+}
+.msg.vis { opacity: 1; transform: translateX(0) !important; }
+.msg.luc { align-self: flex-start; transform: translateX(-12px); }
+.msg.vic { align-self: flex-end;   transform: translateX(12px); }
+.msg-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.54rem; letter-spacing: 0.2em;
+  margin-bottom: 4px;
+}
+.msg.luc .msg-label { color: var(--rouge); }
+.msg.vic .msg-label { color: var(--arcane); text-align: right; }
+.msg-bub {
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 0.93rem; line-height: 1.65; font-weight: 300;
+}
+.msg.luc .msg-bub {
+  background: var(--rouge-pale); border: 1px solid var(--rouge-bd);
+  color: var(--ink-2); border-bottom-left-radius: 2px;
+}
+.msg.vic .msg-bub {
+  background: var(--arcane-pale); border: 1px solid var(--arcane-bd);
+  color: var(--ink-2); border-bottom-right-radius: 2px; text-align: right;
+}
+
+/* ══════════════════════════════════════
+   ZONE SELECTOR — Interactive
+══════════════════════════════════════ */
+.zone-selector {
+  margin: 44px 0;
+  opacity: 0; transform: translateY(14px);
+  transition: opacity 0.8s, transform 0.8s;
+}
+.zone-selector.vis { opacity: 1; transform: translateY(0); }
+.zone-tabs {
+  display: flex; gap: 2px;
+  background: var(--surface);
+  border: 1px solid var(--border-2);
+  border-radius: 8px 8px 0 0;
+  padding: 4px 4px 0;
+  overflow-x: auto;
+}
+.zone-tab {
+  font-family: 'Cinzel', serif;
+  font-size: 0.7rem; font-weight: 500;
+  letter-spacing: 0.1em;
+  padding: 10px 18px;
+  border-radius: 6px 6px 0 0;
+  border: 1px solid transparent;
+  border-bottom: none;
+  cursor: pointer;
+  color: var(--ink-3);
+  background: transparent;
+  transition: all 0.25s;
+  white-space: nowrap;
+  user-select: none;
+}
+.zone-tab:hover { color: var(--ink-2); background: rgba(255,255,255,0.04); }
+.zone-tab.active {
+  color: var(--gold);
+  background: var(--panel);
+  border-color: var(--border-2);
+  border-bottom-color: var(--panel);
+}
+.zone-panel {
+  background: var(--panel);
+  border: 1px solid var(--border-2);
+  border-radius: 0 8px 8px 8px;
+  padding: 32px 34px;
+  display: none;
+  box-shadow: var(--shadow);
+}
+.zone-panel.active { display: block; }
+.zone-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.56rem; letter-spacing: 0.25em;
+  color: var(--ink-4); margin-bottom: 10px;
+}
+.zone-title {
+  font-family: 'Cinzel', serif;
+  font-size: 1.15rem; font-weight: 600;
+  letter-spacing: 0.05em;
+  margin-bottom: 16px;
+}
+.zone-panel:nth-child(1) .zone-title { color: var(--rouge); }
+.zone-panel:nth-child(2) .zone-title { color: var(--arcane); }
+.zone-panel:nth-child(3) .zone-title { color: var(--gold); }
+.zone-desc {
+  font-size: 1.0rem; line-height: 1.85;
+  color: var(--ink-2); font-weight: 300;
+  margin-bottom: 20px;
+}
+
+/* Combat log inside zone */
+.combat-log {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 16px 18px;
+  max-height: 220px;
+  overflow-y: auto;
+}
+.combat-log::-webkit-scrollbar { width: 4px; }
+.combat-log::-webkit-scrollbar-track { background: transparent; }
+.combat-log::-webkit-scrollbar-thumb { background: var(--border-2); border-radius: 2px; }
+.log-line {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.72rem; line-height: 1.8;
+  color: var(--ink-3); padding: 2px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+.log-line:last-child { border-bottom: none; }
+.log-ns   { color: var(--rouge); }
+.log-sf   { color: var(--arcane); }
+.log-sys  { color: var(--gold); }
+.log-dmg  { color: #ff8080; }
+.log-heal { color: var(--hp-green); }
+
+/* ══════════════════════════════════════
+   BOSS BATTLE — Interactive HP bar
+══════════════════════════════════════ */
+.boss-fight {
+  background: var(--panel);
+  border: 1px solid var(--border-3);
+  border-radius: 12px;
+  padding: 36px 40px;
+  margin: 44px 0;
+  box-shadow: var(--shadow-lg);
+  opacity: 0; transform: translateY(14px);
+  transition: opacity 0.9s, transform 0.9s;
+  position: relative; overflow: hidden;
+}
+.boss-fight::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--rouge), var(--gold), var(--arcane));
+}
+.boss-fight.vis { opacity: 1; transform: translateY(0); }
+.boss-header {
+  display: flex; justify-content: space-between;
+  align-items: flex-start; margin-bottom: 28px;
+}
+.boss-name {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 1.3rem; color: var(--rouge);
+  text-shadow: 0 0 20px rgba(224,56,80,0.4);
+}
+.boss-meta {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.56rem; color: var(--ink-4);
+  letter-spacing: 0.18em; margin-top: 4px;
+}
+.boss-badge {
+  font-family: 'Cinzel', serif;
+  font-size: 0.6rem; font-weight: 600;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--rouge); border: 1px solid var(--rouge-bd);
+  background: var(--rouge-pale); padding: 5px 12px; border-radius: 4px;
+}
+.boss-hp-section { margin-bottom: 24px; }
+.boss-hp-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.56rem; letter-spacing: 0.2em;
+  color: var(--ink-4); margin-bottom: 6px;
+  display: flex; justify-content: space-between;
+}
+.boss-hp-bar {
+  height: 10px; border-radius: 5px;
+  background: rgba(255,255,255,0.07); overflow: hidden;
+  position: relative;
+}
+.boss-hp-fill {
+  height: 100%; border-radius: 5px;
+  background: linear-gradient(90deg, var(--rouge-2), var(--rouge), #ff6080);
+  width: 100%;
+  transition: width 1.5s cubic-bezier(0.4,0,0.2,1);
+  position: relative;
+}
+.boss-hp-fill::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(90deg, transparent 40%, rgba(255,255,255,0.12));
+  animation: hpSheen 3s ease infinite;
+}
+@keyframes hpSheen {
+  0%   { opacity: 0; transform: translateX(-100%); }
+  50%  { opacity: 1; }
+  100% { opacity: 0; transform: translateX(200%); }
+}
+.boss-narr {
+  font-size: 1.02rem; line-height: 1.88;
+  color: var(--ink-2); font-weight: 300; margin-bottom: 20px;
+}
+.boss-narr em { font-style: italic; color: var(--ink); }
+
+/* Attack btns */
+.attack-btns {
+  display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px;
+}
+.atk-btn {
+  font-family: 'Cinzel', serif;
+  font-size: 0.68rem; font-weight: 500;
+  letter-spacing: 0.1em;
+  padding: 10px 18px; border-radius: 6px;
+  border: 1px solid; cursor: pointer;
+  transition: all 0.25s; user-select: none;
+  display: flex; align-items: center; gap: 8px;
+  background: transparent;
+}
+.atk-btn.ns {
+  color: var(--rouge); border-color: var(--rouge-bd);
+  background: var(--rouge-pale);
+}
+.atk-btn.ns:hover { background: rgba(224,56,80,0.15); box-shadow: 0 0 16px var(--rouge-glow); }
+.atk-btn.sf {
+  color: var(--arcane); border-color: var(--arcane-bd);
+  background: var(--arcane-pale);
+}
+.atk-btn.sf:hover { background: rgba(144,96,232,0.15); box-shadow: 0 0 16px var(--arcane-glow); }
+.atk-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+.atk-result {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.7rem; color: var(--gold);
+  margin-top: 12px; min-height: 20px;
+  letter-spacing: 0.08em;
+}
+
+/* ══════════════════════════════════════
+   VICTORY CARD
+══════════════════════════════════════ */
+.victory {
+  background: linear-gradient(135deg, rgba(232,184,64,0.06), rgba(144,96,232,0.06));
+  border: 1px solid var(--border-3);
+  border-radius: 12px;
+  padding: 44px;
+  margin: 44px 0;
+  text-align: center;
+  box-shadow: var(--shadow-lg);
+  opacity: 0; transform: translateY(14px);
+  transition: opacity 0.9s, transform 0.9s;
+  position: relative; overflow: hidden;
+}
+.victory::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), var(--arcane), var(--rouge), transparent);
+}
+.victory.vis { opacity: 1; transform: translateY(0); }
+.victory-icon { font-size: 2.5rem; margin-bottom: 12px; display: block; }
+.victory-title {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 1.6rem; color: var(--gold);
+  text-shadow: 0 0 30px rgba(232,184,64,0.4);
+  letter-spacing: 0.06em; margin-bottom: 8px;
+}
+.victory-sub {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem; letter-spacing: 0.25em;
+  color: var(--ink-4); margin-bottom: 20px;
+}
+.loot-grid {
+  display: flex; justify-content: center; gap: 10px;
+  flex-wrap: wrap; margin-top: 20px;
+}
+.loot-item {
+  font-family: 'Cinzel', serif;
+  font-size: 0.68rem; font-weight: 500;
+  padding: 7px 14px; border-radius: 6px;
+  border: 1px solid var(--gold-bd);
+  color: var(--gold); background: var(--gold-pale);
+  letter-spacing: 0.08em;
+  display: flex; align-items: center; gap: 6px;
+}
+
+/* ══════════════════════════════════════
+   PULL QUOTE
+══════════════════════════════════════ */
+.pull-q {
+  margin: 44px 0;
+  padding: 28px 36px 28px 40px;
+  background: var(--surface);
+  border: 1px solid var(--border-2);
+  border-left: 3px solid var(--gold);
+  border-radius: 0 10px 10px 0;
+  box-shadow: var(--shadow);
+  opacity: 0; transform: translateX(-16px);
+  transition: opacity 0.8s, transform 0.8s;
+  position: relative;
+}
+.pull-q.vis { opacity: 1; transform: translateX(0); }
+.q-glyph {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 5rem; line-height: 0;
+  position: absolute; top: 44px; left: 10px;
+  color: rgba(232,184,64,0.1);
+}
+.pull-q blockquote {
+  font-size: 1.15rem; font-style: italic; line-height: 1.78; font-weight: 300;
+  color: var(--ink-2);
+}
+.pull-q cite {
+  display: block; margin-top: 12px;
+  font-family: 'Share Tech Mono', monospace;
+  font-style: normal; font-size: 0.58rem;
+  letter-spacing: 0.22em; color: var(--ink-4);
+}
+
+/* ══════════════════════════════════════
+   FAREWELL
+══════════════════════════════════════ */
+.farewell-msgs {
+  background: var(--surface);
+  border: 1px solid var(--border-2);
+  border-radius: 10px;
+  padding: 28px 32px;
+  margin: 36px 0 52px;
+  box-shadow: var(--shadow);
+  opacity: 0; transform: translateY(14px);
+  transition: opacity 0.8s, transform 0.8s;
+  position: relative; overflow: hidden;
+}
+.farewell-msgs::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--arcane), var(--rouge));
+  opacity: 0.5;
+}
+.farewell-msgs.vis { opacity: 1; transform: translateY(0); }
+
+/* ══════════════════════════════════════
+   STORY END
+══════════════════════════════════════ */
+.story-end {
+  max-width: 700px; margin: 0 auto 90px;
+  padding: 60px 52px; text-align: center;
+  border-top: 1px solid var(--border-2);
+  opacity: 0; transform: translateY(20px);
+  transition: opacity 0.9s, transform 0.9s;
+  position: relative; z-index: 2;
+}
+.story-end.vis { opacity: 1; transform: translateY(0); }
+.end-crest { font-size: 1.8rem; margin-bottom: 20px; letter-spacing: 10px; }
+.end-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.58rem; letter-spacing: 0.28em;
+  color: var(--ink-4); border: 1px solid var(--border-2);
+  padding: 6px 18px; border-radius: 4px;
+  display: inline-block; margin-bottom: 26px;
+}
+.end-quote {
+  font-size: 1.08rem; font-style: italic; line-height: 1.85;
+  color: var(--ink-3); font-weight: 300;
+  max-width: 520px; margin: 0 auto 40px;
+}
+.btn-home {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: 'Cinzel', serif;
+  font-size: 0.62rem; letter-spacing: 0.18em;
+  font-weight: 500; color: var(--ink-3);
+  text-decoration: none;
+  border: 1px solid var(--border-2);
+  background: var(--surface); padding: 12px 28px; border-radius: 6px;
+  box-shadow: var(--shadow); transition: all 0.3s;
+}
+.btn-home svg { width: 14px; height: 14px; transition: transform 0.3s; }
+.btn-home:hover { border-color: var(--gold); color: var(--gold); background: var(--gold-pale); }
+.btn-home:hover svg { transform: translateX(-3px); }
+
+@media (max-width: 680px) {
+  nav { padding: 13px 20px; }
+  .content { padding: 0 22px; }
+  .hud { grid-template-columns: 1fr; }
+  .boss-fight { padding: 24px 22px; }
+  .victory { padding: 28px 22px; }
+  .story-end { padding: 44px 22px; }
+  .hero-title { font-size: 1.7rem; }
+  .zone-tabs { padding: 3px 3px 0; }
+  .zone-tab { padding: 8px 12px; font-size: 0.62rem; }
+}
+</style>
+</head>
+<body>
+
+<div id="particles"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-brand">⚔ Whispers of Caring <span>|</span> Epic Realm</div>
+  <div class="nav-right">
+    <div class="nav-badge">SESSION: ACTIVE</div>
+    <a href="c3index.html" class="nav-home">Home</a>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════
+     HERO
+══════════════════════════════ -->
+<section class="hero">
+  <div class="hero-fog"></div>
+  <div class="hero-book-ornament">⚔ ✦ ⚔</div>
+  <div class="hero-chapter">// CHAPTER III · PART VI · GAME CHRONICLES //</div>
+  <h1 class="hero-title">Nightshade &amp;<br><span class="glow-gold">Starfire's</span><br>Chronicles</h1>
+  <div class="hero-subtitle">EPIC BATTLES: GUARDIANS OF THE GUILD</div>
+  <div class="hero-chars">
+    <div class="char-card nightshade">
+      <span style="font-size:1.3rem">🗡</span>
+      <div>
+        <div>Nightshade</div>
+        <span class="char-class">ROGUE · LUCIFER</span>
+      </div>
+    </div>
+    <div style="color:var(--ink-4);font-size:1.2rem;align-self:center">×</div>
+    <div class="char-card starfire">
+      <span style="font-size:1.3rem">✦</span>
+      <div>
+        <div>Starfire</div>
+        <span class="char-class">SORCERESS · VICTORIA</span>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-cue">
+    <span>// BEGIN CHRONICLE //</span>
+    <div class="scroll-bar"></div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     THE DAY BEGINS
+══════════════════════════════ -->
+<div class="content">
+  <div class="sec-head rev">
+    <span class="sec-head-label">// PRE-SESSION · AURORA VISTA //</span>
+    <div class="sec-head-line"></div>
+    <span class="sec-head-icon">🌅</span>
+  </div>
+  <h2 class="sec-title rev">A Morning Before<br>the <span class="gc">Adventure</span></h2>
+  <p class="prose rev">
+    Lucifer woke at 11:30 AM after his long journey, stepped out onto his balcony to enjoy the Aurora Vista scenery, and settled in with the newspaper — focusing on technology and software updates. As he went about his morning routine, his thoughts drifted to Victoria and the curious world of cosmetics, leading to a message he simply <em>couldn't hold back.</em>
+  </p>
+
+  <div class="chat-block rev">
+    <div class="chat-header">📱 MORNING EXCHANGE</div>
+    <div class="msgs">
+      <div class="msg luc rev"><div class="msg-label">LUCIFER</div><div class="msg-bub">Hi, Victoria.</div></div>
+      <div class="msg vic rev"><div class="msg-label">VICTORIA</div><div class="msg-bub">Hi.</div></div>
+      <div class="msg luc rev"><div class="msg-label">LUCIFER</div><div class="msg-bub">Why do women and girls use different kinds of moisturizers? Why don't they use the same one all the time? Those cosmetics cost a significant amount.</div></div>
+      <div class="msg vic rev"><div class="msg-label">VICTORIA</div><div class="msg-bub">Hey Lucifer, you don't understand the diverse reasons why people use cosmetics. It's not fair to criticize their choices.</div></div>
+      <div class="msg luc rev"><div class="msg-label">LUCIFER</div><div class="msg-bub">Okay, I understand. Hey Victoria — if you're available, would you like to play a game?</div></div>
+      <div class="msg vic rev"><div class="msg-label">VICTORIA</div><div class="msg-bub">Sure, Lucifer. Just give me a moment and we can start 🎮</div></div>
+    </div>
+  </div>
+
+  <!-- CHARACTER HUD -->
+  <div class="sec-head rev">
+    <span class="sec-head-label">// CHARACTER PROFILES //</span>
+    <div class="sec-head-line"></div>
+    <span class="sec-head-icon">⚔</span>
+  </div>
+  <div class="hud rev">
+    <div class="hud-card ns">
+      <div class="hud-name">⚔ NIGHTSHADE</div>
+      <div class="hud-class">// STEALTHY ROGUE · LV. 48 //</div>
+      <div class="hud-stats">
+        <div class="stat-row">
+          <div class="stat-label"><span>HP</span><span>94 / 100</span></div>
+          <div class="stat-bar"><div class="stat-fill fill-hp" style="--w:94%"></div></div>
+        </div>
+        <div class="stat-row">
+          <div class="stat-label"><span>STAMINA</span><span>78 / 100</span></div>
+          <div class="stat-bar"><div class="stat-fill fill-sp" style="--w:78%"></div></div>
+        </div>
+        <div class="stat-row">
+          <div class="stat-label"><span>STEALTH</span><span>97 / 100</span></div>
+          <div class="stat-bar"><div class="stat-fill fill-mp" style="--w:97%"></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="hud-card sf">
+      <div class="hud-name">✦ STARFIRE</div>
+      <div class="hud-class">// POWERFUL SORCERESS · LV. 47 //</div>
+      <div class="hud-stats">
+        <div class="stat-row">
+          <div class="stat-label"><span>HP</span><span>88 / 100</span></div>
+          <div class="stat-bar"><div class="stat-fill fill-hp" style="--w:88%"></div></div>
+        </div>
+        <div class="stat-row">
+          <div class="stat-label"><span>MANA</span><span>92 / 100</span></div>
+          <div class="stat-bar"><div class="stat-fill fill-arc" style="--w:92%"></div></div>
+        </div>
+        <div class="stat-row">
+          <div class="stat-label"><span>ARCANE PWR</span><span>100 / 100</span></div>
+          <div class="stat-bar"><div class="stat-fill fill-mp" style="--w:100%"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ZONE SELECTOR -->
+  <div class="sec-head rev">
+    <span class="sec-head-label">// BATTLE ZONES · EPIC REALM //</span>
+    <div class="sec-head-line"></div>
+    <span class="sec-head-icon">🗺</span>
+  </div>
+  <h2 class="sec-title rev">The <span class="rc">Grendel</span> Horde &amp;<br><span class="ac">Dark Abyss</span> Await</h2>
+
+  <div class="zone-selector rev" id="zoneSelector">
+    <div class="zone-tabs">
+      <div class="zone-tab active" data-zone="0">🌲 Mist Forest</div>
+      <div class="zone-tab" data-zone="1">⛏ Dark Abyss</div>
+      <div class="zone-tab" data-zone="2">🚪 The Golem Door</div>
+    </div>
+
+    <!-- Zone 0 -->
+    <div class="zone-panel active">
+      <div class="zone-label">// ZONE 01 · ENCHANTED FOREST //</div>
+      <div class="zone-title">Grendel Horde Assault</div>
+      <div class="zone-desc">A dark, mist-filled forest teeming with lurking enemies. Nightshade and Starfire moved cautiously through the dense underbrush — until a group of Grendels leapt from the shadows, brandishing crude weapons and snarling fiercely.</div>
+      <div class="combat-log" id="log0">
+        <div class="log-line log-sys">▶ ENTERING ZONE: Mist-Filled Forest</div>
+        <div class="log-line log-sf">✦ Starfire casts Barrier Dome — protecting against archers</div>
+        <div class="log-line log-ns">⚔ Nightshade charges the ridge — blades flashing</div>
+        <div class="log-line log-dmg">💥 3× Grendel Archer defeated [CRITICAL STRIKE]</div>
+        <div class="log-line log-sf">✦ Starfire launches fireball — flanking cluster eliminated</div>
+        <div class="log-line log-sys">⚠ ALERT: Rogue Grendel sneaking from behind!</div>
+        <div class="log-line log-sf">✦ Starfire freeze spell — Rogue immobilized</div>
+        <div class="log-line log-ns">⚔ Nightshade finishing blow — target eliminated</div>
+        <div class="log-line log-sf">✦ Starfire ice storm — remaining horde immobilized</div>
+        <div class="log-line log-sys log-heal">✅ WAVE CLEARED — Horde defeated</div>
+        <div class="log-line log-sys">▶ BOSS DETECTED: Grendel Leader ahead</div>
+      </div>
+    </div>
+
+    <!-- Zone 1 -->
+    <div class="zone-panel">
+      <div class="zone-label">// ZONE 02 · CAVERN SYSTEM //</div>
+      <div class="zone-title">Dark Abyss Navigation</div>
+      <div class="zone-desc">A notorious cavern known for its complex maze-like structure, deadly traps, and relentless enemies. Bioluminescent fungi lit their path as they navigated pendulum blades, collapsing floors, hidden spikes, and skeletal warriors.</div>
+      <div class="combat-log">
+        <div class="log-line log-sys">▶ ENTERING ZONE: Dark Abyss [DANGER LEVEL: HIGH]</div>
+        <div class="log-ns log-line">⚔ Nightshade crouches — stealth mode activated</div>
+        <div class="log-line log-sys">⚠ OBSTACLE: Swinging Pendulum Blades detected</div>
+        <div class="log-ns log-line">⚔ Nightshade dashes through — finds safe spots</div>
+        <div class="log-sf log-line">✦ Starfire times passage — crosses with grace</div>
+        <div class="log-line log-sys">⚠ ENCOUNTER: Skeletal Warrior Battalion</div>
+        <div class="log-sf log-line">✦ Starfire casts FROST NOVA — skeletons frozen [STUN]</div>
+        <div class="log-ns log-line">⚔ Nightshade SHADOW STRIKE — skeletons shattered</div>
+        <div class="log-line log-heal">⭐ Loot collected: Ancient Coins + Magical Relics</div>
+        <div class="log-line log-sys">▶ Deeper passage found — continuing forward</div>
+        <div class="log-line log-sys">▶ MASSIVE DOOR DETECTED ahead — Rune-carved stone</div>
+      </div>
+    </div>
+
+    <!-- Zone 2 -->
+    <div class="zone-panel">
+      <div class="zone-label">// ZONE 03 · INNER SANCTUM //</div>
+      <div class="zone-title">The Golem Guardian</div>
+      <div class="zone-desc">A massive ornate door carved into the rock face, covered in ancient runes — guarded by a towering stone golem, its eyes glowing with otherworldly light. The golden key waited behind it. The final obstacle between them and victory.</div>
+      <div class="combat-log">
+        <div class="log-line log-sys">▶ BOSS ENCOUNTER: Stone Golem Guardian [ELITE]</div>
+        <div class="log-line log-dmg">💥 Golem fist crash — shockwave! Both players dodge</div>
+        <div class="log-sf log-line">✦ Starfire spell barrage — explosions of light and fire</div>
+        <div class="log-ns log-line">⚔ Nightshade darts in — delivering critical hits</div>
+        <div class="log-line log-dmg">⚠ Golem rocky hide — resilient defense [CHIP AWAY]</div>
+        <div class="log-sf log-line">✦ Starfire weakening spells — golem defenses crumbling</div>
+        <div class="log-ns log-line">⚔ Nightshade FINAL STRIKE — blades gleam in moonlight</div>
+        <div class="log-line log-heal">💥 GOLEM DEFEATED — DOOR UNLOCKED</div>
+        <div class="log-line log-sys">▶ Chamber entered — Golden Key on pedestal</div>
+        <div class="log-line log-heal">🔑 GOLDEN KEY acquired — Next level unlocked!</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOSS BATTLE — Interactive -->
+  <div class="sec-head rev">
+    <span class="sec-head-label">// BOSS BATTLE · GRENDEL LEADER //</span>
+    <div class="sec-head-line"></div>
+    <span class="sec-head-icon">💀</span>
+  </div>
+  <h2 class="sec-title rev">The <span class="rc">Grendel Leader</span><br>Falls</h2>
+
+  <div class="boss-fight rev" id="bossFight">
+    <div class="boss-header">
+      <div>
+        <div class="boss-name">☠ GRENDEL LEADER</div>
+        <div class="boss-meta">// ZONE BOSS · MIST FOREST · HP: 1500 //</div>
+      </div>
+      <div class="boss-badge">⚠ BOSS</div>
+    </div>
+
+    <div class="boss-hp-section">
+      <div class="boss-hp-label">
+        <span>BOSS HP</span>
+        <span id="bossHpText">1500 / 1500</span>
+      </div>
+      <div class="boss-hp-bar">
+        <div class="boss-hp-fill" id="bossHpFill"></div>
+      </div>
+    </div>
+
+    <p class="boss-narr">
+      The Grendel leader swung a massive club, sending shockwaves through the ground. Victoria's character hurled spells creating explosions of light and fire, while Lucifer's rogue darted in and out — delivering critical hits. At one point, the boss caught Lucifer off guard, sending his character flying. <em>His health bar dipped dangerously low.</em>
+    </p>
+    <div class="vic-inline" style="margin:14px 0 20px; padding:10px 14px; background:var(--arcane-pale); border:1px solid var(--arcane-bd); border-left:2px solid var(--arcane); border-radius:0 8px 8px 0; font-size:0.9rem; color:var(--ink-2); font-style:italic;">
+      <span style="font-family:'Share Tech Mono',monospace;font-style:normal;font-size:0.55rem;letter-spacing:0.2em;color:var(--arcane);display:block;margin-bottom:4px;">STARFIRE · VOICE CHAT</span>
+      "Hang in there, Nightshade! I've got you!" — [HEALING SPELL CAST · +320 HP]
+    </div>
+
+    <div class="attack-btns">
+      <button class="atk-btn ns" id="atkNS" onclick="attackBoss('ns')">⚔ Shadow Strike [Nightshade]</button>
+      <button class="atk-btn sf" id="atkSF" onclick="attackBoss('sf')">✦ Fireball Barrage [Starfire]</button>
+    </div>
+    <div class="atk-result" id="atkResult">// Click to attack the Grendel Leader //</div>
+  </div>
+
+  <!-- VICTORY -->
+  <div class="victory rev" id="victoryCard" style="display:none">
+    <span class="victory-icon">🏆</span>
+    <div class="victory-title">Victory!</div>
+    <div class="victory-sub">// GRENDEL LEADER DEFEATED · QUEST COMPLETE //</div>
+    <p style="font-size:1rem;color:var(--ink-3);font-style:italic;font-weight:300;max-width:460px;margin:0 auto 20px">"We did it!" Victoria exclaimed. "Another victory for the guild!"</p>
+    <div class="loot-grid">
+      <div class="loot-item">💰 Gold Pouch x3</div>
+      <div class="loot-item">⚔ Rare Blade</div>
+      <div class="loot-item">✦ Arcane Scroll</div>
+      <div class="loot-item">🔑 Golden Key</div>
+    </div>
+  </div>
+
+  <!-- REFLECTION -->
+  <div class="pull-q rev">
+    <div class="q-glyph">"</div>
+    <blockquote>It wasn't just about the game or the victory, but the connection, laughter, and support they provided for each other — in the game and in life.</blockquote>
+    <cite>// EPIC BATTLES · NIGHTSHADE &amp; STARFIRE'S CHRONICLES</cite>
+  </div>
+
+  <!-- FAREWELL MESSAGES -->
+  <div class="sec-head rev">
+    <span class="sec-head-label">// SESSION END · LOG OFF //</span>
+    <div class="sec-head-line"></div>
+    <span class="sec-head-icon">🌙</span>
+  </div>
+  <div class="farewell-msgs rev">
+    <div class="chat-header">🌙 FAREWELL EXCHANGE</div>
+    <div class="msgs">
+      <div class="msg vic rev"><div class="msg-label">STARFIRE · VICTORIA</div><div class="msg-bub">Same time tomorrow?</div></div>
+      <div class="msg luc rev"><div class="msg-label">NIGHTSHADE · LUCIFER</div><div class="msg-bub">Wouldn't miss it for the world. Good night, Starfire. See you in the game.</div></div>
+      <div class="msg vic rev"><div class="msg-label">STARFIRE · VICTORIA</div><div class="msg-bub">Good night, Nightshade. Sweet dreams of more victories to come. 🌟</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- STORY END -->
+<div class="story-end rev">
+  <div class="end-crest">⚔ ✦ ⚔</div>
+  <span class="end-label">// SESSION COMPLETE · CHRONICLE SAVED //</span>
+  <p class="end-quote">As they signed off, the virtual world faded away — but the bond forged over countless nights of shared adventures remained strong and unbroken, ready to face whatever challenges awaited them next.</p>
+  <a href="c3index.html" class="btn-home">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+    Return to Home
+  </a>
+</div>
+
+<script>
+/* ── Particles ── */
+const pc = document.getElementById('particles');
+const cols = ['rgba(224,56,80,', 'rgba(144,96,232,', 'rgba(232,184,64,'];
+for (let i = 0; i < 35; i++) {
+  const p = document.createElement('div');
+  p.className = 'particle';
+  const c = cols[i % 3];
+  const sz = 1.5 + Math.random() * 2.5;
+  const dx = (Math.random() - 0.5) * 80;
+  p.style.cssText =
+    `left:${Math.random()*100}vw;bottom:${-10 + Math.random()*20}px;` +
+    `width:${sz}px;height:${sz}px;` +
+    `background:${c}${0.3 + Math.random()*0.4});` +
+    `--dx:${dx}px;` +
+    `animation-duration:${6+Math.random()*12}s;` +
+    `animation-delay:${-Math.random()*14}s;`;
+  pc.appendChild(p);
+}
+
+/* ── Scroll reveal ── */
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.rev').forEach(el => io.observe(el));
+
+/* ── Stagger chat msgs ── */
+document.querySelectorAll('.msg').forEach((m, i) => {
+  m.style.transitionDelay = (i * 0.07) + 's';
+});
+
+/* ── Zone tabs ── */
+document.querySelectorAll('.zone-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    const idx = +tab.dataset.zone;
+    document.querySelectorAll('.zone-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.zone-panel').forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    document.querySelectorAll('.zone-panel')[idx].classList.add('active');
+  });
+});
+
+/* ── Boss Battle ── */
+let bossHp = 1500;
+const bossMax = 1500;
+const nsHits = [
+  ['⚔ Shadow Strike — CRITICAL HIT!', 180],
+  ['⚔ Dual Blade Slash — precise!', 140],
+  ['⚔ Backstab from stealth!', 210],
+  ['⚔ Rogue Finisher — devastating!', 160],
+];
+const sfHits = [
+  ['✦ Fireball Barrage — BOOM!', 150],
+  ['✦ Frost Nova — boss slowed!', 120],
+  ['✦ Arcane Missiles — volley!', 170],
+  ['✦ Healing Light cast on Nightshade! +80 HP', 0, true],
+];
+let nsIdx = 0, sfIdx = 0;
+
+function attackBoss(who) {
+  if (bossHp <= 0) return;
+  const result = document.getElementById('atkResult');
+  let hit, dmg, heal = false;
+
+  if (who === 'ns') {
+    [hit, dmg] = nsHits[nsIdx % nsHits.length]; nsIdx++;
+  } else {
+    const entry = sfHits[sfIdx % sfHits.length]; sfIdx++;
+    hit = entry[0]; dmg = entry[1]; heal = entry[2];
+  }
+
+  if (!heal) {
+    bossHp = Math.max(0, bossHp - dmg);
+    const pct = (bossHp / bossMax * 100).toFixed(1);
+    document.getElementById('bossHpFill').style.width = pct + '%';
+    document.getElementById('bossHpText').textContent = bossHp + ' / ' + bossMax;
+    result.textContent = hit + (dmg ? ' [−' + dmg + ' HP]' : '');
+    result.style.color = who === 'ns' ? 'var(--rouge)' : 'var(--arcane)';
+  } else {
+    result.textContent = hit;
+    result.style.color = 'var(--hp-green)';
+  }
+
+  if (bossHp <= 0) {
+    document.getElementById('bossHpFill').style.background = 'var(--hp-green)';
+    document.getElementById('bossHpText').textContent = 'DEFEATED';
+    result.textContent = '🏆 GRENDEL LEADER DEFEATED! QUEST COMPLETE!';
+    result.style.color = 'var(--gold)';
+    document.getElementById('atkNS').disabled = true;
+    document.getElementById('atkSF').disabled = true;
+    setTimeout(() => {
+      const vc = document.getElementById('victoryCard');
+      vc.style.display = 'block';
+      setTimeout(() => { vc.classList.add('vis'); io.observe(vc); }, 50);
+    }, 600);
+  }
+}
+</script>
+</body>
+</html>

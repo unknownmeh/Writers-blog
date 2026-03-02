@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Interior Monologue — Whispers of Caring</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display+SC:ital,wght@0,400;0,700;1,400&family=EB+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Barlow+Condensed:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+
+/* ══════════════════════════════════════════
+   DESIGN TOKENS
+   Lucifer = Obsidian world · Victoria = Canvas world
+══════════════════════════════════════════ */
+:root {
+  /* Lucifer — dark */
+  --luc-bg:        #0d1017;
+  --luc-bg2:       #141820;
+  --luc-surface:   #1a2030;
+  --luc-border:    rgba(100,140,200,0.12);
+  --luc-accent:    #4a8adc;
+  --luc-accent2:   #6aa0e8;
+  --luc-text:      #c8d4e8;
+  --luc-text-dim:  #7a90b0;
+  --luc-text-faint:#3a4860;
+  --luc-gold:      #c8a060;
+
+  /* Victoria — light */
+  --vic-bg:        #fdf8f0;
+  --vic-bg2:       #f5ede0;
+  --vic-surface:   #fffcf6;
+  --vic-border:    rgba(180,80,60,0.12);
+  --vic-accent:    #c04840;
+  --vic-accent2:   #d86850;
+  --vic-text:      #2a1a14;
+  --vic-text-dim:  #7a5848;
+  --vic-text-faint:#c8aa90;
+  --vic-sage:      #5a7858;
+
+  /* shared */
+  --mid-line:      rgba(160,160,160,0.2);
+  --r: 10px;
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+
+body {
+  font-family:'EB Garamond', Georgia, serif;
+  overflow-x:hidden;
+  background:#0d1017;
+  color:#c8d4e8;
+  transition:background .6s, color .6s;
+}
+
+body.vic-mode {
+  background:var(--vic-bg);
+  color:var(--vic-text);
+}
+
+/* grain */
+body::after {
+  content:''; position:fixed; inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='320'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='320' height='320' filter='url(%23g)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events:none; z-index:9999;
+}
+
+/* ── reading progress ── */
+#prog {
+  position:fixed; top:0; left:0; height:2px; width:0%;
+  z-index:500; transition:width .08s linear;
+}
+body:not(.vic-mode) #prog { background:linear-gradient(to right,var(--luc-accent),var(--luc-gold)); }
+body.vic-mode #prog { background:linear-gradient(to right,var(--vic-accent),var(--vic-sage)); }
+
+/* ══ NAV ══ */
+nav {
+  position:fixed; top:0; left:0; right:0; z-index:400;
+  height:58px; display:flex; align-items:center; justify-content:space-between;
+  padding:0 clamp(18px,5vw,64px);
+  transition:background .6s, border-color .6s;
+  backdrop-filter:blur(16px);
+}
+body:not(.vic-mode) nav {
+  background:rgba(13,16,23,0.93);
+  border-bottom:1px solid var(--luc-border);
+}
+body.vic-mode nav {
+  background:rgba(253,248,240,0.95);
+  border-bottom:1px solid var(--vic-border);
+}
+.n-brand {
+  font-family:'Playfair Display SC',serif;
+  font-size:0.88rem; font-weight:400; letter-spacing:0.04em;
+  text-decoration:none; transition:color .6s;
+}
+body:not(.vic-mode) .n-brand { color:var(--luc-text); }
+body.vic-mode .n-brand { color:var(--vic-text); }
+.n-right { display:flex; gap:28px; align-items:center; }
+.n-link {
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:0.62rem; font-weight:400; letter-spacing:0.3em; text-transform:uppercase;
+  text-decoration:none; transition:color .6s;
+}
+body:not(.vic-mode) .n-link { color:var(--luc-text-dim); }
+body.vic-mode .n-link { color:var(--vic-text-dim); }
+.n-link:hover { opacity:.7; }
+.n-phase {
+  font-family:'Barlow Condensed',sans-serif; font-size:0.58rem;
+  font-weight:400; letter-spacing:0.2em; transition:color .6s;
+}
+body:not(.vic-mode) .n-phase { color:var(--luc-text-faint); }
+body.vic-mode .n-phase { color:var(--vic-text-faint); }
+
+/* ══ HERO — SPLIT ══ */
+.hero {
+  min-height:100vh; display:grid; grid-template-columns:1fr 1fr;
+  position:relative; overflow:hidden;
+  transition:all .8s cubic-bezier(0.4,0,0.2,1);
+}
+
+/* Dark half — Lucifer */
+.hero-half.luc {
+  background:
+    radial-gradient(ellipse 70% 60% at 20% 30%, rgba(30,60,120,0.3) 0%, transparent 60%),
+    linear-gradient(160deg,#060810 0%,#0d1220 40%,#111828 100%);
+  display:flex; align-items:center; justify-content:flex-end;
+  padding:80px clamp(28px,4vw,60px) 80px clamp(28px,4vw,48px);
+  position:relative; overflow:hidden;
+}
+.hero-half.luc::before {
+  content:''; position:absolute; inset:0;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Ccircle cx='30' cy='30' r='0.8' fill='rgba(200,210,240,0.08)'/%3E%3Ccircle cx='10' cy='10' r='0.5' fill='rgba(200,210,240,0.05)'/%3E%3Ccircle cx='50' cy='15' r='0.6' fill='rgba(200,210,240,0.06)'/%3E%3Ccircle cx='20' cy='50' r='0.4' fill='rgba(200,210,240,0.04)'/%3E%3Ccircle cx='45' cy='45' r='0.7' fill='rgba(200,210,240,0.07)'/%3E%3C/svg%3E");
+}
+/* mountain silhouette for Lucifer */
+.luc-mountains {
+  position:absolute; bottom:0; left:0; right:0; height:35%; pointer-events:none;
+}
+.luc-mountains svg { width:100%; height:100%; }
+
+/* Light half — Victoria */
+.hero-half.vic {
+  background:
+    radial-gradient(ellipse 70% 60% at 80% 40%, rgba(220,120,80,0.15) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 20% 80%, rgba(90,120,88,0.12) 0%, transparent 55%),
+    linear-gradient(160deg,#fff8f0 0%,#f8ede0 50%,#f0e4d0 100%);
+  display:flex; align-items:center; justify-content:flex-start;
+  padding:80px clamp(28px,4vw,48px) 80px clamp(28px,4vw,60px);
+  position:relative; overflow:hidden;
+}
+/* painterly brush smears for Victoria */
+.vic-paint {
+  position:absolute; border-radius:40%; pointer-events:none; opacity:0.08;
+}
+.vic-paint-1 { width:280px; height:80px; background:var(--vic-accent); top:20%; right:-60px; transform:rotate(-8deg); filter:blur(30px); }
+.vic-paint-2 { width:200px; height:200px; background:var(--vic-sage); bottom:20%; left:-40px; filter:blur(40px); }
+.vic-paint-3 { width:160px; height:50px; background:#d4a840; top:60%; right:20%; transform:rotate(6deg); filter:blur(20px); opacity:0.07; }
+
+/* divider line in middle */
+.hero::after {
+  content:''; position:absolute; left:50%; top:0; bottom:0;
+  width:1px; background:linear-gradient(to bottom,transparent,rgba(180,180,180,0.25),transparent);
+  z-index:2;
+}
+
+/* hero inner content */
+.hero-inner {
+  max-width:380px; position:relative; z-index:1;
+}
+.hi-chapter {
+  font-family:'Barlow Condensed',sans-serif; font-size:0.54rem; font-weight:400;
+  letter-spacing:0.5em; text-transform:uppercase; display:block; margin-bottom:16px;
+}
+.luc .hi-chapter { color:var(--luc-text-faint); }
+.vic .hi-chapter { color:var(--vic-text-faint); }
+
+.hi-name {
+  font-family:'Playfair Display SC',serif;
+  font-size:clamp(2.2rem,4.5vw,3.8rem); font-weight:400;
+  line-height:1.05; letter-spacing:0.02em; margin-bottom:18px;
+}
+.luc .hi-name { color:var(--luc-text); }
+.vic .hi-name { color:var(--vic-text); }
+
+.hi-label {
+  font-family:'Barlow Condensed',sans-serif; font-size:0.66rem;
+  font-weight:500; letter-spacing:0.38em; text-transform:uppercase;
+  display:block; margin-bottom:20px; padding-bottom:14px;
+}
+.luc .hi-label {
+  color:var(--luc-accent); border-bottom:1px solid var(--luc-border);
+}
+.vic .hi-label {
+  color:var(--vic-accent); border-bottom:1px solid var(--vic-border);
+}
+
+.hi-desc {
+  font-size:1rem; font-style:italic; font-weight:300;
+  line-height:1.9; margin-bottom:26px;
+}
+.luc .hi-desc { color:var(--luc-text-dim); }
+.vic .hi-desc { color:var(--vic-text-dim); }
+
+.hi-btn {
+  display:inline-flex; align-items:center; gap:9px;
+  padding:10px 22px; border-radius:0;
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:0.63rem; font-weight:500; letter-spacing:0.26em; text-transform:uppercase;
+  border:none; cursor:pointer; transition:all .3s;
+}
+.luc .hi-btn {
+  background:var(--luc-accent); color:#fff;
+}
+.luc .hi-btn:hover { background:var(--luc-accent2); transform:translateY(-2px); box-shadow:0 8px 30px rgba(74,138,220,0.35); }
+.vic .hi-btn {
+  background:var(--vic-accent); color:#fff;
+}
+.vic .hi-btn:hover { background:var(--vic-accent2); transform:translateY(-2px); box-shadow:0 8px 30px rgba(192,72,64,0.35); }
+
+/* hero tags */
+.hi-tags { display:flex; gap:8px; flex-wrap:wrap; margin-top:18px; }
+.hi-tag {
+  padding:4px 12px;
+  font-family:'Barlow Condensed',sans-serif; font-size:0.58rem;
+  font-weight:400; letter-spacing:0.15em; text-transform:uppercase;
+}
+.luc .hi-tag { background:rgba(74,138,220,0.1); color:var(--luc-accent2); border:1px solid rgba(74,138,220,0.2); }
+.vic .hi-tag { background:rgba(192,72,64,0.08); color:var(--vic-accent); border:1px solid rgba(192,72,64,0.18); }
+
+/* Center divider label */
+.hero-divider-label {
+  position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+  z-index:10; display:flex; flex-direction:column; align-items:center; gap:10px;
+  pointer-events:none;
+}
+.hdl-circle {
+  width:46px; height:46px; border-radius:50%;
+  background:rgba(120,120,120,0.12); backdrop-filter:blur(8px);
+  border:1px solid rgba(180,180,180,0.18);
+  display:flex; align-items:center; justify-content:center;
+  font-size:1rem; color:rgba(200,200,200,0.5);
+}
+.hdl-text {
+  font-family:'Barlow Condensed',sans-serif; font-size:0.5rem;
+  letter-spacing:0.4em; text-transform:uppercase; color:rgba(180,180,180,0.35);
+  writing-mode:vertical-rl; text-orientation:mixed;
+}
+
+/* scroll cue */
+.hero-scroll {
+  position:absolute; bottom:32px; left:50%; transform:translateX(-50%);
+  z-index:10; display:flex; flex-direction:column; align-items:center; gap:7px;
+}
+.hero-scroll span {
+  font-family:'Barlow Condensed',sans-serif; font-size:0.5rem;
+  letter-spacing:0.45em; text-transform:uppercase; color:rgba(180,180,180,0.35);
+}
+.hero-scroll .drop-line {
+  width:1px; height:32px;
+  background:linear-gradient(to bottom,rgba(180,180,180,0.3),transparent);
+  animation:dropAnim 2s ease-in-out infinite;
+}
+@keyframes dropAnim{0%,100%{opacity:.3;transform:scaleY(1);}50%{opacity:.7;transform:scaleY(1.2);}}
+
+/* ══ PERSPECTIVE TOGGLE ══ */
+.toggle-bar {
+  position:sticky; top:58px; z-index:300;
+  display:flex; align-items:stretch;
+  height:48px; overflow:hidden;
+  transition:background .6s;
+}
+body:not(.vic-mode) .toggle-bar { background:var(--luc-bg2); border-bottom:1px solid var(--luc-border); }
+body.vic-mode .toggle-bar { background:var(--vic-bg2); border-bottom:1px solid var(--vic-border); }
+
+.tb-btn {
+  flex:1; display:flex; align-items:center; justify-content:center; gap:12px;
+  border:none; cursor:pointer; transition:all .4s;
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:0.65rem; font-weight:500; letter-spacing:0.28em; text-transform:uppercase;
+  position:relative;
+}
+.tb-btn::after {
+  content:''; position:absolute; bottom:0; left:0; right:0; height:2px;
+  transform:scaleX(0); transform-origin:center; transition:transform .35s;
+}
+.tb-btn.luc-btn { background:transparent; color:var(--luc-text-dim); }
+.tb-btn.luc-btn::after { background:var(--luc-accent); }
+.tb-btn.vic-btn { background:transparent; color:var(--vic-text-faint); }
+.tb-btn.vic-btn::after { background:var(--vic-accent); }
+.tb-btn.active::after { transform:scaleX(1); }
+body:not(.vic-mode) .tb-btn.luc-btn { color:var(--luc-accent); }
+body:not(.vic-mode) .tb-btn.luc-btn.active { color:var(--luc-accent); }
+body.vic-mode .tb-btn.vic-btn { color:var(--vic-accent); }
+
+.tb-divider { width:1px; background:var(--mid-line); margin:8px 0; flex-shrink:0; }
+.tb-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+.luc-btn .tb-dot { background:var(--luc-accent); }
+.vic-btn .tb-dot { background:var(--vic-accent); }
+
+/* ══ MONOLOGUE SECTIONS ══ */
+.mono-section {
+  transition:opacity .5s, transform .5s;
+}
+/* Lucifer section */
+.luc-section {
+  background:
+    radial-gradient(ellipse 80% 40% at 10% 20%, rgba(20,50,100,0.08) 0%,transparent 60%),
+    var(--luc-bg);
+  padding:90px clamp(18px,10vw,160px) 90px;
+}
+/* Victoria section */
+.vic-section {
+  background:
+    radial-gradient(ellipse 80% 40% at 90% 20%, rgba(220,100,80,0.06) 0%,transparent 60%),
+    radial-gradient(ellipse 60% 50% at 10% 80%, rgba(90,120,88,0.06) 0%,transparent 55%),
+    var(--vic-bg);
+  padding:90px clamp(18px,10vw,160px) 90px;
+}
+
+/* inner container */
+.mono-inner { max-width:680px; margin:0 auto; }
+
+/* ── Oration header ── */
+.oration-head { margin-bottom:60px; }
+.oh-num {
+  font-family:'Playfair Display SC',serif; font-size:5rem; font-weight:400;
+  line-height:1; opacity:0.05; display:block; margin-bottom:-20px; user-select:none;
+}
+.luc-section .oh-num { color:var(--luc-accent); }
+.vic-section .oh-num { color:var(--vic-accent); }
+
+.oh-label {
+  font-family:'Barlow Condensed',sans-serif; font-size:0.54rem;
+  font-weight:500; letter-spacing:0.5em; text-transform:uppercase; display:block; margin-bottom:12px;
+}
+.luc-section .oh-label { color:var(--luc-accent); }
+.vic-section .oh-label { color:var(--vic-accent); }
+
+.oh-name {
+  font-family:'Playfair Display SC',serif;
+  font-size:clamp(2rem,4vw,3.2rem); font-weight:400; line-height:1.1;
+  display:block; margin-bottom:14px;
+}
+.luc-section .oh-name { color:var(--luc-text); }
+.vic-section .oh-name { color:var(--vic-text); }
+
+.oh-sub {
+  font-size:1.05rem; font-style:italic; font-weight:300; line-height:1.8;
+}
+.luc-section .oh-sub { color:var(--luc-text-dim); }
+.vic-section .oh-sub { color:var(--vic-text-dim); }
+
+/* divider rule */
+.oh-rule {
+  display:flex; align-items:center; gap:16px; margin-top:22px;
+}
+.oh-rule::before, .oh-rule::after {
+  content:''; flex:1; height:1px;
+}
+.luc-section .oh-rule::before,.luc-section .oh-rule::after { background:linear-gradient(to right,rgba(74,138,220,0.25),transparent); }
+.vic-section .oh-rule::before,.vic-section .oh-rule::after { background:linear-gradient(to right,rgba(192,72,64,0.2),transparent); }
+.luc-section .oh-rule::after { background:linear-gradient(to left,rgba(74,138,220,0.25),transparent); }
+.vic-section .oh-rule::after { background:linear-gradient(to left,rgba(192,72,64,0.2),transparent); }
+.oh-rule span { font-size:0.8rem; opacity:0.3; }
+
+/* ── Prose ── */
+.oration-body p {
+  font-size:clamp(1rem,1.8vw,1.1rem); font-weight:400;
+  line-height:2.1; margin-bottom:1.8em; text-align:justify; hyphens:auto;
+}
+.luc-section .oration-body p { color:var(--luc-text-dim); }
+.vic-section .oration-body p { color:var(--vic-text-dim); }
+
+.oration-body p.drop::first-letter {
+  font-family:'Playfair Display SC',serif; font-size:4.5rem; font-weight:700;
+  float:left; line-height:0.8; margin:0.05em 0.14em 0 0;
+}
+.luc-section .oration-body p.drop::first-letter { color:var(--luc-accent); }
+.vic-section .oration-body p.drop::first-letter { color:var(--vic-accent); }
+
+/* ── Quote block ── */
+.quote-block {
+  margin:2.8em 0; padding:24px 28px;
+  position:relative; overflow:hidden;
+}
+.luc-section .quote-block {
+  background:rgba(74,138,220,0.05);
+  border-left:2px solid var(--luc-accent);
+}
+.vic-section .quote-block {
+  background:rgba(192,72,64,0.05);
+  border-left:2px solid var(--vic-accent);
+}
+.quote-block p {
+  font-size:1.1rem; font-style:italic; font-weight:300;
+  line-height:1.85; margin:0;
+}
+.luc-section .quote-block p { color:var(--luc-text); }
+.vic-section .quote-block p { color:var(--vic-text); }
+.quote-block::before {
+  content:'"'; position:absolute; top:-10px; left:18px;
+  font-family:'Playfair Display SC',serif; font-size:4rem;
+  line-height:1; opacity:0.07;
+}
+.luc-section .quote-block::before { color:var(--luc-accent); }
+.vic-section .quote-block::before { color:var(--vic-accent); }
+
+/* ── Trait cards ── */
+.traits-grid {
+  display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:2.8em 0;
+}
+.trait-card {
+  padding:20px 22px; transition:transform .25s;
+}
+.trait-card:hover { transform:translateY(-3px); }
+.luc-section .trait-card {
+  background:var(--luc-surface); border:1px solid var(--luc-border);
+}
+.vic-section .trait-card {
+  background:rgba(255,255,255,0.6); border:1px solid var(--vic-border);
+}
+.tc-icon { font-size:1.4rem; display:block; margin-bottom:8px; }
+.tc-title {
+  font-family:'Barlow Condensed',sans-serif; font-size:0.58rem;
+  font-weight:500; letter-spacing:0.28em; text-transform:uppercase;
+  display:block; margin-bottom:6px;
+}
+.luc-section .tc-title { color:var(--luc-accent); }
+.vic-section .tc-title { color:var(--vic-accent); }
+.tc-desc {
+  font-size:0.92rem; font-style:italic; font-weight:300; line-height:1.6;
+}
+.luc-section .tc-desc { color:var(--luc-text-dim); }
+.vic-section .tc-desc { color:var(--vic-text-dim); }
+
+/* ── Section break ── */
+.sec-break {
+  display:flex; align-items:center; gap:20px; margin:56px 0;
+}
+.sec-break::before,.sec-break::after {
+  content:''; flex:1; height:1px;
+}
+.luc-section .sec-break::before,.luc-section .sec-break::after {
+  background:linear-gradient(to right,transparent,var(--luc-border),transparent);
+}
+.vic-section .sec-break::before,.vic-section .sec-break::after {
+  background:linear-gradient(to right,transparent,var(--vic-border),transparent);
+}
+.sec-break span { font-size:1rem; opacity:0.2; }
+
+/* ── Long monologue with expand ── */
+.mono-full { }
+.mono-preview { }
+.mono-hidden {
+  display:none; overflow:hidden;
+  transition:max-height .6s ease, opacity .5s;
+}
+.mono-hidden.open { display:block; }
+
+.expand-btn {
+  display:flex; align-items:center; gap:10px; margin:20px 0 0;
+  background:none; border:none; cursor:pointer;
+  font-family:'Barlow Condensed',sans-serif; font-size:0.62rem;
+  font-weight:500; letter-spacing:0.3em; text-transform:uppercase;
+  transition:opacity .2s;
+  padding:8px 0;
+}
+.expand-btn:hover { opacity:.7; }
+.luc-section .expand-btn { color:var(--luc-accent); border-top:1px solid var(--luc-border); }
+.vic-section .expand-btn { color:var(--vic-accent); border-top:1px solid var(--vic-border); }
+.expand-icon {
+  width:22px; height:22px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:0.9rem; transition:transform .3s;
+}
+.luc-section .expand-icon { background:rgba(74,138,220,0.1); color:var(--luc-accent); }
+.vic-section .expand-icon { background:rgba(192,72,64,0.08); color:var(--vic-accent); }
+.expand-btn.open .expand-icon { transform:rotate(180deg); }
+
+/* ══ DUALITY SECTION ══ */
+.duality-section {
+  padding:90px clamp(18px,6vw,80px);
+  text-align:center; position:relative; overflow:hidden;
+  transition:background .6s;
+}
+body:not(.vic-mode) .duality-section { background:var(--luc-bg2); }
+body.vic-mode .duality-section { background:var(--vic-bg2); }
+
+.duality-section::before {
+  content:''; position:absolute; left:0; right:0; top:50%; height:1px;
+  background:linear-gradient(to right,transparent,var(--mid-line),transparent);
+}
+.ds-label {
+  font-family:'Barlow Condensed',sans-serif; font-size:0.54rem;
+  font-weight:500; letter-spacing:0.5em; text-transform:uppercase;
+  display:block; margin-bottom:20px; transition:color .6s;
+}
+body:not(.vic-mode) .ds-label { color:var(--luc-text-faint); }
+body.vic-mode .ds-label { color:var(--vic-text-faint); }
+.ds-title {
+  font-family:'Playfair Display SC',serif; font-size:clamp(1.6rem,3.5vw,2.6rem);
+  font-weight:400; line-height:1.2; margin-bottom:18px;
+  transition:color .6s;
+}
+body:not(.vic-mode) .ds-title { color:var(--luc-text); }
+body.vic-mode .ds-title { color:var(--vic-text); }
+.ds-desc {
+  font-size:1.05rem; font-style:italic; font-weight:300; line-height:1.9;
+  max-width:560px; margin:0 auto 40px; transition:color .6s;
+}
+body:not(.vic-mode) .ds-desc { color:var(--luc-text-dim); }
+body.vic-mode .ds-desc { color:var(--vic-text-dim); }
+
+/* contrast cards */
+.contrast-grid {
+  display:grid; grid-template-columns:1fr auto 1fr;
+  gap:0; max-width:700px; margin:0 auto;
+  align-items:stretch;
+}
+.cc-luc {
+  background:var(--luc-surface);
+  border:1px solid var(--luc-border); border-right:none;
+  padding:28px 28px 28px 28px;
+  text-align:left;
+}
+.cc-vic {
+  background:rgba(255,255,255,0.5);
+  border:1px solid rgba(192,72,64,0.14); border-left:none;
+  padding:28px;
+  text-align:left;
+  backdrop-filter:blur(4px);
+}
+.cc-mid {
+  width:40px; display:flex; align-items:center; justify-content:center;
+  font-size:1.2rem; background:rgba(128,128,128,0.06);
+  border-top:1px solid var(--mid-line); border-bottom:1px solid var(--mid-line);
+  color:rgba(160,160,160,0.4);
+}
+.cc-who {
+  font-family:'Barlow Condensed',sans-serif; font-size:0.54rem;
+  font-weight:500; letter-spacing:0.32em; text-transform:uppercase;
+  display:block; margin-bottom:10px;
+}
+.cc-luc .cc-who { color:var(--luc-accent); }
+.cc-vic .cc-who { color:var(--vic-accent); }
+.cc-trait-list { list-style:none; }
+.cc-trait-list li {
+  font-size:0.9rem; font-style:italic; font-weight:300; line-height:1.7;
+  padding:5px 0;
+  display:flex; align-items:flex-start; gap:8px;
+}
+.cc-luc .cc-trait-list li { color:var(--luc-text-dim); }
+.cc-luc .cc-trait-list li::before { content:'—'; color:var(--luc-accent); opacity:.5; flex-shrink:0; }
+.cc-vic .cc-trait-list li { color:var(--vic-text-dim); }
+.cc-vic .cc-trait-list li::before { content:'—'; color:var(--vic-accent); opacity:.5; flex-shrink:0; }
+
+/* ══ CLOSING ══ */
+.closing-section {
+  padding:80px clamp(18px,8vw,120px); text-align:center; transition:background .6s;
+}
+body:not(.vic-mode) .closing-section { background:var(--luc-bg); }
+body.vic-mode .closing-section { background:var(--vic-bg); }
+
+.cs-label {
+  font-family:'Barlow Condensed',sans-serif; font-size:0.54rem;
+  font-weight:500; letter-spacing:0.5em; text-transform:uppercase;
+  display:block; margin-bottom:20px; transition:color .6s;
+}
+body:not(.vic-mode) .cs-label { color:var(--luc-text-faint); }
+body.vic-mode .cs-label { color:var(--vic-text-faint); }
+.cs-text {
+  font-size:clamp(1.05rem,2vw,1.22rem); font-style:italic; font-weight:300;
+  line-height:1.95; max-width:560px; margin:0 auto 14px; transition:color .6s;
+}
+body:not(.vic-mode) .cs-text { color:var(--luc-text-dim); }
+body.vic-mode .cs-text { color:var(--vic-text-dim); }
+.cs-sub {
+  font-family:'Barlow Condensed',sans-serif; font-size:0.7rem;
+  font-weight:400; letter-spacing:0.2em; font-style:normal; margin-top:6px;
+  transition:color .6s;
+}
+body:not(.vic-mode) .cs-sub { color:var(--luc-text-faint); }
+body.vic-mode .cs-sub { color:var(--vic-text-faint); }
+
+.cs-rule { display:flex; align-items:center; justify-content:center; gap:16px; margin:30px 0 36px; }
+.cs-rule::before,.cs-rule::after { content:''; width:60px; height:1px; }
+body:not(.vic-mode) .cs-rule::before,.cs-rule::after { background:var(--luc-border); }
+body.vic-mode .cs-rule::before,.cs-rule::after { background:var(--vic-border); }
+.cs-rule span { font-size:0.8rem; opacity:0.25; }
+
+.btn-return {
+  display:inline-flex; align-items:center; gap:10px;
+  padding:12px 32px; border:none; cursor:pointer;
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:0.65rem; font-weight:500; letter-spacing:0.3em; text-transform:uppercase;
+  text-decoration:none; transition:all .3s;
+}
+body:not(.vic-mode) .btn-return { background:var(--luc-accent); color:#fff; }
+body:not(.vic-mode) .btn-return:hover { background:var(--luc-accent2); transform:translateY(-2px); box-shadow:0 8px 30px rgba(74,138,220,.35); }
+body.vic-mode .btn-return { background:var(--vic-accent); color:#fff; }
+body.vic-mode .btn-return:hover { background:var(--vic-accent2); transform:translateY(-2px); box-shadow:0 8px 30px rgba(192,72,64,.3); }
+.btn-return svg { width:14px; height:14px; transition:transform .3s; }
+.btn-return:hover svg { transform:translateX(-3px); }
+
+/* ══ KEYFRAMES ══ */
+@keyframes fadeUp { from{opacity:0;transform:translateY(24px);} to{opacity:1;transform:none;} }
+.reveal { opacity:0; transform:translateY(20px); transition:opacity .7s ease,transform .7s ease; }
+.reveal.in { opacity:1; transform:none; }
+
+/* ── Hero animations ── */
+.hero-half.luc .hero-inner { animation:fadeUp .9s .1s ease both; }
+.hero-half.vic .hero-inner { animation:fadeUp .9s .25s ease both; }
+
+@media(max-width:700px){
+  .hero { grid-template-columns:1fr; min-height:auto; }
+  .hero::after { display:none; }
+  .hero-half { justify-content:center; padding:90px 24px 60px; }
+  .hero-half.luc { padding-bottom:40px; }
+  .hero-half.vic { padding-top:40px; }
+  .hero-divider-label { display:none; }
+  nav { padding:0 16px; }
+  .luc-section,.vic-section { padding:60px 18px; }
+  .traits-grid { grid-template-columns:1fr; }
+  .contrast-grid { grid-template-columns:1fr; }
+  .cc-luc { border-right:1px solid var(--luc-border); border-bottom:none; }
+  .cc-vic { border-left:1px solid rgba(192,72,64,0.14); border-top:none; }
+  .cc-mid { display:none; }
+  .closing-section { padding:60px 18px; }
+  .duality-section { padding:60px 18px; }
+}
+</style>
+</head>
+<body>
+
+<div id="prog"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="../index.html" class="n-brand">Whispers of Caring</a>
+  <div class="n-right">
+    <a href="c3index.html" class="n-link">Home</a>
+    
+  </div>
+</nav>
+
+<!-- HERO — SPLIT -->
+<section class="hero">
+
+  <!-- Lucifer side -->
+  <div class="hero-half luc">
+    <div class="luc-mountains">
+      <svg viewBox="0 0 720 200" preserveAspectRatio="xMidYMax slice" fill="none">
+        <path d="M0 200 L0 120 L80 60 L160 110 L240 30 L320 100 L400 50 L480 120 L560 40 L640 100 L720 70 L720 200 Z" fill="rgba(15,25,50,0.8)"/>
+        <path d="M0 200 L0 150 L100 120 L200 145 L300 115 L400 140 L500 120 L600 145 L720 130 L720 200 Z" fill="rgba(10,15,30,0.9)"/>
+      </svg>
+    </div>
+    <div class="hero-inner">
+      <span class="hi-chapter">Interior Monologue · Chapter III</span>
+      <h1 class="hi-name">Lucifer</h1>
+      <span class="hi-label">The Introspective · Aurora Vista</span>
+      <p class="hi-desc">"I thrive in my solitude — not because I dislike people, but because I find a deep sense of peace in my own company."</p>
+      <button class="hi-btn" onclick="scrollToSection('luc-mono')">
+        Read His Oration
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+      <div class="hi-tags">
+        <span class="hi-tag">🏔 Aurora Vista</span>
+        <span class="hi-tag">💻 Engineer</span>
+        <span class="hi-tag">📝 Writer</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Centre label -->
+  <div class="hero-divider-label">
+    <div class="hdl-circle">❧</div>
+    <span class="hdl-text">vs</span>
+  </div>
+
+  <!-- Victoria side -->
+  <div class="hero-half vic">
+    <div class="vic-paint vic-paint-1"></div>
+    <div class="vic-paint vic-paint-2"></div>
+    <div class="vic-paint vic-paint-3"></div>
+    <div class="hero-inner">
+      <span class="hi-chapter">Interior Monologue · Chapter III</span>
+      <h1 class="hi-name">Victoria</h1>
+      <span class="hi-label">The Painter · Evervale</span>
+      <p class="hi-desc">"Life is a canvas waiting to be filled with the colours of our experiences — and I, Victoria, am its devoted painter."</p>
+      <button class="hi-btn" onclick="scrollToSection('vic-mono')">
+        Read Her Oration
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+      <div class="hi-tags">
+        <span class="hi-tag">🎨 Evervale</span>
+        <span class="hi-tag">🖌 Artist</span>
+        <span class="hi-tag">🌿 Dreamer</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-scroll">
+    <span>Scroll</span>
+    <div class="drop-line"></div>
+  </div>
+</section>
+
+<!-- PERSPECTIVE TOGGLE BAR -->
+<div class="toggle-bar">
+  <button class="tb-btn luc-btn active" id="luc-tb" onclick="switchMode('luc')">
+    <span class="tb-dot"></span>
+    Lucifer's World
+  </button>
+  <div class="tb-divider"></div>
+  <button class="tb-btn vic-btn" id="vic-tb" onclick="switchMode('vic')">
+    <span class="tb-dot"></span>
+    Victoria's World
+  </button>
+</div>
+
+<!-- ════ LUCIFER MONOLOGUE ════ -->
+<section class="luc-section mono-section" id="luc-mono">
+  <div class="mono-inner">
+
+    <div class="oration-head reveal">
+      <span class="oh-num">01</span>
+      <span class="oh-label">First Oration</span>
+      <span class="oh-name">Lucifer's Voice</span>
+      <p class="oh-sub">An introvert's portrait — Aurora Vista, solitude, code, and the one friendship that broke through.</p>
+      <div class="oh-rule"><span>◆</span></div>
+    </div>
+
+    <div class="oration-body">
+      <div class="mono-preview">
+        <p class="drop reveal">People often see me as this enigmatic, introverted figure, moving quietly through life — a mystery even to those closest to me. But there's more beneath the surface, layers that most never take the time to uncover. I live in Aurora Vista, a quaint village cradled by the mountains, where the winters freeze the waterfalls into glistening sculptures, and the summers paint the skies with hues of gold and amber.</p>
+
+        <p class="reveal">I thrive in my solitude, not because I dislike people, but because I find a deep sense of peace in my own company. My mornings are sacred — a ritual that begins with the sun's first light streaming through my window. I rise early, before the world stirs, and take a moment to write, capturing fleeting thoughts and dreams that often elude me by day.</p>
+      </div>
+
+      <div class="mono-hidden" id="luc-full">
+        <div class="quote-block reveal">
+          <p>"Writing, for me, is not just a hobby — it's a lifeline, a way to articulate the whirlwind of emotions and ideas that dance in my mind."</p>
+        </div>
+
+        <p class="reveal">Work takes up most of my day as an Associate System Engineer. It's a demanding role, but one that challenges me in ways that are both exhausting and exhilarating. I immerse myself in the rhythm of code and algorithms, finding a strange comfort in the predictability and logic they offer. It's a stark contrast to the chaotic unpredictability of human interaction, which often leaves me feeling drained.</p>
+
+        <div class="traits-grid reveal">
+          <div class="trait-card">
+            <span class="tc-icon">🏔</span>
+            <span class="tc-title">Aurora Vista</span>
+            <span class="tc-desc">A quaint village cradled by mountains — serene, yet complex, a place that reflects both the calm and the storm within him.</span>
+          </div>
+          <div class="trait-card">
+            <span class="tc-icon">💻</span>
+            <span class="tc-title">The Engineer</span>
+            <span class="tc-desc">Within the sterile glow of the computer screen, a semblance of control — a space where things make sense.</span>
+          </div>
+          <div class="trait-card">
+            <span class="tc-icon">📝</span>
+            <span class="tc-title">The Writer</span>
+            <span class="tc-desc">Writing as a lifeline — capturing fleeting thoughts and dreams that dance in the quiet of early mornings.</span>
+          </div>
+          <div class="trait-card">
+            <span class="tc-icon">🌙</span>
+            <span class="tc-title">Evening Sanctuary</span>
+            <span class="tc-desc">Evenings as sacred time — lost in thought, finding clarity and a sense of purpose in the stillness.</span>
+          </div>
+        </div>
+
+        <p class="reveal">Despite my introverted nature, there are moments of unexpected connection. Like with Victoria. She's the light to my shadow, an imaginative artist with a zest for life that's contagious. We've known each other for years, our bond strengthened by countless hours spent in conversation, both online and in person. She sees the world through a lens of creativity and wonder, painting with colours I often fail to notice.</p>
+
+        <div class="quote-block reveal">
+          <p>"Our interactions are a dance of contrasts. While I am measured and deliberate, she is spontaneous and effervescent. She challenges me to step out of my comfort zone, to see beyond the walls I've built around myself."</p>
+        </div>
+
+        <div class="sec-break reveal"><span>◆</span></div>
+
+        <p class="reveal">Evenings are my sanctuary, a time to unwind and reflect. I often find myself lost in thought, contemplating the day's events and the intricate weave of emotions they bring. It's in these quiet moments that I find clarity — a sense of purpose that guides me forward. I cherish the stillness, the silence that allows me to hear my own thoughts amidst the noise of the world.</p>
+
+        <p class="reveal">Life in Aurora Vista is a reflection of my inner landscape — serene, yet complex, a place where I can retreat and find solace. I am Lucifer, an introvert at heart, a seeker of solitude and meaning, ever striving to find balance in a world that often feels overwhelming. Through the lens of my experiences and the words I write, I carve out my place in the vast tapestry of life, embracing the silence as my greatest ally.</p>
+      </div>
+
+      <button class="expand-btn" id="luc-expand" onclick="expandMono('luc-full','luc-expand')">
+        <span class="expand-icon">↓</span>
+        Read Full Monologue
+      </button>
+    </div>
+
+  </div>
+</section>
+
+<!-- ════ VICTORIA MONOLOGUE ════ -->
+<section class="vic-section mono-section" id="vic-mono">
+  <div class="mono-inner">
+
+    <div class="oration-head reveal">
+      <span class="oh-num">02</span>
+      <span class="oh-label">Second Oration</span>
+      <span class="oh-name">Victoria's Voice</span>
+      <p class="oh-sub">A painter's portrait — Evervale, the canvas of life, colour as language, and the friendship built on beautiful opposites.</p>
+      <div class="oh-rule"><span>◆</span></div>
+    </div>
+
+    <div class="oration-body">
+      <div class="mono-preview">
+        <p class="drop reveal">Life is a canvas, waiting to be filled with the colours of our experiences — and I, Victoria, am its devoted painter. Every day presents a new opportunity to splash vibrant hues across the landscape of my existence, to breathe life into my dreams with each stroke of my brush. I live in Evervale, a town where tranquillity and kindness are as abundant as the air we breathe.</p>
+
+        <p class="reveal">From a young age, I found solace in the world of art. To me, painting is not just a hobby; it's a language — a means of expressing the emotions and visions that words often fail to capture. My heart swells with joy as I mix colours on my palette, watching as they blend into new shades that tell stories of their own.</p>
+      </div>
+
+      <div class="mono-hidden" id="vic-full">
+        <div class="quote-block reveal">
+          <p>"It's in the delicate details of my work that I find my voice — in the gentle curve of a brushstroke or the bold splash of red that speaks of passion and fire."</p>
+        </div>
+
+        <p class="reveal">My days are a whirlwind of creativity and exploration. I wake up with the sun, its golden rays casting a warm glow over my little studio. It's a sacred space, filled with canvases in various stages of completion, brushes and paints strewn about in delightful chaos. I love the feel of the paint under my fingers, the way it transforms the blank canvas into a portal to another world.</p>
+
+        <div class="traits-grid reveal">
+          <div class="trait-card">
+            <span class="tc-icon">🎨</span>
+            <span class="tc-title">The Studio</span>
+            <span class="tc-desc">Canvases in various stages, brushes in delightful chaos — a sacred space where blank surfaces become portals to other worlds.</span>
+          </div>
+          <div class="trait-card">
+            <span class="tc-icon">🌿</span>
+            <span class="tc-title">Evervale</span>
+            <span class="tc-desc">A town where tranquillity and kindness are as abundant as the air — seeds of the next masterpiece in every evening walk.</span>
+          </div>
+          <div class="trait-card">
+            <span class="tc-icon">✨</span>
+            <span class="tc-title">Art as Language</span>
+            <span class="tc-desc">Painting as a means of expressing emotions that words fail to capture — colour as voice, canvas as soul.</span>
+          </div>
+          <div class="trait-card">
+            <span class="tc-icon">🌅</span>
+            <span class="tc-title">Evenings in Evervale</span>
+            <span class="tc-desc">Strolling through peaceful streets as the sun sets — mind abuzz with ideas, images waiting to be brought to life.</span>
+          </div>
+        </div>
+
+        <p class="reveal">Yet, life is not all about the solitary pursuit of artistic perfection. There are moments of connection that ground me, reminding me of the world beyond my studio. Like my dear friend, Lucifer. He's an intriguing contrast to my exuberance — a quiet, introspective soul who finds comfort in the rhythm of routine and the solitude of his thoughts. Our friendship is a dance of opposites, a beautiful balance of light and shadow.</p>
+
+        <div class="quote-block reveal">
+          <p>"Our conversations are a blend of my whimsical musings and his grounded logic, creating a tapestry of ideas and perspectives that enriches both our lives."</p>
+        </div>
+
+        <div class="sec-break reveal"><span>◆</span></div>
+
+        <p class="reveal">My art is not just a reflection of my surroundings, but a window into my soul — a glimpse of the world as I see it, filled with beauty, wonder, and endless possibilities. Each painting is a story, a journey that takes the viewer into the depths of my imagination, where dreams and reality intertwine in a dance of colour and light.</p>
+
+        <p class="reveal">I am Victoria, a creator of worlds, a weaver of dreams, and a believer in the power of art to touch hearts and change lives. Through my paintings, I strive to share the beauty and joy I find in each day, hoping to inspire others to see the world through my eyes — as a place of endless possibility and boundless wonder.</p>
+      </div>
+
+      <button class="expand-btn" id="vic-expand" onclick="expandMono('vic-full','vic-expand')">
+        <span class="expand-icon">↓</span>
+        Read Full Monologue
+      </button>
+    </div>
+
+  </div>
+</section>
+
+<!-- ════ DUALITY ════ -->
+<div class="duality-section reveal">
+  <span class="ds-label">The Balance Between Them</span>
+  <h2 class="ds-title">A Dance of Contrasts</h2>
+  <p class="ds-desc">Measured and deliberate meets spontaneous and effervescent. Solitude and code meets colour and canvas. Yet — a harmony that keeps them both grounded.</p>
+
+  <div class="contrast-grid">
+    <div class="cc-luc">
+      <span class="cc-who">Lucifer</span>
+      <ul class="cc-trait-list">
+        <li>Introvert — thrives in solitude</li>
+        <li>Measured, deliberate, precise</li>
+        <li>Code and logic as comfort</li>
+        <li>Mountain village — cold and serene</li>
+        <li>The shadow to her light</li>
+      </ul>
+    </div>
+    <div class="cc-mid">⇌</div>
+    <div class="cc-vic">
+      <span class="cc-who">Victoria</span>
+      <ul class="cc-trait-list">
+        <li>Exuberant — bursts with creative energy</li>
+        <li>Spontaneous, effervescent, bold</li>
+        <li>Colour and art as voice</li>
+        <li>Warm town — gentle and kind</li>
+        <li>The light to his shadow</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ════ CLOSING ════ -->
+<div class="closing-section">
+  <span class="cs-label">Chapter III · Phase III · Close</span>
+  <p class="cs-text">From the start, they had a meeting only once that was unexpected — not casual. Although with their best of time, they spent more happily than ever, with some awkwardness, shyness, more laughs, and mini adventures.</p>
+  <p class="cs-text cs-sub">After thinking about themselves, delving deep down to the bottom of the heart and soul — without knowing, both drifted into sleep.</p>
+  <div class="cs-rule"><span>❧</span></div>
+  <a href="c3index.html" class="btn-return">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+    Return to Chapter Three
+  </a>
+</div>
+
+<script>
+/* ── progress ── */
+const prog = document.getElementById('prog');
+window.addEventListener('scroll', () => {
+  const t = document.documentElement.scrollHeight - window.innerHeight;
+  prog.style.width = (t > 0 ? window.scrollY / t * 100 : 0) + '%';
+}, { passive: true });
+
+/* ── scroll reveal ── */
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); } });
+}, { threshold: 0.07 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+/* ── perspective toggle ── */
+function switchMode(who) {
+  const body = document.body;
+  const lucBtn = document.getElementById('luc-tb');
+  const vicBtn = document.getElementById('vic-tb');
+  if (who === 'vic') {
+    body.classList.add('vic-mode');
+    lucBtn.classList.remove('active');
+    vicBtn.classList.add('active');
+  } else {
+    body.classList.remove('vic-mode');
+    lucBtn.classList.add('active');
+    vicBtn.classList.remove('active');
+  }
+}
+
+/* ── scroll to section ── */
+function scrollToSection(id) {
+  const el = document.getElementById(id);
+  if (el) { el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+}
+
+/* ── expand monologue ── */
+function expandMono(contentId, btnId) {
+  const content = document.getElementById(contentId);
+  const btn = document.getElementById(btnId);
+  const isOpen = content.classList.contains('open');
+
+  if (isOpen) {
+    content.classList.remove('open');
+    btn.classList.remove('open');
+    btn.querySelector('.expand-icon').textContent = '↓';
+    btn.childNodes[btn.childNodes.length - 1].textContent = ' Read Full Monologue';
+  } else {
+    content.classList.add('open');
+    btn.classList.add('open');
+    btn.querySelector('.expand-icon').textContent = '↑';
+    btn.childNodes[btn.childNodes.length - 1].textContent = ' Collapse Monologue';
+    // reveal newly shown elements
+    content.querySelectorAll('.reveal:not(.in)').forEach(el => {
+      setTimeout(() => el.classList.add('in'), 50);
+    });
+  }
+}
+
+/* ── auto-switch theme based on scroll position ── */
+const lucSection = document.getElementById('luc-mono');
+const vicSection = document.getElementById('vic-mono');
+
+const sectionObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    const id = e.target.id;
+    if (id === 'vic-mono') {
+      switchMode('vic');
+    } else if (id === 'luc-mono') {
+      switchMode('luc');
+    }
+  });
+}, { threshold: 0.4 });
+
+sectionObs.observe(lucSection);
+sectionObs.observe(vicSection);
+</script>
+
+</body>
+</html>
