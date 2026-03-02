@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Aurora's Beauty — Lucifer's Haven</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&family=Cinzel:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:          #f2f5f8;
+      --bg2:         #e8edf3;
+      --surface:     #ffffff;
+      --mist:        #dce6f0;
+      --slate:       #3a5068;
+      --slate-mid:   #5a7898;
+      --slate-soft:  #c8d8e8;
+      --rain:        #6a9ab8;
+      --rain-soft:   #ddeef8;
+      --mountain:    #4a6040;
+      --mountain-soft:#d8e8d0;
+      --rose:        #b85870;
+      --rose-soft:   #f5dce4;
+      --ink:         #141e28;
+      --ink-mid:     #304050;
+      --ink-dim:     #7a90a0;
+      --border:      rgba(58,80,104,0.1);
+      --shadow:      rgba(20,30,40,0.07);
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Jost', sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      overflow-x: hidden;
+    }
+
+    /* paper grain */
+    body::after {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.022'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 9999;
+    }
+
+    /* ── reading progress bar ── */
+    #progress-bar {
+      position: fixed; top: 0; left: 0;
+      height: 2px; width: 0%;
+      background: linear-gradient(to right, var(--rain), var(--slate));
+      z-index: 200; transition: width 0.1s linear;
+    }
+
+    /* ══ NAV ══ */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      height: 58px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 48px;
+      background: rgba(242,245,248,0.94);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-brand {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem; font-style: italic;
+      color: var(--ink); text-decoration: none;
+    }
+    .nav-links { display: flex; gap: 30px; align-items: center; }
+    .nav-links a {
+      font-size: 0.68rem; font-weight: 500;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--ink-dim); text-decoration: none;
+      transition: color 0.25s;
+    }
+    .nav-links a:hover { color: var(--slate); }
+    .nav-links a.active { color: var(--slate); border-bottom: 1.5px solid var(--slate); padding-bottom: 2px; }
+
+    /* ══ HERO ══ */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center;
+      padding: 80px 24px 70px;
+      position: relative;
+      background: url('c2p1bg.jpg') center/cover no-repeat;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom,
+        rgba(242,245,248,0.88) 0%,
+        rgba(232,237,243,0.75) 45%,
+        rgba(242,245,248,0.94) 100%);
+    }
+
+    /* ── rain streaks ── */
+    .rain-streak {
+      position: absolute;
+      width: 1px;
+      background: linear-gradient(to bottom, transparent, rgba(106,154,184,0.35), transparent);
+      opacity: 0;
+      animation: rainFall 1.8s linear infinite;
+      pointer-events: none; z-index: 1;
+    }
+    .rain-streak:nth-child(1)  { left: 8%;  height: 80px; animation-delay: 0s;    animation-duration: 1.6s; }
+    .rain-streak:nth-child(2)  { left: 18%; height: 60px; animation-delay: 0.3s;  animation-duration: 2s; }
+    .rain-streak:nth-child(3)  { left: 30%; height: 90px; animation-delay: 0.7s;  animation-duration: 1.7s; }
+    .rain-streak:nth-child(4)  { left: 45%; height: 70px; animation-delay: 0.1s;  animation-duration: 1.9s; }
+    .rain-streak:nth-child(5)  { left: 58%; height: 85px; animation-delay: 0.5s;  animation-duration: 1.5s; }
+    .rain-streak:nth-child(6)  { left: 70%; height: 65px; animation-delay: 0.9s;  animation-duration: 2.1s; }
+    .rain-streak:nth-child(7)  { left: 82%; height: 75px; animation-delay: 0.4s;  animation-duration: 1.8s; }
+    .rain-streak:nth-child(8)  { left: 92%; height: 55px; animation-delay: 1.1s;  animation-duration: 1.6s; }
+    .rain-streak:nth-child(9)  { left: 25%; height: 95px; animation-delay: 0.6s;  animation-duration: 2.2s; }
+    .rain-streak:nth-child(10) { left: 65%; height: 60px; animation-delay: 1.4s;  animation-duration: 1.7s; }
+
+    @keyframes rainFall {
+      0%   { opacity: 0; transform: translateY(-20px); }
+      15%  { opacity: 0.5; }
+      85%  { opacity: 0.4; }
+      100% { opacity: 0; transform: translateY(100vh); }
+    }
+
+    /* ── mist layer ── */
+    .mist-layer {
+      position: absolute;
+      bottom: 0; left: -10%; right: -10%;
+      height: 200px;
+      background: linear-gradient(to top, rgba(220,230,240,0.55), transparent);
+      pointer-events: none; z-index: 1;
+      animation: mistDrift 8s ease-in-out infinite alternate;
+    }
+    @keyframes mistDrift {
+      0%   { transform: translateX(0); opacity: 0.7; }
+      100% { transform: translateX(20px); opacity: 0.9; }
+    }
+
+    .hero-inner { position: relative; z-index: 2; max-width: 700px; }
+
+    .hero-tag {
+      display: inline-flex; align-items: center; gap: 12px;
+      font-family: 'Cinzel', serif;
+      font-size: 0.58rem; font-weight: 400;
+      letter-spacing: 0.5em; text-transform: uppercase;
+      color: var(--slate-mid); margin-bottom: 24px;
+      animation: riseIn 0.9s ease both;
+    }
+    .hero-tag::before, .hero-tag::after {
+      content: ''; width: 28px; height: 1px;
+      background: var(--slate-mid); opacity: 0.4;
+    }
+
+    .hero h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.8rem, 7.5vw, 5.5rem);
+      font-weight: 300; color: var(--ink);
+      line-height: 1.08; letter-spacing: -0.01em;
+      animation: riseIn 0.9s ease 0.12s both;
+    }
+    .hero h1 em {
+      font-style: italic; color: var(--slate);
+      display: block; font-weight: 300;
+    }
+
+    .hero-divider {
+      display: flex; align-items: center; justify-content: center;
+      gap: 14px; margin: 28px auto;
+      animation: riseIn 0.9s ease 0.24s both;
+    }
+    .hero-divider::before, .hero-divider::after {
+      content: ''; width: 50px; height: 1px;
+      background: var(--ink-dim); opacity: 0.25;
+    }
+    .hero-divider span { font-size: 0.8rem; color: var(--rain); opacity: 0.6; }
+
+    .hero-desc {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem; font-weight: 300;
+      line-height: 1.85; color: var(--ink-mid);
+      max-width: 520px; margin: 0 auto;
+      animation: riseIn 0.9s ease 0.36s both;
+    }
+
+    .hero-pills {
+      display: flex; gap: 10px; justify-content: center;
+      margin-top: 28px; flex-wrap: wrap;
+      animation: riseIn 0.9s ease 0.48s both;
+    }
+    .pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 14px;
+      background: rgba(255,255,255,0.72);
+      backdrop-filter: blur(6px);
+      border: 1px solid rgba(58,80,104,0.14);
+      border-radius: 50px;
+      font-size: 0.68rem; font-weight: 500;
+      letter-spacing: 0.07em; color: var(--slate);
+    }
+
+    .scroll-cue {
+      position: absolute; bottom: 36px; left: 50%;
+      transform: translateX(-50%); z-index: 2;
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+      animation: riseIn 0.9s ease 0.8s both;
+    }
+    .scroll-cue span {
+      font-size: 0.58rem; letter-spacing: 0.35em;
+      text-transform: uppercase; color: var(--ink-dim);
+    }
+    .arr {
+      width: 18px; height: 18px;
+      border-right: 1.5px solid var(--slate);
+      border-bottom: 1.5px solid var(--slate);
+      transform: rotate(45deg);
+      animation: bounceDown 1.8s ease-in-out infinite;
+    }
+
+    /* ══ STORY ══ */
+    .story { max-width: 740px; margin: 0 auto; padding: 90px 32px 110px; }
+
+    /* chapter header */
+    .chapter-header { text-align: center; margin-bottom: 64px; }
+    .chapter-header .label {
+      font-family: 'Cinzel', serif;
+      font-size: 0.58rem; font-weight: 400;
+      letter-spacing: 0.5em; text-transform: uppercase;
+      color: var(--slate-mid); display: block; margin-bottom: 12px;
+    }
+    .chapter-header h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem; font-weight: 400; font-style: italic; color: var(--ink);
+    }
+    .chapter-header .rule {
+      display: flex; align-items: center; gap: 16px;
+      justify-content: center; margin-top: 20px;
+    }
+    .chapter-header .rule::before,
+    .chapter-header .rule::after { content: ''; width: 60px; height: 1px; background: var(--border); }
+    .chapter-header .rule span { font-size: 0.85rem; color: var(--slate-mid); opacity: 0.5; }
+
+    /* scene header */
+    .scene-header {
+      display: flex; align-items: center; gap: 16px;
+      margin: 56px 0 28px;
+    }
+    .scene-header .scene-num {
+      font-family: 'Cinzel', serif;
+      font-size: 0.55rem; font-weight: 500;
+      letter-spacing: 0.4em; text-transform: uppercase;
+      color: var(--slate-mid); white-space: nowrap;
+    }
+    .scene-header::after {
+      content: ''; flex: 1; height: 1px;
+      background: linear-gradient(to right, var(--border), transparent);
+    }
+
+    /* paragraphs */
+    .story p {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.13rem; font-weight: 300;
+      line-height: 2; color: var(--ink-mid);
+      margin-bottom: 1.9em; text-align: justify; hyphens: auto;
+    }
+
+    .drop-cap::first-letter {
+      font-size: 4.8rem; font-weight: 600;
+      color: var(--slate); float: left;
+      line-height: 0.78; margin: 0.06em 0.12em 0 0; font-style: italic;
+    }
+
+    /* location card — Aurora Vista description */
+    .location-card {
+      background: linear-gradient(135deg, var(--mist), var(--bg2));
+      border: 1px solid rgba(58,80,104,0.12);
+      border-left: 3px solid var(--slate-mid);
+      border-radius: 0 10px 10px 0;
+      padding: 28px 32px; margin: 2.5em 0;
+      position: relative; overflow: hidden;
+    }
+    .location-card::after {
+      content: '🏔';
+      position: absolute; right: 18px; bottom: 10px;
+      font-size: 3rem; opacity: 0.08;
+    }
+    .location-card .loc-label {
+      font-family: 'Cinzel', serif;
+      font-size: 0.56rem; font-weight: 500;
+      letter-spacing: 0.4em; text-transform: uppercase;
+      color: var(--slate-mid); display: block; margin-bottom: 12px;
+    }
+    .location-card p {
+      font-style: italic; text-align: left; margin-bottom: 1em;
+    }
+    .location-card p:last-child { margin-bottom: 0; }
+
+    /* apartment card */
+    .apartment-card {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 12px; margin: 2.5em 0;
+    }
+    .apt-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px; padding: 18px 20px;
+      position: relative; overflow: hidden;
+    }
+    .apt-item::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: var(--slate-soft);
+    }
+    .apt-item .apt-icon { font-size: 1.4rem; margin-bottom: 8px; display: block; }
+    .apt-item .apt-name {
+      font-size: 0.62rem; font-weight: 500;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--slate-mid); margin-bottom: 5px; display: block;
+    }
+    .apt-item .apt-desc {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.95rem; font-style: italic;
+      color: var(--ink-dim); line-height: 1.5;
+    }
+
+    /* rain walk scene */
+    .rain-card {
+      background: linear-gradient(135deg, var(--rain-soft), var(--bg2));
+      border: 1px solid rgba(106,154,184,0.2);
+      border-radius: 12px;
+      padding: 32px 36px; margin: 2.5em 0;
+      position: relative; overflow: hidden;
+    }
+    .rain-card::after {
+      content: '🌧';
+      position: absolute; right: 18px; bottom: 10px;
+      font-size: 3rem; opacity: 0.1;
+    }
+    .rain-card p { font-style: italic; text-align: left; margin-bottom: 1.1em; }
+    .rain-card p:last-child { margin-bottom: 0; }
+
+    /* dialogue */
+    .dialogue-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--slate-mid);
+      border-radius: 0 10px 10px 0;
+      padding: 28px 32px; margin: 2.2em 0;
+      box-shadow: 0 4px 20px var(--shadow);
+    }
+    .d-row {
+      display: grid; grid-template-columns: 86px 1fr;
+      gap: 14px; margin-bottom: 18px; align-items: start;
+    }
+    .d-row:last-child { margin-bottom: 0; }
+    .d-name {
+      font-family: 'Cinzel', serif;
+      font-size: 0.56rem; font-weight: 500;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      text-align: right; padding-right: 14px;
+      border-right: 1.5px solid var(--border);
+      padding-top: 4px; line-height: 1.4;
+    }
+    .d-name.v { color: var(--rose); }
+    .d-name.l { color: var(--slate); }
+    .d-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.05rem; font-style: italic;
+      line-height: 1.75; color: var(--ink-mid);
+    }
+
+    /* pull quote */
+    .pull-quote {
+      margin: 3em 0; padding: 26px 32px;
+      border-top: 2px solid var(--slate-mid);
+      border-bottom: 2px solid var(--slate-mid);
+      text-align: center;
+    }
+    .pull-quote p {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.28rem; font-style: italic;
+      color: var(--ink); text-align: center;
+      margin-bottom: 0; line-height: 1.65;
+    }
+
+    /* puddle mishap card */
+    .mishap-card {
+      background: linear-gradient(135deg, var(--mist), var(--surface));
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 32px 36px; margin: 2.5em 0;
+      position: relative; overflow: hidden;
+      box-shadow: 0 4px 20px var(--shadow);
+    }
+    .mishap-card::after {
+      content: '💦';
+      position: absolute; right: 18px; bottom: 10px;
+      font-size: 3rem; opacity: 0.1;
+    }
+    .mishap-card p { font-style: italic; text-align: left; margin-bottom: 1.1em; }
+    .mishap-card p:last-child { margin-bottom: 0; }
+
+    /* message exchange */
+    .msg-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px 28px; margin: 2.2em 0;
+      box-shadow: 0 4px 20px var(--shadow);
+    }
+    .msg-card .mc-header {
+      display: flex; align-items: center; gap: 8px;
+      padding-bottom: 14px; margin-bottom: 18px;
+      border-bottom: 1px solid var(--border);
+    }
+    .mc-dot { width: 8px; height: 8px; border-radius: 50%; }
+    .dot-slate { background: var(--slate); }
+    .dot-rose  { background: var(--rose); }
+    .dot-rain  { background: var(--rain); }
+    .mc-title {
+      font-family: 'Cinzel', serif;
+      font-size: 0.58rem; font-weight: 400;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--ink-dim); margin-left: 6px;
+    }
+    .online-badge {
+      margin-left: auto; display: flex; align-items: center; gap: 5px;
+      font-size: 0.6rem; color: #22c55e; letter-spacing: 0.1em;
+    }
+    .online-badge::before {
+      content: ''; width: 6px; height: 6px; border-radius: 50%;
+      background: #22c55e; box-shadow: 0 0 5px #22c55e;
+      animation: dotPulse 2s infinite;
+    }
+    @keyframes dotPulse { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+
+    .msg-wrap { display: flex; flex-direction: column; gap: 14px; }
+    .msg { display: flex; flex-direction: column; max-width: 78%; }
+    .msg.l { align-self: flex-end; }
+    .msg.v { align-self: flex-start; }
+    .msg-name {
+      font-family: 'Cinzel', serif;
+      font-size: 0.55rem; font-weight: 500;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    .msg.l .msg-name { color: var(--slate); text-align: right; padding-right: 4px; }
+    .msg.v .msg-name { color: var(--rose); padding-left: 4px; }
+    .msg-bubble {
+      padding: 11px 16px; border-radius: 14px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.02rem; font-style: italic;
+      line-height: 1.65; color: var(--ink-mid);
+    }
+    .msg.l .msg-bubble {
+      background: var(--slate-soft);
+      border: 1px solid rgba(58,80,104,0.15);
+      border-bottom-right-radius: 4px;
+    }
+    .msg.v .msg-bubble {
+      background: var(--rose-soft);
+      border: 1px solid rgba(184,88,112,0.15);
+      border-bottom-left-radius: 4px;
+    }
+
+    /* scene break */
+    .scene-break {
+      display: flex; align-items: center; gap: 18px; margin: 48px 0;
+    }
+    .scene-break::before, .scene-break::after {
+      content: ''; flex: 1; height: 1px;
+      background: linear-gradient(to right, transparent, var(--border), transparent);
+    }
+    .scene-break span { font-size: 1rem; opacity: 0.4; }
+
+    /* evening home card */
+    .home-card {
+      background: linear-gradient(135deg, var(--mountain-soft), var(--bg2));
+      border: 1px solid rgba(74,96,64,0.15);
+      border-radius: 12px;
+      padding: 32px 36px; margin: 2.5em 0;
+      position: relative; overflow: hidden;
+    }
+    .home-card::after {
+      content: '📚';
+      position: absolute; right: 18px; bottom: 10px;
+      font-size: 3rem; opacity: 0.1;
+    }
+    .home-card p { font-style: italic; text-align: left; margin-bottom: 1.1em; }
+    .home-card p:last-child { margin-bottom: 0; }
+
+    /* story end */
+    .story-end {
+      text-align: center; margin-top: 72px;
+      padding-top: 48px; border-top: 1px solid var(--border);
+    }
+    .story-end .phase-tag {
+      font-family: 'Cinzel', serif;
+      font-size: 0.58rem; font-weight: 400;
+      letter-spacing: 0.45em; text-transform: uppercase;
+      color: var(--slate-mid); display: block; margin-bottom: 14px;
+    }
+    .story-end .closing {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic; font-size: 1.15rem;
+      color: var(--ink-dim); line-height: 1.8;
+      max-width: 460px; margin: 0 auto 32px;
+    }
+    .return-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 28px;
+      border: 1.5px solid var(--slate);
+      border-radius: 50px;
+      color: var(--slate); text-decoration: none;
+      font-size: 0.7rem; font-weight: 500;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      transition: all 0.25s;
+    }
+    .return-btn:hover {
+      background: var(--slate); color: white;
+      box-shadow: 0 6px 24px rgba(58,80,104,0.25);
+      transform: translateY(-2px);
+    }
+    .return-btn svg { width: 13px; height: 13px; transition: transform 0.25s; }
+    .return-btn:hover svg { transform: translateX(-3px); }
+
+    /* ANIMATIONS */
+    @keyframes riseIn {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes bounceDown {
+      0%, 100% { transform: rotate(45deg) translateY(0); }
+      50%       { transform: rotate(45deg) translateY(5px); }
+    }
+    .reveal {
+      opacity: 0; transform: translateY(22px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+    .reveal.in { opacity: 1; transform: none; }
+
+    @media (max-width: 600px) {
+      nav { padding: 0 18px; }
+      .story { padding: 60px 18px 80px; }
+      .apartment-card { grid-template-columns: 1fr; }
+      .d-row { grid-template-columns: 66px 1fr; gap: 10px; }
+      .dialogue-card, .msg-card { padding: 20px 16px; }
+      .rain-card, .mishap-card, .home-card, .location-card { padding: 22px 18px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="progress-bar"></div>
+
+  <!-- NAV -->
+  <nav>
+    <a href="../index.html" class="nav-brand">Whispers of Caring</a>
+    <div class="nav-links">
+      <a href="chapter2/c2index.html">Home</a>
+     
+      <a href="#" class="active">Phase 1</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <!-- rain streaks -->
+    <div class="rain-streak"></div>
+    <div class="rain-streak"></div>
+    <div class="rain-streak"></div>
+    <div class="rain-streak"></div>
+    <div class="rain-streak"></div>
+    <div class="rain-streak"></div>
+    <div class="rain-streak"></div>
+    <div class="rain-streak"></div>
+    <div class="rain-streak"></div>
+    <div class="rain-streak"></div>
+
+    <!-- mist -->
+    <div class="mist-layer"></div>
+
+    <div class="hero-inner">
+      <p class="hero-tag">Chapter Two &nbsp;·&nbsp; Phase One</p>
+      <h1>Aurora's Beauty<br><em>Lucifer's Haven</em></h1>
+      <div class="hero-divider"><span>🌧</span></div>
+      <p class="hero-desc">Rain‑washed streets, quiet mountains, and a friendship carried through messages — a moment of stillness inside Aurora Vista.</p>
+      <div class="hero-pills">
+        <span class="pill">🏔 Aurora Vista</span>
+        <span class="pill">🌧 The Rain Walk</span>
+        <span class="pill">💬 Messages to Victoria</span>
+      </div>
+    </div>
+
+    <div class="scroll-cue">
+      <span>Begin</span>
+      <div class="arr"></div>
+    </div>
+  </section>
+
+  <!-- STORY -->
+  <main class="story">
+
+    <div class="chapter-header reveal">
+      <span class="label">Chapter Two · Aurora Vista Chronicles</span>
+      <h2>A Story from Lucifer's Village</h2>
+      <div class="rule"><span>❧</span></div>
+    </div>
+
+    <!-- SCENE I -->
+    <div class="scene-header reveal">
+      <span class="scene-num">Scene I &nbsp;·&nbsp; The Village</span>
+    </div>
+
+    <p class="drop-cap reveal">
+      Nestled within the serene embrace of Lucifer's village, Aurora Vista lies a canvas of natural splendour that captivates the senses and ignites the imagination. This idyllic enclave boasts an abundance of breathtaking vistas — each a testament to the awe-inspiring magnificence of the surrounding terrain. Particularly noteworthy are the majestic frozen waterfalls that grace the village during the winter months, their crystalline torrents suspended in time, gleaming like treasures amidst the frost-kissed landscape.
+    </p>
+
+    <div class="location-card reveal">
+      <span class="loc-label">📍 Aurora Vista — The Landscape</span>
+      <p>The ethereal beauty of Aurora Vista is further accentuated by the enchanting dance of the Northern Lights that grace the night sky with their mesmerizing display of colors. The kaleidoscopic panorama of hues, ranging from vibrant greens to shimmering purples, casts a magical spell over the village, infusing the surroundings with an otherworldly allure.</p>
+      <p>Complementing these natural wonders are the lush meadows adorned with delicate wildflowers, the serene lakes reflecting the verdant hills and azure sky, and the dense forests teeming with an array of wildlife. Aurora Vista is indeed a sanctuary of natural beauty — a testament to the boundless splendour of the natural world.</p>
+    </div>
+
+    <p class="reveal">
+      Within this picturesque setting, Lucifer resides in a modest abode — a humble apartment that radiates an understated allure. Despite its unassuming dimensions, the dwelling offers a haven of comfort and tranquillity.
+    </p>
+
+    <!-- Apartment breakdown -->
+    <div class="apartment-card reveal">
+      <div class="apt-item">
+        <span class="apt-icon">🛏</span>
+        <span class="apt-name">Bedroom</span>
+        <span class="apt-desc">A singular room adorned with minimalist elegance — quiet, still, and perfectly his.</span>
+      </div>
+      <div class="apt-item">
+        <span class="apt-icon">🍳</span>
+        <span class="apt-name">Kitchen</span>
+        <span class="apt-desc">A quaint kitchen suffused with the warmth of home-cooked meals and familiar aromas.</span>
+      </div>
+      <div class="apt-item">
+        <span class="apt-icon">🪑</span>
+        <span class="apt-name">Living Area</span>
+        <span class="apt-desc">A cozy retreat where moments of respite and reflection unfold seamlessly.</span>
+      </div>
+      <div class="apt-item">
+        <span class="apt-icon">🪟</span>
+        <span class="apt-name">The Window</span>
+        <span class="apt-desc">A panoramic portal — verdant hills, crystalline waters, towering peaks against the sky.</span>
+      </div>
+    </div>
+
+    <p class="reveal">
+      Indeed, Lucifer's modest dwelling serves as a portal to the sublime — a sanctuary where the beauty of nature converges with the simplicity of everyday existence. In this haven of serenity, he finds solace and inspiration, a testament to the enduring allure of Aurora Vista's astonishing landscapes.
+    </p>
+
+    <!-- SCENE II -->
+    <div class="scene-header reveal">
+      <span class="scene-num">Scene II &nbsp;·&nbsp; The Rain Walk</span>
+    </div>
+
+    <p class="reveal">
+      Lucifer stepped out from the confines of his modest apartment into the streets of Aurora Vista. A gentle patter of rain greeted him — each droplet adding to the ethereal ambiance of the town. The soft sound of raindrops falling on the pavement provided a soothing backdrop to his stroll, as he navigated the winding streets lined with quaint shops and charming cafés.
+    </p>
+
+    <div class="rain-card reveal">
+      <p>He walked; Lucifer took out his phone and began typing a message to Victoria, his fingers dancing across the screen in rhythm with the falling rain.</p>
+      <p>Despite the physical distance between them, he felt a sense of closeness to Victoria — knowing that she was just a message away, sharing in his experiences even from afar.</p>
+    </div>
+
+    <div class="msg-card reveal">
+      <div class="mc-header">
+        <div class="mc-dot dot-slate"></div>
+        <div class="mc-dot dot-rose"></div>
+        <div class="mc-dot dot-rain"></div>
+        <span class="mc-title">Evervale Forums · Evening</span>
+        <span class="online-badge">Online</span>
+      </div>
+      <div class="msg-wrap">
+        <div class="msg l">
+          <span class="msg-name">Lucifer</span>
+          <div class="msg-bubble">"Hey Victoria, just stepped out for a walk in the rain. How's your day been so far?"</div>
+        </div>
+        <div class="msg l">
+          <span class="msg-name">Lucifer</span>
+          <div class="msg-bubble">"It's been a bit stressful at the office. But nothing I can't handle. How about you, Victoria? How's your day winding down?"</div>
+        </div>
+        <div class="msg v">
+          <span class="msg-name">Victoria</span>
+          <div class="msg-bubble">"I've been struggling to find inspiration for a new painting. It's like my creativity has hit a wall, and I can't seem to break through."</div>
+        </div>
+        <div class="msg l">
+          <span class="msg-name">Lucifer</span>
+          <div class="msg-bubble">"I know the feeling. But remember, inspiration can strike at the most unexpected moments. Just keep pushing forward, and you'll find your muse."</div>
+        </div>
+        <div class="msg l">
+          <span class="msg-name">Lucifer</span>
+          <div class="msg-bubble">"I had a breakthrough at work today. It wasn't easy, but I managed to overcome the obstacles and come out on top."</div>
+        </div>
+        <div class="msg v">
+          <span class="msg-name">Victoria</span>
+          <div class="msg-bubble">"I'm proud of you, Lucifer. You always manage to rise above the challenges."</div>
+        </div>
+        <div class="msg v">
+          <span class="msg-name">Victoria</span>
+          <div class="msg-bubble">"Thanks for being there for me, even when I'm feeling stuck. You're a true friend, Lucifer."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pull-quote reveal">
+      <p>"Inspiration can strike at the most unexpected moments. Just keep pushing forward, and you'll find your muse."</p>
+    </div>
+
+    <p class="reveal">
+      As the rain continued to fall outside, Lucifer couldn't help but smile — knowing that no matter the distance between them, he and Victoria would always have each other's backs. With their bond strengthened by the trials of the day, they walked together, albeit in spirit, towards the promise of a new dawn.
+    </p>
+
+    <!-- SCENE III -->
+    <div class="scene-header reveal">
+      <span class="scene-num">Scene III &nbsp;·&nbsp; The Puddle</span>
+    </div>
+
+    <p class="reveal">
+      Lucifer's evening stroll took an unexpected turn as he slipped on the rain-slicked pavement, tumbling into a nearby puddle with a splash. "Oops, well that wasn't graceful," he muttered to himself — feeling a mixture of embarrassment and amusement at his sudden mishap. Pulling himself up, he couldn't help but laugh at the absurdity of the situation.
+    </p>
+
+    <div class="mishap-card reveal">
+      <p>Lucifer emerged from the puddle in an instant, shaking off the water and quickly giving himself a temporary clean. Despite the hurried cleansing, he intended to take a thorough bath once he returned to the room.</p>
+      <p>Quickly, he pulled out his phone — fingers tapping out a message to Victoria as he recounted his misadventure.</p>
+    </div>
+
+    <div class="msg-card reveal">
+      <div class="mc-header">
+        <div class="mc-dot dot-slate"></div>
+        <div class="mc-dot dot-rose"></div>
+        <div class="mc-dot dot-rain"></div>
+        <span class="mc-title">Evervale Forums · Still Raining</span>
+        <span class="online-badge">Online</span>
+      </div>
+      <div class="msg-wrap">
+        <div class="msg l">
+          <span class="msg-name">Lucifer</span>
+          <div class="msg-bubble">"So, guess who just took an impromptu dip in the puddle? Yours truly. Slippery roads + rain = not the best combination."</div>
+        </div>
+        <div class="msg v">
+          <span class="msg-name">Victoria</span>
+          <div class="msg-bubble">"Oh no, are you okay? I can't believe you fell! That's too funny. 😂"</div>
+        </div>
+        <div class="msg l">
+          <span class="msg-name">Lucifer</span>
+          <div class="msg-bubble">"Yeah, I'm fine, just a little wet. Glad I could provide some entertainment for your evening!"</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pull-quote reveal">
+      <p>"Even the most embarrassing moments could bring joy when shared with a friend."</p>
+    </div>
+
+    <p class="reveal">
+      As the rain continued to fall around him, Lucifer couldn't help but feel grateful for moments like these — unexpected, imperfect, but undeniably human. And as he shared the laughter with Victoria, he knew that even the most embarrassing moments could bring joy when shared with a friend.
+    </p>
+
+    <!-- SCENE IV -->
+    <div class="scene-header reveal">
+      <span class="scene-num">Scene IV &nbsp;·&nbsp; Returning Home</span>
+    </div>
+
+    <p class="reveal">
+      Lucifer continued his leisurely stroll through the streets of Aurora Vista, lost in conversation with Victoria — their messages flowing effortlessly back and forth. They exchanged stories of their day, sharing moments of joy and reflection, as well as their hopes and dreams for the future. With each message, their bond grew stronger, reinforced by the shared experience of walking in the rain.
+    </p>
+
+    <div class="home-card reveal">
+      <p>He returned to his room. He took the time to freshen up and then meticulously cleaned his room and kitchen, ensuring everything was in order. After attending to the chores, he carefully arranged the wet clothes under the fan — selecting the perfect spot to allow them to dry efficiently.</p>
+      <p>He decided to unwind by picking up a captivating book, putting on his headphones, and playing his favourite music. With the serene scenery of the town and majestic mountains in view from his window, he found solace in observing the graceful flight of birds as they traversed the sky in groups.</p>
+    </div>
+
+    <p class="reveal">
+      Lucifer always finds inspiration in the captivating beauty of his hometown, Aurora Vista. The town's charm is amplified by the lush greenery, tranquil streets, and the constant presence of rain — ranging from a gentle drizzle to heavy showers — adding a mystical allure to the surroundings. The majestic mountains command attention, invoking a sense of joy and serenity, with their cascading waterfalls, verdant mini-forests, and meandering pathways enhancing the natural splendour of the area.
+    </p>
+
+    <div class="story-end reveal">
+      <span class="phase-tag">Chapter Two · Phase One · Complete</span>
+      <p class="closing">In the quiet of Aurora Vista's rain, two souls remain connected — miles apart, yet never truly distant.</p>
+      <a href="chapter2.html" class="return-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+        Return to Chapter Two
+      </a>
+    </div>
+
+  </main>
+
+  <script>
+    /* Reading progress */
+    const bar = document.getElementById('progress-bar');
+    window.addEventListener('scroll', () => {
+      const scrolled = window.scrollY;
+      const total = document.documentElement.scrollHeight - window.innerHeight;
+      bar.style.width = (total > 0 ? (scrolled / total) * 100 : 0) + '%';
+    }, { passive: true });
+
+    /* Scroll reveal */
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); }
+      });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+  </script>
+
+</body>
+</html>

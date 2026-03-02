@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Twilight Talks — Heart and Art</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=DM+Sans:wght@300;400;500&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #faf7f2;
+    --paper: #f5f0e8;
+    --warm-white: #fffdf8;
+    --ink: #1c1a17;
+    --ink-soft: #3d3a35;
+    --ink-muted: #7a7470;
+    --amber: #c8853a;
+    --amber-light: #f0d4a8;
+    --amber-pale: #fbefd8;
+    --rose: #c0665a;
+    --rose-light: #f2d0cb;
+    --rose-pale: #fdf0ee;
+    --sage: #6b8c7a;
+    --sage-pale: #eef4f0;
+    --border: #e8e2d8;
+    --shadow: rgba(60,40,20,0.08);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 52px;
+    background: rgba(250,247,242,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-brand {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    font-style: italic;
+    color: var(--amber);
+    letter-spacing: 0.02em;
+  }
+  .nav-home {
+    font-size: 0.7rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    text-decoration: none;
+    padding: 7px 20px;
+    border: 1px solid var(--border);
+    border-radius: 40px;
+    transition: all 0.3s ease;
+    font-weight: 500;
+  }
+  .nav-home:hover {
+    border-color: var(--amber);
+    color: var(--amber);
+    background: var(--amber-pale);
+  }
+
+  /* HERO */
+  .hero {
+    padding: 140px 52px 80px;
+    max-width: 860px;
+    margin: 0 auto;
+    position: relative;
+  }
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.68rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--amber);
+    font-weight: 500;
+    margin-bottom: 28px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.2s forwards;
+  }
+  .hero-eyebrow::before {
+    content: '';
+    display: block;
+    width: 28px; height: 1px;
+    background: var(--amber);
+    opacity: 0.6;
+  }
+  h1.hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.8rem, 6vw, 5rem);
+    font-weight: 400;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    opacity: 0;
+    animation: fadeUp 0.9s ease 0.4s forwards;
+    margin-bottom: 16px;
+  }
+  h1.hero-title em {
+    font-style: italic;
+    color: var(--rose);
+  }
+  .hero-subtitle {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1.15rem;
+    color: var(--ink-muted);
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.6s forwards;
+    margin-bottom: 40px;
+    font-weight: 400;
+  }
+  .hero-divider {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    opacity: 0;
+    animation: fadeUp 0.7s ease 0.8s forwards;
+  }
+  .hero-divider span {
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    opacity: 0.6;
+  }
+  .hero-divider::before, .hero-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+  .hero-divider::after { max-width: 60px; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* INTRO PROSE */
+  .prose-section {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 60px 40px;
+  }
+  .prose-text {
+    font-size: 1.05rem;
+    line-height: 1.95;
+    color: var(--ink-soft);
+    font-weight: 300;
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .prose-text.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .prose-text + .prose-text {
+    margin-top: 24px;
+  }
+
+  /* SECTION TITLES */
+  .section-label {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 40px;
+    opacity: 0;
+    transform: translateY(14px);
+    transition: all 0.6s ease;
+  }
+  .section-label.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .section-label-text {
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    white-space: nowrap;
+    font-weight: 500;
+  }
+  .section-label-line {
+    height: 1px;
+    background: var(--border);
+    flex: 1;
+  }
+
+  /* CHAT SECTION */
+  .chat-section {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 20px 40px 60px;
+  }
+  .chat-intro {
+    background: var(--paper);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px 32px;
+    margin-bottom: 40px;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1.05rem;
+    line-height: 1.75;
+    color: var(--ink-soft);
+    opacity: 0;
+    transform: translateY(14px);
+    transition: all 0.7s ease;
+  }
+  .chat-intro.visible { opacity: 1; transform: translateY(0); }
+
+  .chat-bubbles {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .bubble {
+    max-width: 68%;
+    padding: 14px 20px;
+    border-radius: 16px;
+    font-size: 0.95rem;
+    line-height: 1.7;
+    opacity: 0;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    position: relative;
+  }
+  .bubble.visible { opacity: 1; transform: translateX(0) !important; }
+
+  .bubble.lucifer {
+    background: var(--sage-pale);
+    border: 1px solid rgba(107,140,122,0.2);
+    align-self: flex-start;
+    border-bottom-left-radius: 4px;
+    transform: translateX(-14px);
+    color: var(--ink-soft);
+  }
+  .bubble.victoria {
+    background: var(--rose-pale);
+    border: 1px solid rgba(192,102,90,0.2);
+    align-self: flex-end;
+    border-bottom-right-radius: 4px;
+    transform: translateX(14px);
+    color: var(--ink-soft);
+  }
+  .bubble-sender {
+    font-size: 0.62rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 5px;
+  }
+  .lucifer .bubble-sender { color: var(--sage); }
+  .victoria .bubble-sender { color: var(--rose); }
+
+  /* DEBATE SECTION */
+  .debate-section {
+    background: var(--warm-white);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 70px 0;
+    margin: 40px 0;
+  }
+  .debate-inner {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 40px;
+  }
+  .debate-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    font-weight: 400;
+    color: var(--ink);
+    margin-bottom: 8px;
+    opacity: 0;
+    transform: translateY(14px);
+    transition: all 0.7s ease;
+  }
+  .debate-title.visible { opacity: 1; transform: translateY(0); }
+  .debate-title em { font-style: italic; color: var(--amber); }
+  .debate-sub {
+    font-size: 0.9rem;
+    color: var(--ink-muted);
+    margin-bottom: 44px;
+    font-weight: 300;
+    opacity: 0;
+    transition: opacity 0.6s ease 0.1s;
+  }
+  .debate-sub.visible { opacity: 1; }
+
+  .debate-exchange {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .debate-line {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+  .debate-line.visible { opacity: 1; }
+  .debate-cell {
+    background: var(--warm-white);
+    padding: 18px 24px;
+    font-size: 0.92rem;
+    line-height: 1.65;
+    color: var(--ink-soft);
+    font-weight: 300;
+  }
+  .debate-cell.luc {
+    border-right: 1px solid var(--border);
+  }
+  .debate-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    margin-bottom: 1px;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+  .debate-header.visible { opacity: 1; }
+  .debate-header-cell {
+    padding: 12px 24px;
+    font-size: 0.62rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  .debate-header-cell.luc { background: var(--sage-pale); color: var(--sage); }
+  .debate-header-cell.vic { background: var(--rose-pale); color: var(--rose); }
+
+  /* TRUCE */
+  .truce-section {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 60px 40px;
+    text-align: center;
+  }
+  .truce-badge {
+    display: inline-block;
+    background: var(--amber-pale);
+    border: 1px solid var(--amber-light);
+    color: var(--amber);
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    font-weight: 600;
+    padding: 7px 18px;
+    border-radius: 40px;
+    margin-bottom: 28px;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+  }
+  .truce-badge.visible { opacity: 1; }
+  .truce-exchange {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 32px 0;
+  }
+  .truce-line {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--ink-soft);
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.5s ease;
+  }
+  .truce-line.visible { opacity: 1; transform: translateY(0); }
+  .truce-line strong {
+    font-style: normal;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-right: 10px;
+    vertical-align: middle;
+  }
+  .truce-line.luc strong { color: var(--sage); }
+  .truce-line.vic strong { color: var(--rose); }
+
+  /* CLOSING */
+  .closing-section {
+    max-width: 660px;
+    margin: 0 auto;
+    padding: 40px 40px 60px;
+  }
+  .closing-pull {
+    background: linear-gradient(135deg, var(--amber-pale), var(--rose-pale));
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 40px 44px;
+    margin-bottom: 40px;
+    opacity: 0;
+    transform: translateY(16px);
+    transition: all 0.8s ease;
+  }
+  .closing-pull.visible { opacity: 1; transform: translateY(0); }
+  .closing-pull blockquote {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1.2rem;
+    line-height: 1.75;
+    color: var(--ink);
+    font-weight: 400;
+  }
+  .closing-pull cite {
+    display: block;
+    margin-top: 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-style: normal;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+  }
+
+  /* STORY END */
+  .story-end {
+    max-width: 700px;
+    margin: 0 auto 80px;
+    padding: 60px 52px;
+    text-align: center;
+    border-top: 1px solid var(--border);
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.9s ease;
+  }
+  .story-end.visible { opacity: 1; transform: translateY(0); }
+  .end-label {
+    display: inline-block;
+    font-size: 0.62rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    background: var(--paper);
+    border: 1px solid var(--border);
+    padding: 6px 18px;
+    border-radius: 40px;
+    margin-bottom: 28px;
+    font-weight: 500;
+  }
+  .end-quote {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1.15rem;
+    line-height: 1.8;
+    color: var(--ink-soft);
+    font-weight: 400;
+    margin-bottom: 40px;
+    max-width: 540px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .btn-return {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    text-decoration: none;
+    border: 1px solid var(--border);
+    padding: 12px 28px;
+    border-radius: 40px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    background: var(--warm-white);
+  }
+  .btn-return svg {
+    width: 15px; height: 15px;
+    transition: transform 0.3s ease;
+  }
+  .btn-return:hover {
+    border-color: var(--amber);
+    color: var(--amber);
+    background: var(--amber-pale);
+    box-shadow: 0 4px 20px var(--shadow);
+  }
+  .btn-return:hover svg { transform: translateX(-3px); }
+
+  /* Firefly dots */
+  .firefly {
+    position: fixed;
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: var(--amber);
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0;
+    animation: fireflyFloat linear infinite;
+  }
+  @keyframes fireflyFloat {
+    0% { opacity: 0; transform: translate(0,0); }
+    20% { opacity: 0.5; }
+    80% { opacity: 0.3; }
+    100% { opacity: 0; transform: translate(var(--tx), var(--ty)); }
+  }
+
+  @media (max-width: 700px) {
+    nav { padding: 16px 24px; }
+    .hero { padding: 120px 24px 60px; }
+    .prose-section, .chat-section, .debate-inner, .truce-section, .closing-section, .story-end { padding-left: 24px; padding-right: 24px; }
+    .bubble { max-width: 85%; }
+    .debate-cell { padding: 14px 16px; font-size: 0.88rem; }
+    .debate-line { grid-template-columns: 1fr; }
+    .debate-header { grid-template-columns: 1fr; }
+    .closing-pull { padding: 28px 28px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Fireflies -->
+<div id="fireflies"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-brand">Whispers of Caring</div>
+  <a href="index.html" class="nav-home">Home</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">Chapter II · Part IV</div>
+  <h1 class="hero-title">Twilight Talks<br><em>Heart and Art</em></h1>
+  <p class="hero-subtitle">An evening of fireflies, friendly rivalry, and the kind of laughter only true friendship knows.</p>
+  <div class="hero-divider"><span>Lucifer · Victoria</span></div>
+</div>
+
+<!-- INTRO -->
+<div class="prose-section">
+  <p class="prose-text observe">
+    In the glow of the evening, as the moon cast its gentle light over the world, Lucifer and Victoria found themselves immersed in another one of their treasured conversations. Their messages flitted back and forth like fireflies in the night, illuminating the deep bond they shared — a celebration of each other's talents and the delightful banter that only close friends could enjoy.
+  </p>
+  <p class="prose-text observe" style="transition-delay:0.1s">
+    Victoria had just finished sharing another piece of her breath-taking artwork, inspired by the serene landscapes of Aurora Vista. Each brushstroke seemed to carry a whisper of the village's tranquil beauty — a testament to her boundless creativity. Her ability to transform vivid imagination into stunning visuals never ceased to amaze Lucifer.
+  </p>
+</div>
+
+<!-- FIRST CHAT -->
+<div class="chat-section">
+  <div class="section-label observe">
+    <span class="section-label-text">The Evening Exchange</span>
+    <div class="section-label-line"></div>
+  </div>
+  <div class="chat-intro observe">
+    Their conversation often veered into playful territory — a dance of words that revealed the depth of their friendship, filled with affectionate ribbing that spoke volumes about their comfort with one another.
+  </div>
+  <div class="chat-bubbles">
+    <div class="bubble lucifer observe">
+      <div class="bubble-sender">Lucifer</div>
+      Seriously, Vic, how do you manage to make every painting look like it belongs in a gallery? You've got magic in your fingers or something.
+    </div>
+    <div class="bubble victoria observe">
+      <div class="bubble-sender">Victoria</div>
+      Oh please, Luc. Coming from the guy who can write a poem that makes grown men cry, I'll take that as a compliment. You're the one with the real magic.
+    </div>
+    <div class="bubble lucifer observe">
+      <div class="bubble-sender">Lucifer</div>
+      I just string words together and hope they make sense. But you — you create worlds with your art. I'm just a humble wordsmith.
+    </div>
+    <div class="bubble victoria observe">
+      <div class="bubble-sender">Victoria</div>
+      Humble, my foot! If I had a dollar for every time you made me laugh or cry with your writing, I'd be rich by now. Don't sell yourself short, Mr. Poet.
+    </div>
+    <div class="bubble lucifer observe">
+      <div class="bubble-sender">Lucifer</div>
+      Blushing? You? Never. But fine — you're the queen of art. Happy now?
+    </div>
+    <div class="bubble victoria observe">
+      <div class="bubble-sender">Victoria</div>
+      Very 😊 And you're the king of words. So there.
+    </div>
+  </div>
+</div>
+
+<!-- DEBATE SECTION -->
+<div class="debate-section">
+  <div class="debate-inner">
+    <div class="section-label observe">
+      <span class="section-label-text">The Great Debate</span>
+      <div class="section-label-line"></div>
+    </div>
+    <h2 class="debate-title observe">Code vs. <em>Canvas</em></h2>
+    <p class="debate-sub observe">As the evening grew darker, the playful rivalry turned into their most spirited argument yet — whose talent truly rules the world?</p>
+
+    <div class="debate-header observe">
+      <div class="debate-header-cell luc">⌨ Lucifer · System Engineer</div>
+      <div class="debate-header-cell vic">🎨 Victoria · Artist</div>
+    </div>
+    <div class="debate-exchange">
+      <div class="debate-line observe"><div class="debate-cell luc">Just the usual — saved the entire company from a potential server meltdown. No big deal.</div><div class="debate-cell vic">Can your coding save you from artist's block? I spent the entire day finding the right shade of blue for my sky.</div></div>
+      <div class="debate-line observe"><div class="debate-cell luc">Artist's block? Isn't that just an excuse to take a long coffee break? My work is nonstop high-stakes problem-solving.</div><div class="debate-cell vic">At least I paint beautiful landscapes and bring joy to people's lives. You just stare at a screen and type.</div></div>
+      <div class="debate-line observe"><div class="debate-cell luc">Those lines I type keep your internet running so you can post your masterpieces online. Who's bringing joy now?</div><div class="debate-cell vic">Anyone can type a few lines and hit enter. It takes real talent to create art that moves people.</div></div>
+      <div class="debate-line observe"><div class="debate-cell luc">Try debugging a stubborn error at 3 a.m. My code brings order to chaos — it's like art for the logically inclined.</div><div class="debate-cell vic">Logical art? My art inspires creativity and wonder. Your code is just ones and zeros. No offense.</div></div>
+      <div class="debate-line observe"><div class="debate-cell luc">Ones and zeros? That's like saying your paintings are just blobs of colour. At least my work has structure — it's like solving a beautiful, intricate puzzle.</div><div class="debate-cell vic">Blobs of colour?! My 'blobs' evoke emotions and tell stories. They're like visual poetry. Your code just sits there, lifeless.</div></div>
+      <div class="debate-line observe"><div class="debate-cell luc">Lifeless? My code runs complex systems that keep the world ticking. Without it, you wouldn't have electricity to see your visual poetry.</div><div class="debate-cell vic">Fine, Mr. Genius Engineer. But my art touches people's hearts in ways your cold, mechanical coding never could.</div></div>
+      <div class="debate-line observe"><div class="debate-cell luc">Try meeting a tight deadline with a crashed server. And for the record, your paintbrushes aren't exactly a heavy lift.</div><div class="debate-cell vic">You have no idea the precision it takes to blend colours perfectly. But okay — your job sounds a little more stressful than I thought.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- TRUCE -->
+<div class="truce-section">
+  <div class="section-label observe" style="justify-content:center; text-align:center; max-width:300px; margin:0 auto 36px;">
+    <div class="section-label-line"></div>
+    <span class="section-label-text">The Truce</span>
+    <div class="section-label-line"></div>
+  </div>
+  <div class="truce-badge observe">A Moment of Grace</div>
+  <div class="truce-exchange">
+    <div class="truce-line luc observe"><strong>Lucifer</strong> "Your paintings do more than decorate walls. They make people feel something. Maybe we both have our own kind of magic."</div>
+    <div class="truce-line vic observe"><strong>Victoria</strong> "Your code keeps things running, and my art gives people a reason to keep running. We both contribute in our own way. Truce?"</div>
+    <div class="truce-line luc observe"><strong>Lucifer</strong> "Truce. Until you decide to pick another fight about who's more talented."</div>
+    <div class="truce-line vic observe"><strong>Victoria</strong> "Oh, that's definitely happening. But for now, let's agree — we're both pretty amazing."</div>
+    <div class="truce-line luc observe"><strong>Lucifer</strong> "Deal. Goodnight, Ms. Canvas Conjurer. Until our next duel."</div>
+    <div class="truce-line vic observe"><strong>Victoria</strong> "Sweet dreams, code warrior. 🌙"</div>
+  </div>
+</div>
+
+<!-- CLOSING -->
+<div class="closing-section">
+  <div class="closing-pull observe">
+    <blockquote>
+      For in the playful jabs and heartfelt compliments, the teasing remarks and genuine praise, Lucifer and Victoria found a friendship as beautiful and enduring as the art they created.
+    </blockquote>
+    <cite>— Twilight Talks · Heart and Art</cite>
+  </div>
+  <p class="prose-text observe">
+    Their conversation drifted into the night as topics shifted from talents to the everyday absurdities that made up their lives. They laughed about their quirks, shared their dreams, and revelled in the simple joy of each other's company — a reminder that no matter how different their paths, they would always have each other to lean on.
+  </p>
+</div>
+
+<!-- STORY END -->
+<div class="story-end observe">
+  <span class="end-label">Twilight Talks · Heart and Art · Complete</span>
+  <p class="end-quote">As the fireflies faded and the moon climbed higher, a coder and a painter signed off with smiles — two different worlds, one beautiful friendship.</p>
+  <a href="index.html" class="btn-return">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+    Return to Home
+  </a>
+</div>
+
+<script>
+  // Subtle fireflies
+  const container = document.getElementById('fireflies');
+  for (let i = 0; i < 12; i++) {
+    const f = document.createElement('div');
+    f.classList.add('firefly');
+    const x = Math.random() * 100, y = Math.random() * 100;
+    const tx = (Math.random() - 0.5) * 120, ty = (Math.random() - 0.5) * 120;
+    f.style.cssText = `left:${x}vw; top:${y}vh; --tx:${tx}px; --ty:${ty}px; animation-duration:${6+Math.random()*10}s; animation-delay:${-Math.random()*10}s;`;
+    container.appendChild(f);
+  }
+
+  // Intersection Observer
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        // stagger children of debate lines
+        if (e.target.classList.contains('debate-line')) {
+          e.target.style.transitionDelay = '0s';
+        }
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.observe').forEach((el, i) => {
+    if (el.classList.contains('bubble')) {
+      el.style.transitionDelay = (i % 8) * 0.08 + 's';
+    }
+    obs.observe(el);
+  });
+</script>
+</body>
+</html>

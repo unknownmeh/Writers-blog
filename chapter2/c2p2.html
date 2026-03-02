@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>A Day in Paradise — Whispers of Caring</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&family=Lora:ital,wght@0,400;0,500;1,400;1,500&family=DM+Sans:wght@300;400;500&family=Cinzel:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════
+   TOKENS
+═══════════════════════════════════════════════════ */
+:root {
+  --cream:      #faf7f2;
+  --cream2:     #f3ede3;
+  --warm-white: #fffef9;
+  --parchment:  #ede5d4;
+  --amber:      #c8813a;
+  --amber-soft: #f4e5d0;
+  --amber-mid:  #d4935a;
+  --teal:       #3a7068;
+  --teal-soft:  #d4eae7;
+  --teal-mid:   #5a9890;
+  --rose:       #a84858;
+  --rose-soft:  #f5e0e4;
+  --snow:       #dde8f0;
+  --snow-soft:  #eef4f8;
+  --slate-ink:  #1e2830;
+  --ink-mid:    #3a4855;
+  --ink-dim:    #7a8898;
+  --ink-faint:  #b0bbc8;
+  --border:     rgba(30,40,48,0.09);
+  --shadow-sm:  0 2px 12px rgba(30,40,48,0.06);
+  --shadow-md:  0 6px 30px rgba(30,40,48,0.09);
+  --r-sm:       8px;
+  --r-md:       14px;
+}
+
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--cream);
+  color:var(--slate-ink);
+  overflow-x:hidden;
+  min-height:100vh;
+}
+
+/* paper grain */
+body::after{
+  content:'';
+  position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.028'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:9999;
+}
+
+/* ═══ PROGRESS BAR ═══ */
+#prog{
+  position:fixed;top:0;left:0;height:2px;width:0%;
+  background:linear-gradient(to right,var(--amber),var(--teal));
+  z-index:300;transition:width 0.12s linear;
+}
+
+/* ═══ NAV ═══ */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  height:60px;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 clamp(20px,5vw,64px);
+  background:rgba(250,247,242,0.92);
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--border);
+}
+.n-brand{
+  font-family:'Playfair Display',serif;
+  font-size:1.05rem;font-style:italic;
+  color:var(--slate-ink);text-decoration:none;
+  letter-spacing:0.01em;
+}
+.n-links{display:flex;gap:28px;align-items:center;}
+.n-links a{
+  font-size:0.65rem;font-weight:500;
+  letter-spacing:0.2em;text-transform:uppercase;
+  color:var(--ink-dim);text-decoration:none;
+  transition:color .25s;
+}
+.n-links a:hover{color:var(--amber);}
+.n-chap{
+  font-family:'Cinzel',serif;font-size:0.6rem;
+  letter-spacing:0.2em;color:var(--ink-faint);
+}
+
+/* ═══ HERO ═══ */
+.hero{
+  min-height:100vh;
+  display:grid;place-items:center;
+  position:relative;overflow:hidden;
+  padding:100px 24px 80px;
+}
+
+/* dawn gradient bg */
+.hero-bg{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(200,129,58,0.13) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 40% at 80% 100%, rgba(58,112,104,0.1) 0%, transparent 70%),
+    linear-gradient(180deg, #fef9f2 0%, var(--cream2) 60%, var(--snow-soft) 100%);
+}
+
+/* mountain silhouette */
+.mountain-svg{
+  position:absolute;bottom:0;left:0;right: 0;
+  height:220px;pointer-events:none;z-index:1;
+  opacity:0.13;
+  width: 100%;
+}
+
+/* snowflakes */
+.snowflake{
+  position:absolute;
+  color:rgba(180,200,220,0.7);
+  font-size:10px;pointer-events:none;z-index:2;
+  animation:snowDrift linear infinite;
+}
+@keyframes snowDrift{
+  0%  {transform:translateY(-20px) rotate(0deg);opacity:0;}
+  10% {opacity:0.8;}
+  90% {opacity:0.4;}
+  100%{transform:translateY(100vh) rotate(360deg);opacity:0;}
+}
+
+.hero-inner{
+  position:relative;z-index:3;
+  max-width:680px;text-align:center;
+}
+
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:14px;
+  font-family:'Cinzel',serif;font-size:0.55rem;font-weight:400;
+  letter-spacing:0.55em;text-transform:uppercase;
+  color:var(--amber-mid);margin-bottom:26px;
+  animation:riseIn .9s ease both;
+}
+.hero-eyebrow::before,.hero-eyebrow::after{
+  content:'';width:30px;height:1px;background:var(--amber-mid);opacity:0.45;
+}
+
+.hero-h1{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(2.8rem,7vw,5.8rem);
+  font-weight:700;color:var(--slate-ink);
+  line-height:1.05;letter-spacing:-0.02em;
+  animation:riseIn .9s ease .12s both;
+}
+.hero-h1 em{
+  font-style:italic;font-weight:400;
+  color:var(--amber);
+  display:block;
+}
+
+.hero-sub{
+  margin-top:8px;
+  font-family:'Playfair Display',serif;
+  font-size:clamp(1rem,2.2vw,1.3rem);
+  font-weight:400;font-style:italic;
+  color:var(--ink-mid);letter-spacing:0.01em;
+  animation:riseIn .9s ease .22s both;
+}
+
+.hero-rule{
+  display:flex;align-items:center;justify-content:center;gap:16px;
+  margin:30px auto;
+  animation:riseIn .9s ease .32s both;
+}
+.hero-rule::before,.hero-rule::after{content:'';width:55px;height:1px;background:var(--border);}
+.hero-rule span{font-size:0.9rem;color:var(--amber-mid);opacity:0.6;}
+
+.hero-desc{
+  font-family:'Lora',serif;font-size:1.05rem;
+  line-height:1.9;color:var(--ink-mid);font-style:italic;
+  max-width:500px;margin:0 auto 28px;
+  animation:riseIn .9s ease .42s both;
+}
+
+/* pills */
+.pills{
+  display:flex;flex-wrap:wrap;gap:9px;justify-content:center;
+  animation:riseIn .9s ease .52s both;
+}
+.pill{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:6px 15px;
+  background:rgba(255,255,255,0.75);
+  backdrop-filter:blur(8px);
+  border:1px solid rgba(30,40,48,0.1);
+  border-radius:40px;
+  font-size:0.65rem;font-weight:500;
+  letter-spacing:0.08em;color:var(--ink-mid);
+  box-shadow:var(--shadow-sm);
+}
+
+/* scroll cue */
+.scroll-cue{
+  position:absolute;bottom:36px;left:50%;transform:translateX(-50%);
+  z-index:4;display:flex;flex-direction:column;align-items:center;gap:8px;
+  animation:riseIn .9s ease .8s both;
+}
+.scroll-cue span{
+  font-size:0.55rem;letter-spacing:0.4em;text-transform:uppercase;color:var(--ink-faint);
+}
+.caret{
+  width:16px;height:16px;
+  border-right:1.5px solid var(--ink-faint);
+  border-bottom:1.5px solid var(--ink-faint);
+  transform:rotate(45deg);
+  animation:caret 2s ease-in-out infinite;
+}
+@keyframes caret{0%,100%{transform:rotate(45deg) translateY(0);}50%{transform:rotate(45deg) translateY(5px);}}
+
+/* ═══ CONTENT WRAPPER ═══ */
+.content{
+  max-width:760px;margin:0 auto;
+  padding:80px clamp(20px,5vw,48px) 120px;
+}
+
+/* ─── CHAPTER HEADER ─── */
+.ch-header{
+  text-align:center;margin-bottom:72px;
+}
+.ch-header .label{
+  font-family:'Cinzel',serif;font-size:0.55rem;font-weight:400;
+  letter-spacing:0.55em;text-transform:uppercase;
+  color:var(--ink-faint);display:block;margin-bottom:12px;
+}
+.ch-header h2{
+  font-family:'Playfair Display',serif;
+  font-size:1.9rem;font-weight:400;font-style:italic;color:var(--ink-mid);
+}
+.ch-rule{
+  display:flex;align-items:center;justify-content:center;gap:16px;
+  margin-top:22px;
+}
+.ch-rule::before,.ch-rule::after{content:'';width:70px;height:1px;background:var(--border);}
+.ch-rule span{font-size:0.85rem;color:var(--amber-mid);opacity:0.45;}
+
+/* ─── SCENE HEADER ─── */
+.scene-h{
+  display:flex;align-items:center;gap:18px;
+  margin:64px 0 28px;
+}
+.scene-h .snum{
+  font-family:'Cinzel',serif;font-size:0.54rem;font-weight:500;
+  letter-spacing:0.42em;text-transform:uppercase;
+  color:var(--ink-dim);white-space:nowrap;
+  padding:5px 14px;
+  border:1px solid var(--border);
+  border-radius:30px;
+}
+.scene-h::after{content:'';flex:1;height:1px;background:linear-gradient(to right,var(--border),transparent);}
+
+/* ─── STORY PROSE ─── */
+.prose p{
+  font-family:'Lora',serif;
+  font-size:clamp(1rem,1.8vw,1.1rem);
+  line-height:2;color:var(--ink-mid);
+  margin-bottom:1.85em;text-align:justify;hyphens:auto;
+  font-weight:400;
+}
+.prose p.drop-cap::first-letter{
+  font-family:'Playfair Display',serif;
+  font-size:5rem;font-weight:700;font-style:italic;
+  color:var(--amber);float:left;
+  line-height:0.78;margin:0.06em 0.14em 0 0;
+}
+
+/* ─── MORNING CARD (Lucifer's morning scene) ─── */
+.morning-card{
+  display:grid;grid-template-columns:1fr 1fr;gap:14px;
+  margin:2.8em 0;
+}
+.mc-item{
+  background:var(--warm-white);
+  border:1px solid var(--border);
+  border-top:2px solid var(--amber-soft);
+  border-radius:var(--r-md);
+  padding:20px 22px;
+  box-shadow:var(--shadow-sm);
+  transition:transform .25s,box-shadow .25s;
+}
+.mc-item:hover{transform:translateY(-3px);box-shadow:var(--shadow-md);}
+.mc-item .mi-icon{font-size:1.5rem;margin-bottom:10px;display:block;}
+.mc-item .mi-name{
+  font-family:'Cinzel',serif;font-size:0.55rem;font-weight:500;
+  letter-spacing:0.25em;text-transform:uppercase;
+  color:var(--amber-mid);display:block;margin-bottom:6px;
+}
+.mc-item .mi-text{
+  font-family:'Lora',serif;font-size:0.92rem;font-style:italic;
+  color:var(--ink-dim);line-height:1.6;
+}
+
+/* ─── VICTORIA'S PAINTING ─── */
+.painting-reveal{
+  background:linear-gradient(135deg,var(--teal-soft),var(--snow-soft));
+  border:1px solid rgba(58,112,104,0.15);
+  border-left:3px solid var(--teal-mid);
+  border-radius:0 var(--r-md) var(--r-md) 0;
+  padding:26px 32px;margin:2.5em 0;
+  position:relative;overflow:hidden;
+  cursor:pointer;
+  transition:box-shadow .25s;
+}
+.painting-reveal:hover{box-shadow:var(--shadow-md);}
+.painting-reveal::after{
+  content:'🎨';
+  position:absolute;right:18px;bottom:10px;
+  font-size:3rem;opacity:0.1;
+  transition:opacity .3s;
+}
+.painting-reveal:hover::after{opacity:0.18;}
+.pr-label{
+  font-family:'Cinzel',serif;font-size:0.54rem;font-weight:500;
+  letter-spacing:0.38em;text-transform:uppercase;
+  color:var(--teal-mid);display:block;margin-bottom:12px;
+}
+.painting-reveal p{
+  font-family:'Lora',serif;font-size:1.02rem;font-style:italic;
+  line-height:1.85;color:var(--ink-mid);margin-bottom:0;
+}
+
+/* ─── MESSAGE CARD ─── */
+.msg-card{
+  background:var(--warm-white);
+  border:1px solid var(--border);
+  border-radius:var(--r-md);
+  overflow:hidden;
+  margin:2.5em 0;
+  box-shadow:var(--shadow-md);
+}
+.msg-topbar{
+  display:flex;align-items:center;gap:8px;
+  padding:12px 20px;
+  background:var(--cream2);
+  border-bottom:1px solid var(--border);
+}
+.msg-topbar .tdot{width:9px;height:9px;border-radius:50%;}
+.dot-a{background:#e87060;}
+.dot-b{background:#e8c060;}
+.dot-c{background:#60c890;}
+.msg-topbar .ttitle{
+  font-family:'Cinzel',serif;font-size:0.56rem;
+  letter-spacing:0.2em;text-transform:uppercase;
+  color:var(--ink-dim);margin-left:8px;
+}
+.online{
+  margin-left:auto;display:flex;align-items:center;gap:5px;
+  font-size:0.58rem;font-weight:500;letter-spacing:0.08em;color:#22c55e;
+}
+.online::before{
+  content:'';width:6px;height:6px;border-radius:50%;
+  background:#22c55e;box-shadow:0 0 6px #22c55e;
+  animation:pulse 2s infinite;
+}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.25;}}
+
+.msg-body{padding:24px;display:flex;flex-direction:column;gap:14px;}
+.msg-wrap{display:flex;flex-direction:column;max-width:80%;}
+.msg-wrap.l{align-self:flex-end;align-items:flex-end;}
+.msg-wrap.v{align-self:flex-start;align-items:flex-start;}
+.msg-sender{
+  font-family:'Cinzel',serif;font-size:0.52rem;font-weight:500;
+  letter-spacing:0.16em;text-transform:uppercase;
+  margin-bottom:5px;
+}
+.msg-wrap.l .msg-sender{color:var(--amber);text-align:right;}
+.msg-wrap.v .msg-sender{color:var(--teal);}
+.msg-bubble{
+  padding:11px 16px;
+  font-family:'Lora',serif;font-size:0.98rem;font-style:italic;
+  line-height:1.7;color:var(--ink-mid);
+  max-width:100%;
+}
+.msg-wrap.l .msg-bubble{
+  background:var(--amber-soft);
+  border:1px solid rgba(200,129,58,0.18);
+  border-radius:14px 14px 4px 14px;
+}
+.msg-wrap.v .msg-bubble{
+  background:var(--teal-soft);
+  border:1px solid rgba(58,112,104,0.18);
+  border-radius:14px 14px 14px 4px;
+}
+
+/* ─── WORKDAY ─── */
+.workday-grid{
+  display:grid;grid-template-columns:1fr 1fr 1fr;
+  gap:12px;margin:2.5em 0;
+}
+.wd-item{
+  background:var(--warm-white);
+  border:1px solid var(--border);
+  border-radius:var(--r-sm);
+  padding:18px 16px;
+  text-align:center;
+  box-shadow:var(--shadow-sm);
+  transition:transform .25s;
+}
+.wd-item:hover{transform:translateY(-2px);}
+.wd-item .wd-icon{font-size:1.6rem;margin-bottom:10px;display:block;}
+.wd-item .wd-label{
+  font-family:'Cinzel',serif;font-size:0.52rem;font-weight:500;
+  letter-spacing:0.22em;text-transform:uppercase;
+  color:var(--ink-dim);display:block;margin-bottom:6px;
+}
+.wd-item .wd-text{
+  font-family:'Lora',serif;font-size:0.88rem;font-style:italic;
+  color:var(--ink-faint);line-height:1.5;
+}
+
+/* ─── TIMELINE (workday progression) ─── */
+.timeline{margin:2.8em 0;}
+.tl-item{
+  display:grid;grid-template-columns:68px 1fr;
+  gap:0;margin-bottom:0;position:relative;
+}
+.tl-item:not(:last-child)::after{
+  content:'';
+  position:absolute;left:34px;top:40px;bottom:0;
+  width:1px;background:var(--border);
+  transform:translateX(-50%);
+}
+.tl-time{
+  padding-top:2px;
+  font-family:'Cinzel',serif;font-size:0.52rem;
+  letter-spacing:0.15em;color:var(--ink-faint);
+  text-align:right;padding-right:18px;
+  line-height:1.4;
+}
+.tl-dot-wrap{
+  display:flex;flex-direction:column;align-items:flex-start;
+  padding-left:0;position:relative;
+}
+.tl-content{
+  background:var(--warm-white);
+  border:1px solid var(--border);
+  border-radius:var(--r-sm);
+  padding:16px 20px;margin-bottom:12px;
+  box-shadow:var(--shadow-sm);
+  width:100%;
+  transition:border-color .25s;
+}
+.tl-content:hover{border-color:var(--amber-mid);}
+.tl-icon{display:block;font-size:1rem;margin-bottom:6px;}
+.tl-title{
+  font-family:'Cinzel',serif;font-size:0.56rem;font-weight:500;
+  letter-spacing:0.22em;text-transform:uppercase;
+  color:var(--ink-mid);margin-bottom:7px;display:block;
+}
+.tl-desc{
+  font-family:'Lora',serif;font-size:0.95rem;font-style:italic;
+  color:var(--ink-dim);line-height:1.65;
+}
+.tl-right{padding:16px 16px 20px;}
+
+/* ─── PULL QUOTE ─── */
+.pull-quote{
+  border-top:2px solid var(--amber);
+  border-bottom:2px solid var(--amber);
+  padding:24px 28px;margin:3em 0;
+  text-align:center;
+}
+.pull-quote p{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(1.1rem,2.5vw,1.35rem);
+  font-style:italic;font-weight:400;
+  color:var(--slate-ink);line-height:1.6;
+  text-align:center;margin:0;
+}
+
+/* ─── VIEW PHOTO BUTTON ─── */
+.photo-strip{
+  background:linear-gradient(135deg,var(--snow-soft),var(--cream2));
+  border:1px solid var(--border);
+  border-radius:var(--r-md);
+  padding:24px 28px;margin:2.5em 0;
+  display:flex;align-items:center;gap:20px;
+  position:relative;overflow:hidden;
+}
+.photo-strip::before{
+  content:'📷';font-size:3rem;opacity:0.08;
+  position:absolute;right:20px;bottom:8px;
+}
+.photo-strip .ps-text{flex:1;}
+.photo-strip .ps-text .ps-label{
+  font-family:'Cinzel',serif;font-size:0.54rem;letter-spacing:0.32em;
+  text-transform:uppercase;color:var(--teal-mid);display:block;margin-bottom:8px;
+}
+.photo-strip .ps-text p{
+  font-family:'Lora',serif;font-size:0.98rem;font-style:italic;
+  color:var(--ink-mid);line-height:1.65;margin:0;
+}
+.btn-view{
+  flex-shrink:0;
+  display:inline-flex;align-items:center;gap:8px;
+  padding:10px 20px;
+  background:var(--teal-mid);color:white;
+  border:none;border-radius:40px;cursor:pointer;
+  font-size:0.65rem;font-weight:500;letter-spacing:0.18em;
+  text-transform:uppercase;
+  transition:all .25s;
+  position:relative;z-index:1;
+}
+.btn-view:hover{background:var(--teal);transform:translateY(-1px);box-shadow:0 6px 18px rgba(58,112,104,0.3);}
+
+/* ─── GOODNIGHT SEQUENCE ─── */
+.night-card{
+  background:linear-gradient(135deg,#1a2535,#0f1a28);
+  border-radius:var(--r-md);
+  padding:36px 40px;margin:2.8em 0;
+  position:relative;overflow:hidden;
+}
+/* stars */
+.night-card::before{
+  content:'✦ ✧ ✦ ✧ ✦';
+  position:absolute;top:18px;right:20px;
+  font-size:0.7rem;color:rgba(255,255,255,0.2);
+  letter-spacing:8px;
+}
+.nc-header{
+  font-family:'Cinzel',serif;font-size:0.54rem;
+  letter-spacing:0.4em;text-transform:uppercase;
+  color:rgba(255,255,255,0.3);display:block;margin-bottom:20px;
+}
+.night-msgs{display:flex;flex-direction:column;gap:14px;}
+.nm{display:flex;flex-direction:column;max-width:82%;}
+.nm.l{align-self:flex-end;align-items:flex-end;}
+.nm.v{align-self:flex-start;}
+.nm-who{
+  font-family:'Cinzel',serif;font-size:0.5rem;font-weight:500;
+  letter-spacing:0.18em;text-transform:uppercase;margin-bottom:5px;
+}
+.nm.l .nm-who{color:rgba(200,150,80,0.7);text-align:right;}
+.nm.v .nm-who{color:rgba(80,180,170,0.7);}
+.nm-bubble{
+  padding:12px 17px;
+  font-family:'Lora',serif;font-size:0.97rem;font-style:italic;
+  line-height:1.7;
+}
+.nm.l .nm-bubble{
+  background:rgba(200,129,58,0.18);
+  border:1px solid rgba(200,129,58,0.25);
+  border-radius:14px 14px 4px 14px;
+  color:rgba(255,245,230,0.88);
+}
+.nm.v .nm-bubble{
+  background:rgba(58,112,104,0.22);
+  border:1px solid rgba(90,152,144,0.28);
+  border-radius:14px 14px 14px 4px;
+  color:rgba(220,240,238,0.88);
+}
+.moon-divider{
+  text-align:center;margin:28px 0;
+  font-size:0.8rem;color:rgba(255,255,255,0.15);
+  letter-spacing:14px;
+}
+
+/* ─── SCENE BREAK ─── */
+.scene-break{
+  display:flex;align-items:center;gap:18px;margin:52px 0;
+}
+.scene-break::before,.scene-break::after{
+  content:'';flex:1;height:1px;
+  background:linear-gradient(to right,transparent,var(--border),transparent);
+}
+.scene-break span{font-size:1rem;opacity:0.35;}
+
+/* ─── STORY END ─── */
+.story-end{
+  text-align:center;
+  margin-top:80px;padding-top:50px;
+  border-top:1px solid var(--border);
+}
+.end-label{
+  font-family:'Cinzel',serif;font-size:0.55rem;font-weight:400;
+  letter-spacing:0.5em;text-transform:uppercase;
+  color:var(--ink-faint);display:block;margin-bottom:16px;
+}
+.end-quote{
+  font-family:'Playfair Display',serif;
+  font-size:1.12rem;font-style:italic;
+  color:var(--ink-mid);line-height:1.85;
+  max-width:460px;margin:0 auto 36px;
+}
+.btn-return{
+  display:inline-flex;align-items:center;gap:9px;
+  padding:13px 30px;
+  border:1.5px solid var(--ink-mid);
+  border-radius:40px;
+  color:var(--ink-mid);text-decoration:none;
+  font-size:0.65rem;font-weight:500;
+  letter-spacing:0.22em;text-transform:uppercase;
+  transition:all .25s;
+}
+.btn-return:hover{
+  background:var(--slate-ink);color:var(--cream);
+  border-color:var(--slate-ink);
+  transform:translateY(-2px);
+  box-shadow:0 8px 28px rgba(30,40,48,0.22);
+}
+.btn-return svg{width:13px;height:13px;transition:transform .25s;}
+.btn-return:hover svg{transform:translateX(-3px);}
+
+/* ═══ ANIMATIONS ═══ */
+@keyframes riseIn{from{opacity:0;transform:translateY(22px);}to{opacity:1;transform:translateY(0);}}
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .65s ease,transform .65s ease;}
+.reveal.in{opacity:1;transform:none;}
+
+/* ═══ RESPONSIVE ═══ */
+@media(max-width:640px){
+  nav{padding:0 18px;}
+  .morning-card,.workday-grid{grid-template-columns:1fr;}
+  .content{padding:60px 18px 80px;}
+  .night-card{padding:24px 18px;}
+  .pull-quote{padding:18px 16px;}
+  .photo-strip{flex-direction:column;align-items:flex-start;}
+  .tl-item{grid-template-columns:55px 1fr;}
+}
+</style>
+</head>
+<body>
+
+<div id="prog"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="../index.html" class="n-brand">Whispers of Caring</a>
+  <div class="n-links">
+    <a href="../index.html">Home</a>
+   
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+
+  <!-- snow particles (JS-generated) -->
+  <div id="snow-layer"></div>
+
+  <!-- mountain silhouette -->
+  <svg class="mountain-svg" viewBox="0 0 1400 220" preserveAspectRatio="xMidYMax slice" fill="var(--slate-ink)">
+    <path d="M0 220 L0 140 L120 60 L250 130 L380 40 L520 120 L640 20 L760 110 L900 50 L1020 130 L1140 55 L1260 120 L1400 70 L1400 220 Z"/>
+  </svg>
+
+  <div class="hero-inner">
+    <p class="hero-eyebrow">Chapter Two &nbsp;·&nbsp; Phase Two</p>
+    <h1 class="hero-h1">A Day in Paradise<br><em>Lucifer's Haven</em></h1>
+    <p class="hero-sub">Navigating Work and Friendship in Aurora Vista</p>
+    <div class="hero-rule"><span>☕</span></div>
+    <p class="hero-desc">From the first light of dawn over snow-capped mountains to the quiet hush of a night well lived — a day in Aurora Vista unfolds.</p>
+    <div class="pills">
+      <span class="pill">🌄 Dawn at Aurora Vista</span>
+      <span class="pill">☕ Coffee & Messages</span>
+      <span class="pill">💻 Work as an Engineer</span>
+      <span class="pill">🌙 Goodnight, Victoria</span>
+    </div>
+  </div>
+
+  <div class="scroll-cue">
+    <span>Begin</span>
+    <div class="caret"></div>
+  </div>
+</section>
+
+<!-- MAIN CONTENT -->
+<main class="content">
+
+  <div class="ch-header reveal">
+    <span class="label">Chapter Two · Aurora Vista Chronicles</span>
+    <h2>A Story of Quiet Work and Warm Words</h2>
+    <div class="ch-rule"><span>❧</span></div>
+  </div>
+
+  <!-- ── SCENE I: MORNING ── -->
+  <div class="scene-h reveal">
+    <span class="snum">Scene I &nbsp;·&nbsp; The Morning</span>
+  </div>
+
+  <div class="prose">
+    <p class="drop-cap reveal">
+      Lucifer's day as an Associate System Engineer began with the soft chime of his alarm clock resonating through the serene stillness of his cozy apartment in Aurora Vista. The dawn light, tinged with hues of orange and pink, gently filtered through his window — casting a warm glow on the room as he slowly stirred from slumber.
+    </p>
+  </div>
+
+  <!-- Morning scene tiles -->
+  <div class="morning-card reveal">
+    <div class="mc-item">
+      <span class="mi-icon">🌄</span>
+      <span class="mi-name">Dawn Light</span>
+      <span class="mi-text">Orange and pink hues filter through the window, a warm glow filling the room.</span>
+    </div>
+    <div class="mc-item">
+      <span class="mi-icon">🌲</span>
+      <span class="mi-name">Mountain Air</span>
+      <span class="mi-text">Crisp, imbued with pine and the freshness of last night's snowfall.</span>
+    </div>
+    <div class="mc-item">
+      <span class="mi-icon">☕</span>
+      <span class="mi-name">Breakfast</span>
+      <span class="mi-text">Simple toast and freshly brewed coffee — the aroma mingling with the pine outside.</span>
+    </div>
+    <div class="mc-item">
+      <span class="mi-icon">🪟</span>
+      <span class="mi-name">The View</span>
+      <span class="mi-text">Snow-capped mountains and a frozen waterfall, breath-taking as ever.</span>
+    </div>
+  </div>
+
+  <div class="prose">
+    <p class="reveal">
+      As he sipped his coffee and picked up his phone, he noticed a message from Victoria — his friend and confidante who lived miles away in the tranquil town of Evervale, known for its serene atmosphere and its community of peace-minded, transparent individuals.
+    </p>
+  </div>
+
+  <!-- Victoria's painting reveal -->
+  <div class="painting-reveal reveal">
+    <span class="pr-label">📩 Victoria's Morning Message</span>
+    <p>"Morning, Lucifer! How's the day starting for you in paradise?" — accompanied by a photo of her latest painting. It depicted a peaceful landscape at dawn, the intricate brushstrokes capturing the essence of a serene and calm village coming to life.</p>
+  </div>
+
+  <!-- Morning messages -->
+  <div class="msg-card reveal">
+    <div class="msg-topbar">
+      <div class="tdot dot-a"></div><div class="tdot dot-b"></div><div class="tdot dot-c"></div>
+      <span class="ttitle">Evervale Forums · Morning</span>
+      <span class="online">Online</span>
+    </div>
+    <div class="msg-body">
+      <div class="msg-wrap l">
+        <span class="msg-sender">Lucifer</span>
+        <div class="msg-bubble">"Morning, Victoria! The day is starting off beautifully here, as usual. The view from my window is just breath-taking — snow-capped mountains and a frozen waterfall. Your painting looks incredible! I can almost feel the tranquillity of Evervale just by looking at it."</div>
+      </div>
+      <div class="msg-wrap v">
+        <span class="msg-sender">Victoria</span>
+        <div class="msg-bubble">"Thanks, Lucifer! That means a lot coming from you. It's been a peaceful start here. The town is waking up slowly, with people going about their morning routines in that calm, unhurried way."</div>
+      </div>
+      <div class="msg-wrap l">
+        <span class="msg-sender">Lucifer</span>
+        <div class="msg-bubble">"I can only imagine. Sometimes I wonder how you manage to stay so creative with all that serenity around you."</div>
+      </div>
+      <div class="msg-wrap v">
+        <span class="msg-sender">Victoria</span>
+        <div class="msg-bubble">"It can be a bit too quiet at times, but I find inspiration in the calmness. There's a certain clarity here that fuels my creativity. Besides, I have our conversations to keep me connected to the dynamic energy of other places."</div>
+      </div>
+      <div class="msg-wrap l">
+        <span class="msg-sender">Lucifer</span>
+        <div class="msg-bubble">"Just the usual work stuff. But I'm planning to take a walk later, maybe capture some more pictures of the scenery. It's been raining a bit, so everything looks even more magical."</div>
+      </div>
+      <div class="msg-wrap v">
+        <span class="msg-sender">Victoria</span>
+        <div class="msg-bubble">"I've got a few ideas brewing for new paintings. Still in the brainstorming phase, but I have a good feeling about them. Oh, and I'm thinking about experimenting with some new techniques. It's always a bit nerve-wracking, but also exciting!"</div>
+      </div>
+      <div class="msg-wrap l">
+        <span class="msg-sender">Lucifer</span>
+        <div class="msg-bubble">"That sounds amazing, Victoria. Just remember to take breaks and not overwork yourself. Creativity flows best when you're relaxed and happy."</div>
+      </div>
+      <div class="msg-wrap v">
+        <span class="msg-sender">Victoria</span>
+        <div class="msg-bubble">"Thanks, Lucifer. I needed to hear that. Your support means the world to me. Enjoy your walk later, and don't forget to send me some photos! They always brighten my day."</div>
+      </div>
+      <div class="msg-wrap l">
+        <span class="msg-sender">Lucifer</span>
+        <div class="msg-bubble">"Will do, Victoria. Have a great day, and keep that creative spark alive. Talk to you soon!"</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pull-quote reveal">
+    <p>"Your paintings bring a little piece of your world into mine — it's like I'm experiencing the tranquillity of Evervale through your eyes."</p>
+  </div>
+
+  <!-- ── SCENE II: THE WORKDAY ── -->
+  <div class="scene-h reveal">
+    <span class="snum">Scene II &nbsp;·&nbsp; The Workday</span>
+  </div>
+
+  <div class="prose">
+    <p class="reveal">
+      After a brisk shower, Lucifer settled into his workspace — a modest yet meticulously organized corner of his living room that offered a stunning view of the snow-capped mountains and the crystalline beauty of a frozen waterfall. As an Associate System Engineer, his day was a symphony of coding, problem-solving, and troubleshooting.
+    </p>
+  </div>
+
+  <!-- Workday role tiles -->
+  <div class="workday-grid reveal">
+    <div class="wd-item">
+      <span class="wd-icon">🖥️</span>
+      <span class="wd-label">Debugging</span>
+      <span class="wd-text">Methodically resolving complex code issues, line by careful line.</span>
+    </div>
+    <div class="wd-item">
+      <span class="wd-icon">🤝</span>
+      <span class="wd-label">Collaboration</span>
+      <span class="wd-text">Virtual meetings with the team — ideas exchanged, solutions found together.</span>
+    </div>
+    <div class="wd-item">
+      <span class="wd-icon">🏔️</span>
+      <span class="wd-label">Perspective</span>
+      <span class="wd-text">Short breaks to gaze out at the frozen waterfall — a reminder of beauty.</span>
+    </div>
+  </div>
+
+  <!-- Timeline of the day -->
+  <div class="timeline reveal">
+    <div class="tl-item">
+      <div class="tl-time">Morning</div>
+      <div class="tl-right">
+        <div class="tl-content">
+          <span class="tl-icon">🔧</span>
+          <span class="tl-title">Software Optimization</span>
+          <span class="tl-desc">Deep immersion in a challenging project — debugging critical code, resolving syntax issues with quiet determination and unwavering focus.</span>
+        </div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-time">Midday</div>
+      <div class="tl-right">
+        <div class="tl-content">
+          <span class="tl-icon">📹</span>
+          <span class="tl-title">Virtual Team Meetings</span>
+          <span class="tl-desc">Technical jargon, complex discussions, a critical insight from Lucifer that helps navigate a challenging problem — nods of appreciation from colleagues.</span>
+        </div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-time">Lunch</div>
+      <div class="tl-right">
+        <div class="tl-content">
+          <span class="tl-icon">🥗</span>
+          <span class="tl-title">A Brief Respite</span>
+          <span class="tl-desc">Fresh vegetables and grains by the window. A photo sent to Victoria — "Just a little piece of paradise to brighten your day."</span>
+        </div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-time">Afternoon</div>
+      <div class="tl-right">
+        <div class="tl-content">
+          <span class="tl-icon">👁️</span>
+          <span class="tl-title">Code Review</span>
+          <span class="tl-desc">Reviewing teammates' work with a keen eye for detail — constructive feedback, camaraderie, shared purpose making the session both productive and enjoyable.</span>
+        </div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-time">Evening</div>
+      <div class="tl-right">
+        <div class="tl-content">
+          <span class="tl-icon">🍝</span>
+          <span class="tl-title">Wrapping Up</span>
+          <span class="tl-desc">Workspace neatly organized. Pasta and fresh vegetables. A book under the soft glow of a reading lamp — the day's weariness settling in gently.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Photo to Victoria -->
+  <div class="photo-strip reveal">
+    <div class="ps-text">
+      <span class="ps-label">📸 Sent to Victoria · Midday</span>
+      <p>"Just a little piece of paradise to brighten your day" — a photo of the frozen waterfall shimmering in midday sunlight, shared across miles with a warm heart.</p>
+    </div>
+    <button class="btn-view" onclick="this.textContent='💛 Sent!'">View Photo</button>
+  </div>
+
+  <div class="scene-break reveal"><span>🌙</span></div>
+
+  <!-- ── SCENE III: GOODNIGHT ── -->
+  <div class="scene-h reveal">
+    <span class="snum">Scene III &nbsp;·&nbsp; Goodnight, Victoria</span>
+  </div>
+
+  <div class="prose">
+    <p class="reveal">
+      Just as he was about to head to bed, his phone buzzed with a message from Victoria. What followed was a long, winding conversation — the kind that only true friends have — unhurried and honest, carried across the quiet of two different towns settling into sleep.
+    </p>
+  </div>
+
+  <!-- Night conversation — dark card -->
+  <div class="night-card reveal">
+    <span class="nc-header">Evervale Forums · Late Evening</span>
+    <div class="night-msgs" id="night-msgs">
+
+      <div class="nm v">
+        <span class="nm-who">Victoria</span>
+        <div class="nm-bubble">"Hey, Lucifer! My evening was pretty mellow. I managed to sketch out a new painting idea. The calm here really helps me focus. Did you get to enjoy your walk?"</div>
+      </div>
+      <div class="nm l">
+        <span class="nm-who">Lucifer</span>
+        <div class="nm-bubble">"Yeah, I did. It was really peaceful. Got caught in a light drizzle, which made the town look even more magical. Aurora Vista is stunning in the rain."</div>
+      </div>
+      <div class="nm v">
+        <span class="nm-who">Victoria</span>
+        <div class="nm-bubble">"That sounds lovely. I can't wait to see them! Sometimes I wish I could just jump over there to see it myself. How was work today?"</div>
+      </div>
+      <div class="nm l">
+        <span class="nm-who">Lucifer</span>
+        <div class="nm-bubble">"It was a bit of a tough day. Spent a lot of time debugging some stubborn code. But talking to you always makes things feel a bit brighter."</div>
+      </div>
+
+      <!-- Hidden messages, revealed by toggle -->
+      <div id="night-extra" style="display:flex;flex-direction:column;gap:14px;display:none;">
+        <div class="nm v">
+          <span class="nm-who">Victoria</span>
+          <div class="nm-bubble">"I had a bit of a slow start, but then I found some inspiration thinking about our chats and the beautiful places you describe."</div>
+        </div>
+        <div class="nm l">
+          <span class="nm-who">Lucifer</span>
+          <div class="nm-bubble">"There's something about fresh air and the sound of rain that clears my mind. Do you ever find that your surroundings give you a burst of creativity?"</div>
+        </div>
+        <div class="nm v">
+          <span class="nm-who">Victoria</span>
+          <div class="nm-bubble">"Definitely. The peaceful vibe here in Evervale really helps me focus. It's almost like the quiet lets me hear my own thoughts more clearly."</div>
+        </div>
+        <div class="nm l">
+          <span class="nm-who">Lucifer</span>
+          <div class="nm-bubble">"Knowing you're on the other end of our conversations always gives me something to look forward to."</div>
+        </div>
+        <div class="nm v">
+          <span class="nm-who">Victoria</span>
+          <div class="nm-bubble">"It's amazing how our talks spark so much creativity for me. Your descriptions of Aurora Vista always inspire new ideas."</div>
+        </div>
+        <div class="nm l">
+          <span class="nm-who">Lucifer</span>
+          <div class="nm-bubble">"I really look forward to seeing your new paintings. They always amaze me. Should we call it a night? It's getting late."</div>
+        </div>
+      </div>
+
+      <div class="moon-divider">· · ·</div>
+
+      <div class="nm v">
+        <span class="nm-who">Victoria</span>
+        <div class="nm-bubble">"Sleep well, Lucifer. Dream of peaceful mountains and rain-kissed paths."</div>
+      </div>
+      <div class="nm l">
+        <span class="nm-who">Lucifer</span>
+        <div class="nm-bubble">"You too, Victoria. Dream of calm streets and beautiful paintings coming to life. Goodnight!"</div>
+      </div>
+      <div class="nm v">
+        <span class="nm-who">Victoria</span>
+        <div class="nm-bubble">"Goodnight, Lucifer. Talk to you tomorrow!"</div>
+      </div>
+    </div>
+
+    <!-- show more toggle -->
+    <div style="text-align:center;margin-top:22px;">
+      <button id="toggle-night" onclick="toggleNight()" style="
+        background:rgba(255,255,255,0.08);
+        border:1px solid rgba(255,255,255,0.15);
+        color:rgba(255,255,255,0.5);
+        padding:8px 22px;border-radius:30px;cursor:pointer;
+        font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;
+        font-family:'Cinzel',serif;transition:all .25s;">
+        Read Full Conversation ↓
+      </button>
+    </div>
+  </div>
+
+  <div class="pull-quote reveal">
+    <p>"With a contented sigh, Lucifer retreated to his bed — the soft whisper of the wind outside lulling him into a state of calm."</p>
+  </div>
+
+  <!-- STORY END -->
+  <div class="story-end reveal">
+    <span class="end-label">Chapter Two · Phase Two · Complete</span>
+    <p class="end-quote">In Aurora Vista's quiet, a day of code and coffee and kind words finds its perfect rest — and somewhere in Evervale, a painter smiles as she sets her phone down.</p>
+    <a href="chapter2.html" class="btn-return">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+      Return to Chapter Two
+    </a>
+  </div>
+
+</main>
+
+<script>
+/* ── Reading progress ── */
+const prog = document.getElementById('prog');
+window.addEventListener('scroll',()=>{
+  const s = window.scrollY;
+  const h = document.documentElement.scrollHeight - window.innerHeight;
+  prog.style.width = (h > 0 ? (s/h)*100 : 0)+'%';
+},{passive:true});
+
+/* ── Scroll reveal ── */
+const obs = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){e.target.classList.add('in');obs.unobserve(e.target);}
+  });
+},{threshold:0.07});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+/* ── Snow flakes ── */
+const snowLayer = document.getElementById('snow-layer');
+const chars = ['❄','❅','❆','·','✦'];
+for(let i=0;i<18;i++){
+  const s = document.createElement('div');
+  s.className='snowflake';
+  s.textContent=chars[Math.floor(Math.random()*chars.length)];
+  s.style.cssText=`
+    left:${Math.random()*100}%;
+    top:${Math.random()*100}%;
+    font-size:${6+Math.random()*8}px;
+    animation-duration:${8+Math.random()*14}s;
+    animation-delay:${Math.random()*10}s;
+  `;
+  snowLayer.appendChild(s);
+}
+
+/* ── Toggle full night conversation ── */
+function toggleNight(){
+  const extra = document.getElementById('night-extra');
+  const btn = document.getElementById('toggle-night');
+  const shown = extra.style.display !== 'none' && extra.style.display !== '';
+  if(shown){
+    extra.style.display='none';
+    btn.textContent='Read Full Conversation ↓';
+  } else {
+    extra.style.display='flex';
+    extra.style.flexDirection='column';
+    extra.style.gap='14px';
+    btn.textContent='Collapse ↑';
+  }
+}
+</script>
+
+</body>
+</html>
