@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chapter Two — Aurora's Symphony</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Cinzel:wght@400;500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ─────────────────────────────────────────
+       DESIGN TOKENS
+    ───────────────────────────────────────── */
+    :root {
+      /* palette */
+      --peach:      #f5c9a0;
+      --peach-mid:  #e8a87c;
+      --apricot:    #f0e4d4;
+      --lavender:   #c8b8e8;
+      --lav-pale:   #ede8f8;
+      --lav-mid:    #a898d0;
+      --mint:       #a8d4c0;
+      --mint-pale:  #e0f2ea;
+      --mint-mid:   #78b89a;
+      --rose:       #e08898;
+      --rose-pale:  #faeef0;
+      --rose-mid:   #c8687a;
+      --sky:        #90c0e0;
+      --sky-pale:   #e4f2fc;
+      --amber:      #e8c080;
+      --amber-pale: #fdf3e0;
+      --ink:        #1a1520;
+      --ink-mid:    #4a4258;
+      --ink-dim:    #9890a8;
+      --white:      #ffffff;
+      --border:     rgba(100,90,130,0.1);
+      --tr:         0.32s cubic-bezier(.4,0,.2,1);
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Jost', sans-serif;
+      /* flowing diagonal mesh for entire body */
+      background:
+        radial-gradient(ellipse 80% 60% at 0% 0%,   rgba(245,201,160,0.35) 0%, transparent 55%),
+        radial-gradient(ellipse 70% 50% at 100% 0%,  rgba(200,184,232,0.28) 0%, transparent 50%),
+        radial-gradient(ellipse 90% 70% at 50% 100%, rgba(168,212,192,0.25) 0%, transparent 55%),
+        radial-gradient(ellipse 60% 50% at 100% 70%, rgba(144,192,224,0.18) 0%, transparent 45%),
+        #f8f4f0;
+      color: var(--ink);
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    /* ─────────────────────────────────────────
+       NAV
+    ───────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      height: 62px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 clamp(18px, 5vw, 60px);
+      background: rgba(248,244,240,0.88);
+      backdrop-filter: blur(20px) saturate(1.4);
+      border-bottom: 1px solid rgba(200,184,232,0.25);
+      transition: box-shadow var(--tr), background var(--tr);
+    }
+    nav.scrolled {
+      background: rgba(248,244,248,0.96);
+      box-shadow: 0 2px 24px rgba(100,80,150,0.08);
+    }
+
+    .nav-brand {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem; font-style: italic; font-weight: 400;
+      color: var(--ink); text-decoration: none; letter-spacing: 0.02em;
+      transition: color var(--tr);
+    }
+    .nav-brand:hover { color: var(--lav-mid); }
+
+    .nav-right { display: flex; align-items: center; gap: 28px; }
+
+    .nav-links { display: flex; gap: 26px; list-style: none; }
+    .nav-links a {
+      font-size: 0.64rem; font-weight: 500;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--ink-dim); text-decoration: none;
+      position: relative; transition: color var(--tr);
+    }
+    .nav-links a::after {
+      content: ''; position: absolute; bottom: -2px; left: 0;
+      width: 0; height: 1px;
+      background: linear-gradient(90deg, var(--lav-mid), var(--mint-mid));
+      transition: width var(--tr);
+    }
+    .nav-links a:hover { color: var(--ink); }
+    .nav-links a:hover::after { width: 100%; }
+
+    .nav-badge {
+      font-family: 'Cinzel', serif; font-size: 0.58rem;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--lav-mid);
+      border: 1px solid var(--lavender);
+      padding: 4px 12px; border-radius: 20px;
+      background: var(--lav-pale);
+    }
+
+    .hamburger {
+      display: none; flex-direction: column; gap: 5px;
+      cursor: pointer; background: none; border: none; padding: 4px;
+    }
+    .hamburger span {
+      display: block; width: 20px; height: 1.5px;
+      background: var(--ink); border-radius: 2px; transition: var(--tr);
+    }
+    .hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(4.5px,4.5px); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(4.5px,-4.5px); }
+
+    .mobile-menu {
+      display: none; position: fixed; inset: 0; z-index: 190;
+      background: rgba(248,244,248,0.97); backdrop-filter: blur(20px);
+      flex-direction: column; align-items: center; justify-content: center; gap: 40px;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      font-family: 'Cinzel', serif; font-size: 1rem;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--ink-mid); text-decoration: none; transition: color var(--tr);
+    }
+    .mobile-menu a:hover { color: var(--lav-mid); }
+
+    /* ─────────────────────────────────────────
+       HERO  — dawn-to-dusk mesh
+    ───────────────────────────────────────── */
+    .hero {
+      min-height: 100vh;
+      position: relative;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      overflow: hidden;
+      padding: 80px 24px 80px;
+    }
+
+    /* animated mesh gradient */
+    .hero-bg {
+      position: absolute; inset: 0; z-index: 0;
+      background:
+        radial-gradient(ellipse 110% 80% at 15% 20%,  rgba(245,201,160,0.55) 0%, transparent 50%),
+        radial-gradient(ellipse 80%  70% at 85% 15%,  rgba(200,184,232,0.45) 0%, transparent 50%),
+        radial-gradient(ellipse 100% 60% at 50% 90%,  rgba(168,212,192,0.40) 0%, transparent 55%),
+        radial-gradient(ellipse 70%  80% at 90% 75%,  rgba(144,192,224,0.30) 0%, transparent 45%),
+        radial-gradient(ellipse 60%  50% at 5%  80%,  rgba(224,136,152,0.22) 0%, transparent 40%),
+        #fdf8f2;
+      animation: meshDrift 20s ease-in-out infinite alternate;
+    }
+
+    @keyframes meshDrift {
+      0%   {
+        background:
+          radial-gradient(ellipse 110% 80% at 15% 20%,  rgba(245,201,160,0.55) 0%, transparent 50%),
+          radial-gradient(ellipse 80%  70% at 85% 15%,  rgba(200,184,232,0.45) 0%, transparent 50%),
+          radial-gradient(ellipse 100% 60% at 50% 90%,  rgba(168,212,192,0.40) 0%, transparent 55%),
+          radial-gradient(ellipse 70%  80% at 90% 75%,  rgba(144,192,224,0.30) 0%, transparent 45%),
+          radial-gradient(ellipse 60%  50% at 5%  80%,  rgba(224,136,152,0.22) 0%, transparent 40%),
+          #fdf8f2;
+      }
+      33%  {
+        background:
+          radial-gradient(ellipse 100% 90% at 25% 35%,  rgba(245,201,160,0.45) 0%, transparent 55%),
+          radial-gradient(ellipse 90%  60% at 75% 25%,  rgba(200,184,232,0.50) 0%, transparent 50%),
+          radial-gradient(ellipse 110% 50% at 40% 85%,  rgba(168,212,192,0.35) 0%, transparent 55%),
+          radial-gradient(ellipse 60%  90% at 95% 60%,  rgba(144,192,224,0.35) 0%, transparent 45%),
+          radial-gradient(ellipse 70%  60% at 10% 70%,  rgba(224,136,152,0.28) 0%, transparent 40%),
+          #fdf8f2;
+      }
+      66%  {
+        background:
+          radial-gradient(ellipse 120% 70% at 10% 15%,  rgba(245,201,160,0.60) 0%, transparent 50%),
+          radial-gradient(ellipse 70%  80% at 90% 10%,  rgba(200,184,232,0.38) 0%, transparent 50%),
+          radial-gradient(ellipse 90%  70% at 55% 95%,  rgba(168,212,192,0.45) 0%, transparent 55%),
+          radial-gradient(ellipse 80%  70% at 85% 80%,  rgba(144,192,224,0.25) 0%, transparent 45%),
+          radial-gradient(ellipse 50%  45% at 3%  85%,  rgba(224,136,152,0.18) 0%, transparent 40%),
+          #fdf8f2;
+      }
+      100% {
+        background:
+          radial-gradient(ellipse 90%  85% at 20% 30%,  rgba(245,201,160,0.48) 0%, transparent 50%),
+          radial-gradient(ellipse 85%  65% at 80% 20%,  rgba(200,184,232,0.52) 0%, transparent 50%),
+          radial-gradient(ellipse 105% 55% at 45% 88%,  rgba(168,212,192,0.42) 0%, transparent 55%),
+          radial-gradient(ellipse 65%  85% at 92% 68%,  rgba(144,192,224,0.32) 0%, transparent 45%),
+          radial-gradient(ellipse 65%  55% at 8%  75%,  rgba(224,136,152,0.25) 0%, transparent 40%),
+          #fdf8f2;
+      }
+    }
+
+    /* SVG doodle overlay */
+    .hero-doodles {
+      position: absolute; inset: 0; z-index: 1;
+      pointer-events: none; overflow: hidden;
+    }
+    .hero-doodles svg { width: 100%; height: 100%; }
+
+    /* drifting specks */
+    .specks { position: absolute; inset: 0; z-index: 2; pointer-events: none; overflow: hidden; }
+    .speck {
+      position: absolute; border-radius: 50%; opacity: 0;
+      animation: drift-up linear infinite;
+    }
+    .speck:nth-child(1)  { left:5%;   width:5px;  height:5px;  background:var(--lavender);  animation-duration:16s; animation-delay:0s;   }
+    .speck:nth-child(2)  { left:14%;  width:3px;  height:3px;  background:var(--mint);      animation-duration:13s; animation-delay:3s;   }
+    .speck:nth-child(3)  { left:27%;  width:4px;  height:4px;  background:var(--peach);     animation-duration:18s; animation-delay:1.5s; }
+    .speck:nth-child(4)  { left:40%;  width:6px;  height:6px;  background:var(--rose);      animation-duration:12s; animation-delay:5s;   }
+    .speck:nth-child(5)  { left:55%;  width:3px;  height:3px;  background:var(--sky);       animation-duration:15s; animation-delay:2s;   }
+    .speck:nth-child(6)  { left:67%;  width:5px;  height:5px;  background:var(--lavender);  animation-duration:19s; animation-delay:4s;   }
+    .speck:nth-child(7)  { left:78%;  width:4px;  height:4px;  background:var(--mint);      animation-duration:14s; animation-delay:0.5s; }
+    .speck:nth-child(8)  { left:88%;  width:3px;  height:3px;  background:var(--amber);     animation-duration:11s; animation-delay:6s;   }
+    .speck:nth-child(9)  { left:94%;  width:5px;  height:5px;  background:var(--rose);      animation-duration:17s; animation-delay:2.5s; }
+    .speck:nth-child(10) { left:33%;  width:3px;  height:3px;  background:var(--sky);       animation-duration:20s; animation-delay:8s;   }
+
+    @keyframes drift-up {
+      0%   { bottom: -10px; opacity: 0;   transform: translateX(0) scale(1); }
+      8%   { opacity: 0.6; }
+      88%  { opacity: 0.3; }
+      100% { bottom: 105vh; opacity: 0;   transform: translateX(30px) scale(0.5); }
+    }
+
+    /* hero text */
+    .hero-inner {
+      position: relative; z-index: 3;
+      text-align: center; max-width: 720px; width: 100%;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 14px;
+      font-family: 'Cinzel', serif; font-size: 0.62rem;
+      letter-spacing: 0.44em; text-transform: uppercase;
+      /* gradient text */
+      background: linear-gradient(90deg, var(--mint-mid), var(--lav-mid));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+      opacity: 0; transform: translateY(14px);
+      animation: up 0.8s 0.1s forwards;
+      margin-bottom: 18px;
+    }
+    .hero-eyebrow::before, .hero-eyebrow::after {
+      content: ''; display: block; width: 28px; height: 1px;
+      background: linear-gradient(90deg, var(--mint), var(--lavender));
+      opacity: 0.7; border-radius: 1px;
+      -webkit-text-fill-color: initial;
+    }
+
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.4rem, 7.5vw, 5.2rem);
+      font-weight: 300; font-style: italic;
+      color: var(--ink); line-height: 1.08;
+      opacity: 0; transform: translateY(22px);
+      animation: up 1s 0.28s forwards;
+      margin-bottom: 4px;
+    }
+    .hero-title .accent {
+      display: block; font-weight: 600; font-style: normal;
+      font-size: clamp(2rem, 6vw, 4.4rem);
+      /* gradient text — peach to rose */
+      background: linear-gradient(120deg, var(--peach-mid) 0%, var(--rose-mid) 55%, var(--lav-mid) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-divider {
+      display: flex; align-items: center; justify-content: center; gap: 18px;
+      margin: 22px auto;
+      opacity: 0; animation: fade 0.8s 0.52s forwards;
+    }
+    .hero-divider-line {
+      width: 55px; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--lav-mid), transparent);
+      opacity: 0.5;
+    }
+    .hero-divider-icon {
+      /* tiny 6-pointed snowflake */
+      width: 20px; height: 20px;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .hero-desc {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.05rem, 2vw, 1.25rem);
+      font-weight: 300; line-height: 1.9;
+      color: var(--ink-mid); max-width: 520px; margin: 0 auto;
+      opacity: 0; transform: translateY(14px);
+      animation: up 0.9s 0.7s forwards;
+    }
+    .hero-desc em {
+      font-style: italic;
+      background: linear-gradient(90deg, var(--rose-mid), var(--lav-mid));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* scroll cue */
+    .scroll-cue {
+      position: absolute; bottom: 38px; left: 50%;
+      transform: translateX(-50%); z-index: 3;
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      opacity: 0; animation: fade 1s 1.2s forwards;
+    }
+    .scroll-cue-text {
+      font-size: 0.54rem; letter-spacing: 0.4em; text-transform: uppercase;
+      color: var(--ink-dim);
+    }
+    .scroll-line {
+      width: 1px; height: 36px;
+      background: linear-gradient(to bottom, var(--lav-mid), transparent);
+      position: relative; overflow: hidden;
+    }
+    .scroll-line::after {
+      content: ''; position: absolute; top: -100%; left: 0;
+      width: 100%; height: 50%;
+      background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.8), transparent);
+      animation: slide-down 2s ease-in-out infinite;
+    }
+    @keyframes slide-down {
+      0%   { top: -60%; }
+      100% { top: 160%; }
+    }
+
+    /* ─────────────────────────────────────────
+       MAIN — each section has its own gradient zone
+    ───────────────────────────────────────── */
+    .main {
+      max-width: 740px; margin: 0 auto;
+      padding: 80px clamp(18px,5vw,40px) 100px;
+    }
+
+    /* ── intro block — peach wash ── */
+    .story-intro {
+      position: relative; margin-bottom: 48px;
+      padding: 36px 40px;
+      border-radius: 20px;
+      background:
+        radial-gradient(ellipse at 100% 0%,   rgba(245,201,160,0.55) 0%, transparent 60%),
+        radial-gradient(ellipse at 0%   100%,  rgba(232,200,168,0.35) 0%, transparent 55%),
+        rgba(255,255,255,0.65);
+      border: 1px solid rgba(245,201,160,0.4);
+      box-shadow: 0 4px 32px rgba(200,140,80,0.07);
+      backdrop-filter: blur(6px);
+    }
+
+    .story-intro-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.05rem,1.8vw,1.2rem);
+      font-weight: 300; line-height: 2;
+      color: var(--ink-mid); text-align: justify; hyphens: auto;
+    }
+    .story-intro-text::first-letter {
+      font-size: 4.2rem; font-weight: 600; font-style: italic;
+      background: linear-gradient(135deg, var(--peach-mid), var(--rose-mid));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+      float: left; line-height: 0.75; margin: 0.06em 0.12em 0 0;
+    }
+
+    /* ── pull quote — lavender wash ── */
+    .pull-quote {
+      position: relative; margin: 0 0 48px;
+      padding: 28px 36px;
+      border-radius: 16px;
+      background:
+        radial-gradient(ellipse at 0% 50%,    rgba(200,184,232,0.5) 0%, transparent 60%),
+        radial-gradient(ellipse at 100% 50%,  rgba(168,212,192,0.3) 0%, transparent 50%),
+        rgba(255,255,255,0.6);
+      border: 1px solid rgba(200,184,232,0.35);
+      box-shadow: 0 4px 28px rgba(150,120,200,0.08);
+    }
+    .pull-quote::before {
+      content: '\201C';
+      position: absolute; top: 4px; left: 14px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 5.5rem; font-weight: 300; line-height: 1;
+      background: linear-gradient(135deg, var(--lav-mid), var(--mint-mid));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; opacity: 0.3;
+    }
+    .pull-quote p {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.1rem,2vw,1.3rem);
+      font-style: italic; font-weight: 300; line-height: 1.75;
+      color: var(--ink-mid); position: relative; z-index: 1;
+    }
+
+    /* ── aurora wavy divider ── */
+    .wave-divider {
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 0 44px; opacity: 0.5;
+    }
+    .wave-divider svg { width: min(320px, 80vw); }
+
+    /* ── section label ── */
+    .section-label {
+      display: flex; align-items: center; gap: 14px; margin-bottom: 28px;
+    }
+    .section-label-text {
+      font-family: 'Cinzel', serif; font-size: 0.58rem;
+      letter-spacing: 0.42em; text-transform: uppercase;
+      color: var(--ink-dim); white-space: nowrap;
+    }
+    .section-label-line {
+      flex: 1; height: 1px;
+      background: linear-gradient(90deg, var(--lavender), var(--mint), transparent);
+      opacity: 0.6;
+    }
+
+    /* ── phase cards ── */
+    .phases { display: flex; flex-direction: column; gap: 10px; }
+
+    /* each card has a unique gradient */
+    .phase-card {
+      display: flex; align-items: stretch;
+      border-radius: 16px;
+      text-decoration: none; color: inherit;
+      overflow: hidden;
+      border: 1px solid rgba(180,160,220,0.15);
+      box-shadow: 0 2px 14px rgba(100,80,150,0.05);
+      transition: box-shadow var(--tr), transform var(--tr), border-color var(--tr);
+      position: relative;
+    }
+    .phase-card:hover {
+      box-shadow: 0 8px 36px rgba(100,80,150,0.12);
+      transform: translateY(-3px);
+      border-color: rgba(180,160,220,0.35);
+    }
+
+    /* gradient backgrounds per card */
+    .phase-card:nth-child(1) {
+      background:
+        radial-gradient(ellipse at 100% 0%,   rgba(168,212,192,0.4) 0%, transparent 60%),
+        radial-gradient(ellipse at 0%   100%,  rgba(168,212,192,0.2) 0%, transparent 50%),
+        rgba(255,255,255,0.75);
+    }
+    .phase-card:nth-child(2) {
+      background:
+        radial-gradient(ellipse at 0%   0%,    rgba(144,192,224,0.38) 0%, transparent 60%),
+        radial-gradient(ellipse at 100% 100%,  rgba(200,184,232,0.25) 0%, transparent 50%),
+        rgba(255,255,255,0.75);
+    }
+    .phase-card:nth-child(3) {
+      background:
+        radial-gradient(ellipse at 100% 50%,  rgba(245,201,160,0.40) 0%, transparent 60%),
+        radial-gradient(ellipse at 0%   50%,  rgba(232,192,168,0.20) 0%, transparent 50%),
+        rgba(255,255,255,0.75);
+    }
+    .phase-card:nth-child(4) {
+      background:
+        radial-gradient(ellipse at 0%   0%,   rgba(232,192,128,0.38) 0%, transparent 60%),
+        radial-gradient(ellipse at 100% 100%, rgba(245,201,160,0.22) 0%, transparent 50%),
+        rgba(255,255,255,0.75);
+    }
+    .phase-card:nth-child(5) {
+      background:
+        radial-gradient(ellipse at 100% 0%,   rgba(224,136,152,0.30) 0%, transparent 60%),
+        radial-gradient(ellipse at 0%   100%,  rgba(200,184,232,0.28) 0%, transparent 50%),
+        rgba(255,255,255,0.75);
+    }
+    .phase-card:nth-child(6) {
+      background:
+        radial-gradient(ellipse at 0%   0%,   rgba(168,212,192,0.35) 0%, transparent 55%),
+        radial-gradient(ellipse at 100% 100%, rgba(144,192,224,0.30) 0%, transparent 55%),
+        rgba(255,255,255,0.75);
+    }
+
+    /* coloured left strip per card */
+    .phase-strip {
+      width: 4px; flex-shrink: 0; align-self: stretch;
+      transition: width var(--tr);
+    }
+    .phase-card:nth-child(1) .phase-strip { background: linear-gradient(to bottom, var(--mint), var(--mint-mid)); }
+    .phase-card:nth-child(2) .phase-strip { background: linear-gradient(to bottom, var(--sky), #6aabe0); }
+    .phase-card:nth-child(3) .phase-strip { background: linear-gradient(to bottom, var(--peach), var(--peach-mid)); }
+    .phase-card:nth-child(4) .phase-strip { background: linear-gradient(to bottom, var(--amber), #d0a050); }
+    .phase-card:nth-child(5) .phase-strip { background: linear-gradient(to bottom, var(--rose), var(--rose-mid)); }
+    .phase-card:nth-child(6) .phase-strip { background: linear-gradient(to bottom, var(--lavender), var(--lav-mid)); }
+    .phase-card:hover .phase-strip { width: 6px; }
+
+    .phase-body {
+      display: flex; align-items: center; gap: 18px;
+      padding: 18px 22px; flex: 1;
+    }
+
+    .phase-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.6rem; font-weight: 300; font-style: italic;
+      line-height: 1; min-width: 46px;
+      transition: opacity var(--tr);
+      user-select: none; opacity: 0.25;
+    }
+    .phase-card:nth-child(1) .phase-num { color: var(--mint-mid); }
+    .phase-card:nth-child(2) .phase-num { color: var(--sky); }
+    .phase-card:nth-child(3) .phase-num { color: var(--peach-mid); }
+    .phase-card:nth-child(4) .phase-num { color: #c89040; }
+    .phase-card:nth-child(5) .phase-num { color: var(--rose-mid); }
+    .phase-card:nth-child(6) .phase-num { color: var(--lav-mid); }
+    .phase-card:hover .phase-num { opacity: 0.55; }
+
+    .phase-info { flex: 1; }
+
+    .phase-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1rem, 1.8vw, 1.15rem); font-weight: 600;
+      color: var(--ink); line-height: 1.3; margin-bottom: 4px;
+      transition: color var(--tr);
+    }
+    .phase-card:nth-child(1):hover .phase-title { color: var(--mint-mid); }
+    .phase-card:nth-child(2):hover .phase-title { color: #5a9acc; }
+    .phase-card:nth-child(3):hover .phase-title { color: var(--peach-mid); }
+    .phase-card:nth-child(4):hover .phase-title { color: #b88030; }
+    .phase-card:nth-child(5):hover .phase-title { color: var(--rose-mid); }
+    .phase-card:nth-child(6):hover .phase-title { color: var(--lav-mid); }
+
+    .phase-sub {
+      font-size: 0.69rem; font-weight: 300;
+      color: var(--ink-dim); letter-spacing: 0.04em; margin-bottom: 6px;
+    }
+
+    .phase-tag {
+      display: inline-block; font-size: 0.57rem; font-weight: 500;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      padding: 2px 9px; border-radius: 10px;
+    }
+    .phase-card:nth-child(1) .phase-tag { background: var(--mint-pale);   color: var(--mint-mid); border: 1px solid rgba(168,212,192,0.5); }
+    .phase-card:nth-child(2) .phase-tag { background: var(--sky-pale);    color: #5a9acc;         border: 1px solid rgba(144,192,224,0.5); }
+    .phase-card:nth-child(3) .phase-tag { background: var(--apricot);     color: var(--peach-mid);border: 1px solid rgba(245,201,160,0.5); }
+    .phase-card:nth-child(4) .phase-tag { background: var(--amber-pale);  color: #b88030;         border: 1px solid rgba(232,192,128,0.5); }
+    .phase-card:nth-child(5) .phase-tag { background: var(--rose-pale);   color: var(--rose-mid); border: 1px solid rgba(224,136,152,0.5); }
+    .phase-card:nth-child(6) .phase-tag { background: var(--lav-pale);    color: var(--lav-mid);  border: 1px solid rgba(200,184,232,0.5); }
+
+    .phase-arrow {
+      width: 34px; height: 34px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      border: 1px solid rgba(150,130,190,0.2);
+      color: var(--ink-dim); flex-shrink: 0;
+      transition: all var(--tr);
+    }
+    .phase-arrow svg { width: 14px; height: 14px; }
+
+    .phase-card:nth-child(1):hover .phase-arrow { background: var(--mint-mid);  border-color: var(--mint-mid);  color: white; }
+    .phase-card:nth-child(2):hover .phase-arrow { background: #5a9acc;          border-color: #5a9acc;          color: white; }
+    .phase-card:nth-child(3):hover .phase-arrow { background: var(--peach-mid); border-color: var(--peach-mid); color: white; }
+    .phase-card:nth-child(4):hover .phase-arrow { background: #b88030;          border-color: #b88030;          color: white; }
+    .phase-card:nth-child(5):hover .phase-arrow { background: var(--rose-mid);  border-color: var(--rose-mid);  color: white; }
+    .phase-card:nth-child(6):hover .phase-arrow { background: var(--lav-mid);   border-color: var(--lav-mid);   color: white; }
+
+    /* ── back section — mint wash ── */
+    .back-section {
+      margin-top: 64px; padding-top: 36px;
+      border-top: 1px solid rgba(168,212,192,0.3);
+      display: flex; align-items: center;
+      justify-content: space-between; flex-wrap: wrap; gap: 16px;
+    }
+
+    .back-btn {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 11px 28px; border-radius: 50px;
+      border: 1.5px solid rgba(168,212,192,0.5);
+      color: var(--ink-mid); text-decoration: none;
+      font-size: 0.67rem; font-weight: 500;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      background: rgba(168,212,192,0.1);
+      transition: all var(--tr);
+    }
+    .back-btn svg { width: 12px; height: 12px; transition: transform var(--tr); }
+    .back-btn:hover {
+      background: var(--mint-pale);
+      border-color: var(--mint-mid); color: var(--mint-mid);
+    }
+    .back-btn:hover svg { transform: translateX(-3px); }
+
+    .back-note {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic; font-size: 0.95rem; color: var(--ink-dim);
+    }
+
+    /* ─────────────────────────────────────────
+       FOOTER
+    ───────────────────────────────────────── */
+    footer {
+      padding: 30px 20px; text-align: center;
+      background:
+        linear-gradient(to right, rgba(200,184,232,0.15), rgba(168,212,192,0.15));
+      border-top: 1px solid rgba(200,184,232,0.25);
+    }
+    footer p {
+      font-family: 'Cinzel', serif; font-size: 0.63rem;
+      letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink-dim);
+    }
+
+    /* ─────────────────────────────────────────
+       SCROLL REVEAL
+    ───────────────────────────────────────── */
+    .reveal {
+      opacity: 0; transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .reveal.in { opacity: 1; transform: none; }
+
+    .reveal-left {
+      opacity: 0; transform: translateX(-16px);
+      transition: opacity 0.5s ease, transform 0.5s ease,
+                  box-shadow var(--tr), border-color var(--tr),
+                  transform var(--tr);
+    }
+    .reveal-left.in { opacity: 1; transform: none; }
+
+    /* stagger */
+    .phases .phase-card:nth-child(1) { transition-delay:0.04s; }
+    .phases .phase-card:nth-child(2) { transition-delay:0.10s; }
+    .phases .phase-card:nth-child(3) { transition-delay:0.16s; }
+    .phases .phase-card:nth-child(4) { transition-delay:0.22s; }
+    .phases .phase-card:nth-child(5) { transition-delay:0.28s; }
+    .phases .phase-card:nth-child(6) { transition-delay:0.34s; }
+
+    /* hover transform must win over reveal-left stagger */
+    .phases .phase-card.in:hover { transform: translateY(-3px) !important; }
+
+    /* ─────────────────────────────────────────
+       KEYFRAMES
+    ───────────────────────────────────────── */
+    @keyframes up   { to { opacity: 1; transform: translateY(0); } }
+    @keyframes fade { to { opacity: 1; } }
+
+    /* ─────────────────────────────────────────
+       RESPONSIVE
+    ───────────────────────────────────────── */
+    @media (max-width: 640px) {
+      .nav-links, .nav-badge { display: none; }
+      .hamburger { display: flex; }
+      .phase-body { padding: 14px 16px; gap: 12px; }
+      .phase-num  { font-size: 1.9rem; min-width: 34px; }
+      .story-intro { padding: 24px 22px; }
+      .pull-quote  { padding: 22px 22px 22px 26px; }
+      .back-section { flex-direction: column; align-items: flex-start; }
+    }
+    @media (max-width: 400px) {
+      .hero-title { font-size: 2rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav id="navbar">
+  <a href="index.html" class="nav-brand">Whispers of Caring</a>
+  <div class="nav-right">
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      
+    </ul>
+    
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html"   onclick="closeMobile()">Home</a>
+  
+  <a href="c2index.html" onclick="closeMobile()">Chapter II</a>
+</div>
+
+<!-- ── HERO ── -->
+<section class="hero" id="hero">
+
+  <div class="hero-bg"></div>
+
+  <!-- doodle layer -->
+  <div class="hero-doodles" aria-hidden="true">
+    <svg viewBox="0 0 1440 800" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+
+      <!-- large snowflake — top left, mint -->
+      <g fill="none" stroke="#78b89a" stroke-width="1.3" stroke-linecap="round" transform="translate(100,120)" opacity="0.55">
+        <line x1="0" y1="-45" x2="0"  y2="45"/>
+        <line x1="-45" y1="0" x2="45" y2="0"/>
+        <line x1="-32" y1="-32" x2="32" y2="32"/>
+        <line x1="32"  y1="-32" x2="-32" y2="32"/>
+        <circle cx="0" cy="0" r="7"/>
+        <circle cx="0"  cy="-45" r="4"/><circle cx="0"  cy="45" r="4"/>
+        <circle cx="-45" cy="0" r="4"/><circle cx="45" cy="0" r="4"/>
+        <line x1="-15" y1="-32" x2="0" y2="-45"/><line x1="15" y1="-32" x2="0" y2="-45"/>
+        <line x1="-15" y1="32"  x2="0" y2="45"/><line x1="15" y1="32"  x2="0" y2="45"/>
+      </g>
+
+      <!-- snowflake — bottom right, lavender -->
+      <g fill="none" stroke="#a898d0" stroke-width="1.2" stroke-linecap="round" transform="translate(1320,660)" opacity="0.5">
+        <line x1="0" y1="-38" x2="0"  y2="38"/>
+        <line x1="-38" y1="0" x2="38" y2="0"/>
+        <line x1="-27" y1="-27" x2="27" y2="27"/>
+        <line x1="27"  y1="-27" x2="-27" y2="27"/>
+        <circle cx="0" cy="0" r="5"/>
+      </g>
+
+      <!-- small snowflake — mid right, sky -->
+      <g fill="none" stroke="#90c0e0" stroke-width="1" stroke-linecap="round" transform="translate(1380,300)" opacity="0.45">
+        <line x1="0" y1="-20" x2="0"  y2="20"/>
+        <line x1="-20" y1="0" x2="20" y2="0"/>
+        <line x1="-14" y1="-14" x2="14" y2="14"/>
+        <line x1="14"  y1="-14" x2="-14" y2="14"/>
+      </g>
+
+      <!-- small snowflake — left mid, peach -->
+      <g fill="none" stroke="#e8a87c" stroke-width="1" stroke-linecap="round" transform="translate(40,480)" opacity="0.4">
+        <line x1="0" y1="-16" x2="0"  y2="16"/>
+        <line x1="-16" y1="0" x2="16" y2="0"/>
+        <line x1="-11" y1="-11" x2="11" y2="11"/>
+        <line x1="11"  y1="-11" x2="-11" y2="11"/>
+      </g>
+
+      <!-- mountain silhouette -->
+      <polyline fill="none" stroke="#a898d0" stroke-width="1" stroke-linejoin="round" opacity="0.3"
+        points="0,760 130,520 270,690 410,420 570,620 720,360 880,580 1040,380 1210,560 1350,400 1440,480"/>
+
+      <!-- aurora wave 1 — mint -->
+      <path fill="none" stroke="#78b89a" stroke-width="1.1" stroke-linecap="round" opacity="0.4"
+        d="M0,200 C160,168 310,232 470,200 C630,168 780,232 940,200 C1100,168 1260,218 1440,200"/>
+      <!-- aurora wave 2 — lavender -->
+      <path fill="none" stroke="#a898d0" stroke-width="0.9" stroke-linecap="round" opacity="0.35"
+        d="M0,220 C160,188 310,252 470,220 C630,188 780,252 940,220 C1100,188 1260,238 1440,220"/>
+      <!-- aurora wave 3 — sky -->
+      <path fill="none" stroke="#90c0e0" stroke-width="0.7" stroke-linecap="round" opacity="0.3"
+        d="M0,238 C180,206 340,270 500,238 C660,206 820,270 980,238 C1140,206 1300,250 1440,238"/>
+
+      <!-- quill — top right, amber -->
+      <g fill="none" stroke="#e8c080" stroke-width="1.2" stroke-linecap="round" transform="translate(1340,55) rotate(-35)" opacity="0.55">
+        <path d="M0,90 C8,52 25,14 54,-8 C34,17 29,46 25,70 Z"/>
+        <path d="M25,70 L8,108"/>
+        <path d="M54,-8 C74,10 64,37 25,70"/>
+        <path d="M21,76 C31,66 44,61 52,59"/>
+      </g>
+
+      <!-- paintbrush — bottom left, rose -->
+      <g fill="none" stroke="#e08898" stroke-width="1.2" stroke-linecap="round" transform="translate(78,690) rotate(12)" opacity="0.5">
+        <rect x="-5" y="-54" width="10" height="70" rx="3"/>
+        <path d="M-5,16 C-5,32 5,32 5,16"/>
+        <path d="M-3,16 L0,34 L3,16"/>
+      </g>
+
+      <!-- stars — scattered, multi-colour -->
+      <polygon points="720,42 723,54 736,54 726,62 730,74 720,66 710,74 714,62 704,54 717,54"
+        fill="none" stroke="#e8a87c" stroke-width="1.2" opacity="0.7"/>
+      <polygon points="310,88 313,97 322,97 315,103 318,112 310,106 302,112 305,103 298,97 307,97"
+        fill="none" stroke="#e08898" stroke-width="1.1" opacity="0.65"/>
+      <polygon points="1080,110 1083,119 1092,119 1085,125 1088,134 1080,128 1072,134 1075,125 1068,119 1077,119"
+        fill="none" stroke="#90c0e0" stroke-width="1" opacity="0.6"/>
+      <polygon points="490,740 492,748 501,748 494,754 497,762 490,757 483,762 486,754 479,748 488,748"
+        fill="none" stroke="#a898d0" stroke-width="1" opacity="0.55"/>
+
+      <!-- scattered dots — multicolour -->
+      <circle cx="260"  cy="80"  r="2.5" fill="#78b89a" opacity="0.4"/>
+      <circle cx="580"  cy="55"  r="2"   fill="#a898d0" opacity="0.4"/>
+      <circle cx="920"  cy="100" r="2.5" fill="#90c0e0" opacity="0.35"/>
+      <circle cx="1200" cy="300" r="2"   fill="#e8a87c" opacity="0.4"/>
+      <circle cx="780"  cy="730" r="2.5" fill="#e08898" opacity="0.35"/>
+      <circle cx="160"  cy="370" r="2"   fill="#e8c080" opacity="0.35"/>
+      <circle cx="1380" cy="540" r="2"   fill="#78b89a" opacity="0.3"/>
+      <circle cx="430"  cy="670" r="2.5" fill="#a898d0" opacity="0.35"/>
+
+      <!-- corner flourish TL — mint -->
+      <path d="M22,140 C40,110 62,92 95,80" fill="none" stroke="#78b89a" stroke-width="1.1" stroke-linecap="round" opacity="0.45"/>
+      <circle cx="22" cy="140" r="3.5" fill="#78b89a" opacity="0.45"/>
+      <circle cx="95" cy="80"  r="3.5" fill="#78b89a" opacity="0.45"/>
+
+      <!-- corner flourish BR — lavender -->
+      <path d="M1418,660 C1400,690 1378,708 1345,720" fill="none" stroke="#a898d0" stroke-width="1.1" stroke-linecap="round" opacity="0.45"/>
+      <circle cx="1418" cy="660" r="3.5" fill="#a898d0" opacity="0.45"/>
+      <circle cx="1345" cy="720" r="3.5" fill="#a898d0" opacity="0.45"/>
+    </svg>
+  </div>
+
+  <!-- rising specks -->
+  <div class="specks" aria-hidden="true">
+    <div class="speck"></div><div class="speck"></div><div class="speck"></div>
+    <div class="speck"></div><div class="speck"></div><div class="speck"></div>
+    <div class="speck"></div><div class="speck"></div><div class="speck"></div>
+    <div class="speck"></div>
+  </div>
+
+  <!-- content -->
+  <div class="hero-inner">
+    <p class="hero-eyebrow">Novel I &nbsp;·&nbsp; Chapter Two</p>
+
+    <h1 class="hero-title">
+      Lucifer &amp; Victoria's
+      <span class="accent">Aurora's Symphony</span>
+    </h1>
+
+    <div class="hero-divider">
+      <div class="hero-divider-line"></div>
+      <div class="hero-divider-icon">
+        <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <line x1="10" y1="1"  x2="10" y2="19" stroke="#a898d0" stroke-width="1.2" stroke-linecap="round"/>
+          <line x1="1"  y1="10" x2="19" y2="10" stroke="#a898d0" stroke-width="1.2" stroke-linecap="round"/>
+          <line x1="3"  y1="3"  x2="17" y2="17" stroke="#a898d0" stroke-width="1.2" stroke-linecap="round"/>
+          <line x1="17" y1="3"  x2="3"  y2="17" stroke="#a898d0" stroke-width="1.2" stroke-linecap="round"/>
+          <circle cx="10" cy="10" r="2.5" stroke="#a898d0" stroke-width="1.1" fill="none"/>
+        </svg>
+      </div>
+      <div class="hero-divider-line"></div>
+    </div>
+
+    <p class="hero-desc">
+      Two souls whose paths once grazed in school halls — brought together by destiny, digital warmth, and the quiet magic of <em>caring.</em>
+    </p>
+  </div>
+
+  <div class="scroll-cue" aria-hidden="true">
+    <span class="scroll-cue-text">Explore</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ── MAIN ── -->
+<main class="main">
+
+  <div class="story-intro reveal">
+    <p class="story-intro-text">
+      Lucifer's day as an Associate System Engineer began with the soft chime of his alarm clock resonating through the serene stillness of his cozy apartment in Aurora Vista. The dawn light, tinged with hues of orange and pink, gently filtered through his window, casting a warm glow on the room as he slowly stirred from slumber. The crisp mountain air, imbued with a hint of pine and the freshness of the previous night's snowfall, seeped through the slightly open window, invigorating his senses and readying him for the day ahead.
+    </p>
+  </div>
+
+  <div class="pull-quote reveal">
+    <p>"Glad I could provide some entertainment for your evening!"</p>
+  </div>
+
+  <!-- wavy aurora divider -->
+  <div class="wave-divider reveal" aria-hidden="true">
+    <svg viewBox="0 0 320 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,18 C45,6  90,30 135,18 C180,6  225,30 270,18 C290,12 308,20 320,18"
+        stroke="#78b89a" stroke-width="1.2" stroke-linecap="round"/>
+      <path d="M0,24 C45,12 90,36 135,24 C180,12 225,36 270,24 C290,18 308,26 320,24"
+        stroke="#a898d0" stroke-width="0.8" stroke-linecap="round" opacity="0.65"/>
+      <path d="M0,12 C45,0  90,24 135,12 C180,0  225,24 270,12 C290,6  308,14 320,12"
+        stroke="#90c0e0" stroke-width="0.6" stroke-linecap="round" opacity="0.5"/>
+      <!-- centre ornament -->
+      <circle cx="160" cy="18" r="5" fill="none" stroke="#e08898" stroke-width="1.2"/>
+      <line x1="148" y1="18" x2="155" y2="18" stroke="#e08898" stroke-width="1"/>
+      <line x1="165" y1="18" x2="172" y2="18" stroke="#e08898" stroke-width="1"/>
+      <line x1="160" y1="8"  x2="160" y2="13" stroke="#e08898" stroke-width="1"/>
+      <line x1="160" y1="23" x2="160" y2="28" stroke="#e08898" stroke-width="1"/>
+    </svg>
+  </div>
+
+  <div class="section-label reveal">
+    <span class="section-label-text">Chapter Two · Six Phases</span>
+    <div class="section-label-line"></div>
+  </div>
+
+  <!-- ── phase cards ── -->
+  <div class="phases">
+
+    <a href="chapter2/c2p1.html" class="phase-card reveal-left">
+      <div class="phase-strip"></div>
+      <div class="phase-body">
+        <span class="phase-num">01</span>
+        <div class="phase-info">
+          <div class="phase-title">Aurora's Beauty — Lucifer's Haven</div>
+          <div class="phase-sub">Where dawn paints the mountains in hues of orange and pink</div>
+          <span class="phase-tag">Nature</span>
+        </div>
+        <div class="phase-arrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+      </div>
+    </a>
+
+    <a href="chapter2/c2p2.html" class="phase-card reveal-left">
+      <div class="phase-strip"></div>
+      <div class="phase-body">
+        <span class="phase-num">02</span>
+        <div class="phase-info">
+          <div class="phase-title">A Day in Paradise</div>
+          <div class="phase-sub">Navigating work and friendship in Aurora Vista</div>
+          <span class="phase-tag">Connection</span>
+        </div>
+        <div class="phase-arrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+      </div>
+    </a>
+
+    <a href="chapter2/c2p3.html" class="phase-card reveal-left">
+      <div class="phase-strip"></div>
+      <div class="phase-body">
+        <span class="phase-num">03</span>
+        <div class="phase-info">
+          <div class="phase-title">The Masterpiece</div>
+          <div class="phase-sub">Victoria's winter vision of Aurora Vista</div>
+          <span class="phase-tag">Art</span>
+        </div>
+        <div class="phase-arrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+      </div>
+    </a>
+
+    <a href="chapter2/c2p4.html" class="phase-card reveal-left">
+      <div class="phase-strip"></div>
+      <div class="phase-body">
+        <span class="phase-num">04</span>
+        <div class="phase-info">
+          <div class="phase-title">Twilight Talks — Heart and Art</div>
+          <div class="phase-sub">Exploring tastes, tales, and the joy of shared afternoons</div>
+          <span class="phase-tag">Warmth</span>
+        </div>
+        <div class="phase-arrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+      </div>
+    </a>
+
+    <a href="chapter2/c2p5.html" class="phase-card reveal-left">
+      <div class="phase-strip"></div>
+      <div class="phase-body">
+        <span class="phase-num">05</span>
+        <div class="phase-info">
+          <div class="phase-title">A Sudden Silence</div>
+          <div class="phase-sub">The distance between messages — and the ache it carries</div>
+          <span class="phase-tag">Longing</span>
+        </div>
+        <div class="phase-arrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+      </div>
+    </a>
+
+    <a href="chapter2/c2p6.html" class="phase-card reveal-left">
+      <div class="phase-strip"></div>
+      <div class="phase-body">
+        <span class="phase-num">06</span>
+        <div class="phase-info">
+          <div class="phase-title">Guild Guardians</div>
+          <div class="phase-sub">The tale of unbreakable unity — Nightshade &amp; Starfire</div>
+          <span class="phase-tag">Unity</span>
+        </div>
+        <div class="phase-arrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+      </div>
+    </a>
+
+  </div>
+
+  <!-- back -->
+  <div class="back-section reveal">
+    <a href="https://unknownmeh.github.io/Writers-blog/" class="back-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+      Back to Home
+    </a>
+    <span class="back-note">Come back and read the next chapter</span>
+  </div>
+
+</main>
+
+<footer>
+  <p>Whispers of Caring &nbsp;·&nbsp; Lucifer Writings &nbsp;·&nbsp; LW@2024</p>
+</footer>
+
+<script>
+  const nav = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 50);
+  });
+
+  const btn  = document.getElementById('hamburger');
+  const menu = document.getElementById('mobileMenu');
+  btn.addEventListener('click', () => {
+    btn.classList.toggle('open');
+    menu.classList.toggle('open');
+  });
+  function closeMobile() {
+    btn.classList.remove('open');
+    menu.classList.remove('open');
+  }
+
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.08 });
+
+  document.querySelectorAll('.reveal, .reveal-left').forEach(el => obs.observe(el));
+</script>
+
+</body>
+</html>
