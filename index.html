@@ -456,65 +456,6 @@
         @media (max-width: 480px) {
             .chapter-excerpt { padding-left: 12px; font-size: 1rem; }
         }
-
-        /* ─── Mobile background image fixes ─── */
-        @media (max-width: 768px) {
-            /* Disable the scale transform — it causes clipping/blurring on small screens */
-            .bg-layer {
-                transform: none !important;
-                transition: none !important;
-                /* Ensure full coverage on all mobile screen ratios */
-                background-size: cover !important;
-                background-position: center center !important;
-                background-repeat: no-repeat !important;
-                /* Fix iOS Safari background rendering */
-                -webkit-background-size: cover !important;
-                /* Keep layer pinned to section bounds */
-                position: absolute !important;
-                inset: 0 !important;
-                width: 100% !important;
-                height: 100% !important;
-            }
-
-            /* Disable hover scale effect on touch devices */
-            section:hover .bg-layer {
-                transform: none !important;
-            }
-
-            /* Hero image — nudge focal point up slightly for portrait screens */
-            #hero .bg-layer {
-                background-position: center 20% !important;
-            }
-
-            /* Chapter 1 — was center top, keep it */
-            #ch1 .bg-layer {
-                background-position: center top !important;
-            }
-
-            /* Chapters 2–4 — center is fine */
-            #ch2 .bg-layer,
-            #ch3 .bg-layer,
-            #ch4 .bg-layer {
-                background-position: center center !important;
-            }
-
-            /* Slightly reduce section min-height on small screens
-               so the image fills without excessive dead space */
-            section {
-                min-height: 100svh;
-            }
-        }
-
-        /* Extra small phones (< 430px) */
-        @media (max-width: 430px) {
-            .bg-layer {
-                background-size: cover !important;
-                background-position: 50% 30% !important;
-            }
-            #ch1 .bg-layer {
-                background-position: 50% 10% !important;
-            }
-        }
     </style>
 </head>
 <body>
