@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Morning Musings — Whispers of Caring · Chapter IV</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,600;1,700&family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream:#fdf8f2;--ivory:#f7f0e6;--parchment:#efe5d4;--warm-mid:#e8d9c4;--warm-low:#d4c4ae;
+  --ink:#1c1712;--ink2:#3d3428;--ink3:#6b5c48;--ink4:#9c8a74;--ink5:#c4b09a;
+  --luc:#4a7c5f;--luc2:#2d5c42;--luc3:#1b3d2a;--luc-g:rgba(74,124,95,0.08);--luc-b:rgba(74,124,95,0.18);--luc-pale:rgba(74,124,95,0.05);
+  --vic:#b85c6e;--vic2:#8a3a4c;--vic3:#5c2030;--vic-g:rgba(184,92,110,0.08);--vic-b:rgba(184,92,110,0.18);--vic-pale:rgba(184,92,110,0.05);
+  --amber:#c8864a;--amber2:#a06030;--amber-g:rgba(200,134,74,0.1);
+  --sep:rgba(28,23,18,0.08);--sep2:rgba(28,23,18,0.14);--sep3:rgba(28,23,18,0.22);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'EB Garamond',serif;background:var(--cream);color:var(--ink);overflow-x:hidden;line-height:1.7;}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");opacity:.6;}
+#prog{position:fixed;top:0;left:0;height:3px;width:0%;z-index:600;background:linear-gradient(90deg,var(--luc),var(--amber),var(--vic));transition:width .1s linear;}
+nav{position:fixed;top:0;left:0;right:0;z-index:500;height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(18px,5vw,72px);background:rgba(253,248,242,0.94);backdrop-filter:blur(16px);border-bottom:1px solid var(--sep);}
+.nav-brand{font-family:'Playfair Display',serif;font-style:italic;font-size:1.05rem;font-weight:400;color:var(--ink);text-decoration:none;transition:color .3s;}
+.nav-brand:hover{color:var(--vic);}
+.nav-right{display:flex;align-items:center;gap:12px;}
+.nav-tag{font-family:'DM Mono',monospace;font-size:0.5rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--amber);border:1px solid var(--warm-low);padding:3px 10px;border-radius:3px;}
+.nav-link{font-family:'DM Mono',monospace;font-size:0.5rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--ink3);text-decoration:none;border:1px solid var(--sep2);padding:5px 14px;border-radius:3px;transition:all .25s;}
+.nav-link:hover{color:var(--luc);border-color:var(--luc-b);background:var(--luc-pale);}
+
+/* HERO */
+.hero{position:relative;min-height:100vh;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:100px 24px 80px;background:linear-gradient(170deg,var(--ivory) 0%,var(--cream) 55%,var(--parchment) 100%);z-index:2;}
+.hero::before{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 60% 50% at 20% 40%,rgba(200,134,74,0.07),transparent),radial-gradient(ellipse 50% 50% at 80% 35%,rgba(184,92,110,0.07),transparent),radial-gradient(ellipse 70% 40% at 50% 85%,rgba(74,124,95,0.06),transparent);}
+#floralCanvas{position:absolute;inset:0;z-index:1;pointer-events:none;}
+.hero-inner{position:relative;z-index:3;max-width:680px;}
+.h-issue{font-family:'DM Mono',monospace;font-size:0.52rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--ink4);display:block;margin-bottom:16px;opacity:0;animation:fadeUp .7s ease .1s forwards;}
+.h-kicker{font-family:'Playfair Display',serif;font-style:italic;font-weight:400;font-size:clamp(0.85rem,1.8vw,1.1rem);color:var(--vic);display:block;margin-bottom:10px;opacity:0;animation:fadeUp .7s ease .25s forwards;}
+.h-title{font-family:'Playfair Display',serif;font-size:clamp(3rem,8.5vw,6.5rem);font-weight:900;line-height:1.0;letter-spacing:-0.02em;color:var(--ink);margin-bottom:6px;opacity:0;animation:fadeUp 1s ease .4s forwards;}
+.h-title em{display:block;font-style:italic;font-weight:400;font-size:0.55em;color:var(--ink3);letter-spacing:0.06em;margin-top:8px;}
+.h-byline{display:flex;align-items:center;justify-content:center;gap:18px;margin:22px 0 20px;opacity:0;animation:fadeUp .7s ease .65s forwards;}
+.h-byline::before,.h-byline::after{content:'';flex:1;max-width:80px;height:1px;background:linear-gradient(90deg,transparent,var(--sep3));}
+.h-byline::after{transform:scaleX(-1);}
+.h-byline-inner{display:flex;align-items:center;gap:10px;font-family:'DM Mono',monospace;font-size:0.5rem;letter-spacing:0.18em;color:var(--ink4);}
+.byline-dot{width:4px;height:4px;border-radius:50%;background:var(--warm-low);}
+.h-desc{font-family:'EB Garamond',serif;font-style:italic;font-size:1.1rem;line-height:1.9;color:var(--ink3);max-width:460px;margin:0 auto 30px;opacity:0;animation:fadeUp .7s ease .8s forwards;}
+.h-tags{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;opacity:0;animation:fadeUp .7s ease 1s forwards;}
+.h-tag{font-family:'DM Mono',monospace;font-size:0.5rem;letter-spacing:0.12em;padding:5px 14px;border:1px solid var(--sep2);border-radius:3px;color:var(--ink4);background:rgba(255,255,255,0.5);transition:all .25s;}
+.h-tag.luc{color:var(--luc);border-color:var(--luc-b);background:var(--luc-pale);}
+.h-tag.vic{color:var(--vic);border-color:var(--vic-b);background:var(--vic-pale);}
+.h-tag.amb{color:var(--amber);border-color:rgba(200,134,74,0.25);background:var(--amber-g);}
+.scroll-cue{position:absolute;bottom:32px;left:50%;transform:translateX(-50%);z-index:3;display:flex;flex-direction:column;align-items:center;gap:10px;opacity:0;animation:fadeUp .7s ease 1.5s forwards;}
+.scroll-cue span{font-family:'DM Mono',monospace;font-size:0.46rem;letter-spacing:0.32em;text-transform:uppercase;color:var(--ink5);}
+.scroll-line{width:1px;height:36px;background:linear-gradient(180deg,var(--amber),transparent);animation:lineGrow 2.2s ease-in-out infinite;}
+@keyframes lineGrow{0%,100%{opacity:.3;}50%{opacity:1;}}
+
+/* PAGE */
+.page{position:relative;z-index:2;max-width:860px;margin:0 auto;padding:0 clamp(20px,5vw,52px) 100px;}
+.sec-div{display:flex;align-items:center;gap:14px;margin:72px 0 34px;}
+.sec-div-label{font-family:'DM Mono',monospace;font-size:0.5rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--ink4);white-space:nowrap;}
+.sec-div-rule{flex:1;height:1px;background:var(--sep2);}
+.sec-div-num{font-family:'Playfair Display',serif;font-style:italic;font-size:0.9rem;color:var(--ink5);}
+.scene-head{font-family:'Playfair Display',serif;font-size:clamp(1.7rem,4.5vw,2.8rem);font-weight:700;line-height:1.12;letter-spacing:-0.01em;color:var(--ink);margin-bottom:20px;}
+.scene-head em{font-style:italic;font-weight:400;color:var(--ink3);}
+.scene-head .lc{color:var(--luc);}
+.scene-head .vc{color:var(--vic);}
+.scene-head .ac{color:var(--amber);}
+.prose{font-size:1.14rem;line-height:2.05;color:var(--ink2);margin-bottom:22px;}
+.prose em{font-style:italic;color:var(--ink);}
+.prose strong{font-weight:500;color:var(--ink);}
+.drop::first-letter{font-family:'Playfair Display',serif;font-size:4.8rem;font-weight:900;font-style:italic;float:left;line-height:.78;margin:.06em .16em 0 0;color:var(--amber);}
+
+/* PULL QUOTE */
+.pull{margin:40px 0;padding:30px 40px;border-top:2px solid var(--sep2);border-bottom:2px solid var(--sep2);text-align:center;position:relative;background:var(--ivory);}
+.pull::before{content:'\201C';font-family:'Playfair Display',serif;font-size:5rem;line-height:1;color:var(--warm-mid);position:absolute;top:-8px;left:28px;}
+.pull p{font-family:'Playfair Display',serif;font-style:italic;font-size:clamp(1.1rem,2.2vw,1.4rem);color:var(--ink);line-height:1.65;}
+.pull cite{display:block;margin-top:12px;font-family:'DM Mono',monospace;font-style:normal;font-size:0.5rem;letter-spacing:0.2em;color:var(--ink4);}
+
+/* STICKER CHAT */
+.sticker-chat{background:var(--ivory);border:1px solid var(--sep2);border-radius:14px;margin:30px 0;overflow:hidden;box-shadow:0 2px 20px rgba(28,23,18,0.06);}
+.sc-bar{display:flex;align-items:center;gap:10px;padding:12px 20px;border-bottom:1px solid var(--sep);background:var(--cream);}
+.sc-bar-dots{display:flex;gap:5px;}
+.sc-bar-dots span{width:8px;height:8px;border-radius:50%;}
+.scd1{background:#ff605a;}.scd2{background:#ffbc2c;}.scd3{background:#28c840;}
+.sc-bar-title{font-family:'DM Mono',monospace;font-size:0.5rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink4);margin-left:6px;}
+.sc-bar-status{margin-left:auto;font-family:'DM Mono',monospace;font-size:0.5rem;color:var(--luc);display:flex;align-items:center;gap:5px;}
+.sc-bar-status::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--luc);animation:pulse-dot 2s infinite;}
+@keyframes pulse-dot{0%,100%{opacity:1;}50%{opacity:.3;}}
+.sc-body{padding:22px 20px;display:flex;flex-direction:column;gap:14px;}
+.sc-msg{display:flex;flex-direction:column;max-width:75%;}
+.sc-msg.luc{align-self:flex-end;align-items:flex-end;}
+.sc-msg.vic{align-self:flex-start;}
+.sc-who{font-family:'DM Mono',monospace;font-size:0.46rem;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:5px;}
+.sc-msg.luc .sc-who{color:var(--luc);text-align:right;}
+.sc-msg.vic .sc-who{color:var(--vic);}
+.sc-bubble{padding:11px 18px;font-family:'EB Garamond',serif;font-style:italic;font-size:1.0rem;line-height:1.72;color:var(--ink2);border-radius:3px;}
+.sc-sticker{font-size:2.2rem;padding:10px 14px;border-radius:3px;text-align:center;display:inline-block;line-height:1.3;}
+.sc-msg.luc .sc-bubble,.sc-msg.luc .sc-sticker{background:var(--luc-g);border:1px solid var(--luc-b);border-radius:12px 0 12px 12px;}
+.sc-msg.vic .sc-bubble,.sc-msg.vic .sc-sticker{background:var(--vic-g);border:1px solid var(--vic-b);border-radius:0 12px 12px 12px;}
+.sc-caption{font-family:'DM Mono',monospace;font-size:0.46rem;letter-spacing:0.12em;margin-top:4px;color:var(--ink5);font-style:normal;}
+.sc-msg.luc .sc-caption{text-align:right;}
+
+/* PLAN GRID */
+.plan-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:28px 0;}
+.plan-card{background:var(--ivory);border:1px solid var(--sep2);border-radius:10px;padding:20px 22px;position:relative;overflow:hidden;transition:all .25s;}
+.plan-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+.plan-card.lc-card::before{background:linear-gradient(90deg,var(--luc),transparent);}
+.plan-card.vc-card::before{background:linear-gradient(90deg,var(--vic),transparent);}
+.plan-card.ac-card::before{background:linear-gradient(90deg,var(--amber),transparent);}
+.plan-card.sh-card::before{background:linear-gradient(90deg,var(--ink3),transparent);}
+.plan-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(28,23,18,0.08);}
+.pc-icon{font-size:1.6rem;display:block;margin-bottom:10px;}
+.pc-what{font-family:'DM Mono',monospace;font-size:0.48rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink4);display:block;margin-bottom:6px;}
+.pc-desc{font-family:'EB Garamond',serif;font-style:italic;font-size:0.95rem;line-height:1.65;color:var(--ink2);}
+
+/* GIFT REVEAL */
+.gift-reveal{margin:32px 0;border-radius:12px;overflow:hidden;border:1px solid var(--sep2);box-shadow:0 4px 24px rgba(28,23,18,0.07);}
+.gr-top{background:var(--ivory);padding:28px 32px;display:flex;align-items:center;gap:20px;border-bottom:1px solid var(--sep);}
+.gr-box{width:70px;height:70px;border-radius:12px;background:linear-gradient(135deg,var(--vic-g),var(--vic-pale));border:1px solid var(--vic-b);display:flex;align-items:center;justify-content:center;font-size:2rem;flex-shrink:0;cursor:pointer;transition:all .3s;}
+.gr-box:hover{transform:rotate(-5deg) scale(1.05);}
+.gr-box.opened{animation:unwrap .5s ease forwards;}
+@keyframes unwrap{0%{transform:scale(1);}30%{transform:scale(0.85) rotate(8deg);}60%{transform:scale(1.12) rotate(-3deg);}100%{transform:scale(1) rotate(0deg);}}
+.gr-info{flex:1;}
+.gr-label{font-family:'DM Mono',monospace;font-size:0.5rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--vic);display:block;margin-bottom:8px;}
+.gr-title{font-family:'Playfair Display',serif;font-style:italic;font-size:1.3rem;color:var(--ink);margin-bottom:6px;}
+.gr-sub{font-family:'EB Garamond',serif;font-size:0.95rem;color:var(--ink3);line-height:1.6;}
+.gr-reveal{background:var(--cream);padding:0;max-height:0;overflow:hidden;transition:max-height .8s cubic-bezier(.4,0,.2,1),padding .4s;}
+.gr-reveal.open{max-height:500px;padding:24px 32px;}
+.gr-reveal-label{font-family:'DM Mono',monospace;font-size:0.5rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--amber);display:block;margin-bottom:14px;}
+.brushes-row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px;}
+.brush-item{display:flex;flex-direction:column;align-items:center;gap:5px;background:var(--ivory);border:1px solid var(--sep2);border-radius:8px;padding:12px 16px;font-family:'DM Mono',monospace;font-size:0.46rem;letter-spacing:0.1em;color:var(--ink4);text-align:center;}
+.brush-icon{font-size:1.6rem;}
+.gr-btn{display:inline-flex;align-items:center;gap:8px;padding:9px 22px;border-radius:5px;border:1px solid var(--vic-b);color:var(--vic);background:var(--vic-pale);cursor:pointer;font-family:'DM Mono',monospace;font-size:0.5rem;letter-spacing:0.18em;text-transform:uppercase;transition:all .25s;}
+.gr-btn:hover{background:var(--vic-g);box-shadow:0 0 16px rgba(184,92,110,0.2);}
+
+/* BANTER */
+.banter{background:var(--ivory);border:1px solid var(--sep2);border-radius:14px;margin:30px 0;overflow:hidden;box-shadow:0 2px 20px rgba(28,23,18,0.06);}
+.banter-header{background:var(--cream);padding:12px 20px;border-bottom:1px solid var(--sep);display:flex;align-items:center;justify-content:space-between;}
+.banter-title{font-family:'DM Mono',monospace;font-size:0.5rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--ink4);}
+.banter-badge{font-family:'DM Mono',monospace;font-size:0.46rem;letter-spacing:0.14em;padding:3px 10px;border-radius:3px;color:var(--amber);border:1px solid rgba(200,134,74,0.25);background:var(--amber-g);}
+.banter-body{padding:22px 20px;display:flex;flex-direction:column;gap:12px;}
+.banter-more{display:none;flex-direction:column;gap:12px;}
+.banter-more.open{display:flex;}
+.banter-toggle{display:block;width:100%;padding:10px;background:none;border:none;border-top:1px solid var(--sep);font-family:'DM Mono',monospace;font-size:0.48rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--ink4);cursor:pointer;transition:color .2s,background .2s;}
+.banter-toggle:hover{color:var(--vic);background:var(--vic-pale);}
+.b-msg{display:flex;flex-direction:column;max-width:80%;}
+.b-msg.luc{align-self:flex-end;align-items:flex-end;}
+.b-msg.vic{align-self:flex-start;}
+.b-who{font-family:'DM Mono',monospace;font-size:0.46rem;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:5px;}
+.b-msg.luc .b-who{color:var(--luc);text-align:right;}
+.b-msg.vic .b-who{color:var(--vic);}
+.b-bub{padding:11px 18px;font-family:'EB Garamond',serif;font-style:italic;font-size:1.0rem;line-height:1.72;color:var(--ink2);}
+.b-msg.luc .b-bub{background:var(--luc-g);border:1px solid var(--luc-b);border-radius:12px 0 12px 12px;}
+.b-msg.vic .b-bub{background:var(--vic-g);border:1px solid var(--vic-b);border-radius:0 12px 12px 12px;}
+
+/* REFLECTION */
+.reflection{background:linear-gradient(155deg,var(--vic-pale),var(--luc-pale));border:1px solid var(--sep2);border-radius:14px;padding:38px 44px;margin:40px 0;position:relative;overflow:hidden;box-shadow:0 4px 30px rgba(28,23,18,0.06);}
+.reflection::before{content:'\2665';position:absolute;bottom:-20px;right:20px;font-size:8rem;color:rgba(184,92,110,0.04);line-height:1;pointer-events:none;}
+.ref-label{font-family:'DM Mono',monospace;font-size:0.5rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--vic);display:block;margin-bottom:14px;}
+.ref-title{font-family:'Playfair Display',serif;font-style:italic;font-size:1.5rem;font-weight:400;color:var(--ink);margin-bottom:16px;}
+.ref-text{font-family:'EB Garamond',serif;font-size:1.1rem;line-height:2.0;color:var(--ink2);}
+.ref-text em{font-style:italic;color:var(--vic);}
+.ref-text strong{font-weight:500;color:var(--ink);}
+
+/* GAME STRIP */
+.game-strip{background:var(--ink);border-radius:12px;padding:32px 36px;margin:32px 0;position:relative;overflow:hidden;}
+.game-strip::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 60% at 20% 50%,rgba(74,124,95,0.12),transparent),radial-gradient(ellipse 50% 50% at 80% 40%,rgba(184,92,110,0.1),transparent);}
+.gs-label{font-family:'DM Mono',monospace;font-size:0.5rem;letter-spacing:0.25em;text-transform:uppercase;color:rgba(255,255,255,0.4);display:block;margin-bottom:14px;}
+.gs-title{font-family:'Playfair Display',serif;font-style:italic;font-size:1.4rem;color:#f0e8dc;margin-bottom:14px;position:relative;z-index:1;}
+.gs-text{font-family:'EB Garamond',serif;font-style:italic;font-size:1.05rem;line-height:1.9;color:rgba(240,232,220,0.75);position:relative;z-index:1;}
+.gs-text em{color:#f0e8dc;font-style:italic;}
+
+/* GOODNIGHT */
+.goodnight{background:linear-gradient(155deg,rgba(28,23,18,0.03),rgba(28,23,18,0.07));border:1px solid var(--sep2);border-radius:14px;padding:32px 36px;margin:32px 0;text-align:center;position:relative;}
+.goodnight::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--amber2),transparent);opacity:.4;}
+.gn-moon{font-size:2.5rem;display:block;margin-bottom:14px;}
+.gn-title{font-family:'Playfair Display',serif;font-style:italic;font-size:1.4rem;color:var(--ink);margin-bottom:16px;}
+.gn-msgs{display:flex;flex-direction:column;gap:10px;max-width:520px;margin:0 auto;}
+.gn-line{font-family:'EB Garamond',serif;font-style:italic;font-size:1.0rem;line-height:1.65;padding:10px 18px;border-radius:8px;}
+.gn-luc{background:var(--luc-g);border:1px solid var(--luc-b);color:var(--ink2);text-align:right;}
+.gn-vic{background:var(--vic-g);border:1px solid var(--vic-b);color:var(--ink2);text-align:left;}
+.gn-who{display:block;font-family:'DM Mono',monospace;font-style:normal;font-size:0.44rem;letter-spacing:0.18em;margin-bottom:4px;opacity:.7;}
+.gn-luc .gn-who{color:var(--luc);}
+.gn-vic .gn-who{color:var(--vic);}
+
+/* CLOSING */
+.closing{text-align:center;padding:64px 0 90px;border-top:1px solid var(--sep2);margin-top:64px;}
+.closing-ornament{display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:24px;}
+.closing-ornament::before,.closing-ornament::after{content:'';width:56px;height:1px;background:linear-gradient(90deg,transparent,var(--sep3));}
+.closing-ornament::after{transform:scaleX(-1);}
+.closing-ornament span{font-size:0.5rem;letter-spacing:10px;color:var(--ink5);}
+.closing-quote{font-family:'Playfair Display',serif;font-style:italic;font-size:clamp(1.0rem,2vw,1.25rem);color:var(--ink3);line-height:1.8;max-width:520px;margin:0 auto 36px;}
+.btn-back{display:inline-flex;align-items:center;gap:9px;padding:12px 30px;border-radius:4px;border:1px solid var(--sep3);color:var(--ink2);text-decoration:none;font-family:'DM Mono',monospace;font-size:0.52rem;letter-spacing:0.2em;text-transform:uppercase;transition:all .3s;background:var(--ivory);}
+.btn-back:hover{border-color:var(--vic-b);color:var(--vic);background:var(--vic-pale);}
+.btn-back svg{width:12px;height:12px;transition:transform .25s;}
+.btn-back:hover svg{transform:translateX(-3px);}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:none;}}
+.rev{opacity:0;transform:translateY(14px);transition:opacity .75s ease,transform .75s ease;}
+.rev.vis{opacity:1;transform:none;}
+
+@media(max-width:640px){
+  nav{padding:0 16px;}.nav-tag{display:none;}
+  .page{padding:0 18px 80px;}
+  .plan-grid{grid-template-columns:1fr;}
+  .reflection,.game-strip,.goodnight{padding:22px 18px;}
+  .gr-top{flex-direction:column;align-items:flex-start;}
+  .scene-head{font-size:1.7rem;}
+  .h-title{font-size:2.8rem;}
+  .pull{padding:22px 20px;}
+  .pull::before{left:14px;}
+}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+<nav>
+  <a href="index.html" class="nav-brand">Whispers of Caring</a>
+  <div class="nav-right">
+    <span class="nav-tag">C4 · P4</span>
+    <a href="c4index.html" class="nav-link">HOME</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <canvas id="floralCanvas"></canvas>
+  <div class="hero-inner">
+    <span class="h-issue">|| chapter iv · phase iv · daily dispatch ||</span>
+    <span class="h-kicker">Between Lucifer &amp; Victoria</span>
+    <h1 class="h-title">Morning<br>Musings<em>&amp; Evening Teasers</em></h1>
+    <div class="h-byline">
+      <div class="h-byline-inner">
+        <span>Stickers</span><div class="byline-dot"></div>
+        <span>Breakfast Plans</span><div class="byline-dot"></div>
+        <span>A Mystery Gift</span><div class="byline-dot"></div>
+        <span>Goodnight</span>
+      </div>
+    </div>
+    <p class="h-desc">As days fade, their bond only deepens — connecting across two different worlds, every single day.</p>
+    <div class="h-tags">
+      <span class="h-tag luc">🌿 Lucifer</span>
+      <span class="h-tag vic">🌹 Victoria</span>
+      <span class="h-tag amb">☕ A Cosy Day</span>
+      <span class="h-tag">🎮 Evening Arena</span>
+    </div>
+  </div>
+  <div class="scroll-cue"><span>// read on //</span><div class="scroll-line"></div></div>
+</section>
+
+<div class="page">
+
+  <!-- I. MORNING STICKERS -->
+  <div class="sec-div rev">
+    <span class="sec-div-label">// moment i · rise &amp; shine //</span>
+    <div class="sec-div-rule"></div>
+    <span class="sec-div-num">01</span>
+  </div>
+  <h2 class="scene-head rev">The <span class="ac">Good Morning</span><br>Ritual</h2>
+  <p class="prose drop rev">Lucifer stirred awake to find his room had barely brightened from the night before, the morning light only just filtering through his curtains. He smiled and felt for his phone — another notification from Victoria. That had, over time, become part of their little tradition: sending good morning texts to one another. Today was no different.</p>
+
+  <div class="sticker-chat rev">
+    <div class="sc-bar">
+      <div class="sc-bar-dots"><span class="scd1"></span><span class="scd2"></span><span class="scd3"></span></div>
+      <span class="sc-bar-title">Morning Messages · Daily Ritual</span>
+      <span class="sc-bar-status">Connected</span>
+    </div>
+    <div class="sc-body">
+      <div class="sc-msg vic">
+        <div class="sc-who">Victoria</div>
+        <div class="sc-sticker">😴🐱<br><small style="font-size:0.7rem;font-family:'DM Mono',monospace;letter-spacing:0.1em;color:var(--vic)">Good morning!</small></div>
+        <span class="sc-caption">// sleepy cat sticker · stretching //</span>
+      </div>
+      <div class="sc-msg luc">
+        <div class="sc-who">Lucifer</div>
+        <div class="sc-sticker">🐻☕<br><small style="font-size:0.7rem;font-family:'DM Mono',monospace;letter-spacing:0.1em;color:var(--luc)">Morning!</small></div>
+        <span class="sc-caption">// yawning bear with coffee cup //</span>
+      </div>
+      <div class="sc-msg vic">
+        <div class="sc-who">Victoria</div>
+        <div class="sc-sticker">😎☀️<br><small style="font-size:0.7rem;font-family:'DM Mono',monospace;letter-spacing:0.1em;color:var(--vic)">Rise &amp; shine!</small></div>
+        <span class="sc-caption">// smiling sun in sunglasses //</span>
+      </div>
+      <div class="sc-msg luc">
+        <div class="sc-who">Lucifer</div>
+        <div class="sc-sticker">🐶🪧<br><small style="font-size:0.7rem;font-family:'DM Mono',monospace;letter-spacing:0.1em;color:var(--luc)">Let's tackle the day!</small></div>
+        <span class="sc-caption">// playful dog wagging tail with sign //</span>
+      </div>
+      <div class="sc-msg vic">
+        <div class="sc-who">Victoria</div>
+        <div class="sc-sticker">🐰🦸<br><small style="font-size:0.7rem;font-family:'DM Mono',monospace;letter-spacing:0.1em;color:var(--vic)">We got this! 👍</small></div>
+        <span class="sc-caption">// bunny in superhero cape · thumbs up //</span>
+      </div>
+    </div>
+  </div>
+  <p class="prose rev">This light-hearted exchange set a cheerful tone for the day. For Lucifer, even if it was only a playful sticker chain, <em>it made him feel that both were connected and ready for whatever the day would throw their way.</em> There was warmth in his chest from knowing they had each other's backs in the simplest ways.</p>
+
+  <!-- II. BREAKFAST PLANS -->
+  <div class="sec-div rev">
+    <span class="sec-div-label">// moment ii · breakfast table //</span>
+    <div class="sec-div-rule"></div>
+    <span class="sec-div-num">02</span>
+  </div>
+  <h2 class="scene-head rev"><em>Avocado Toast</em><br>&amp; <span class="ac">Day Plans</span></h2>
+  <p class="prose rev">As the sun rose over the kitchen, Lucifer and Victoria enjoyed breakfast in the warm light. The smell of freshly brewed coffee and toasted bread filled the air, giving off a feeling of cosiness. Victoria was sipping her coffee and looking at Lucifer with a smile filled with questions.</p>
+  <div class="pull rev">
+    <p>"So, what are you going to be doing today?" she asked, while also drinking her coffee.</p>
+    <cite>— Victoria · Morning Conversation</cite>
+  </div>
+  <div class="plan-grid rev">
+    <div class="plan-card lc-card"><span class="pc-icon">🥾</span><span class="pc-what">// Lucifer's plan //</span><p class="pc-desc">A hike to <em>Aurora Vista's edge</em> — a new location on his bucket list, waiting to be explored.</p></div>
+    <div class="plan-card vc-card"><span class="pc-icon">🎨</span><span class="pc-what">// Victoria's plan //</span><p class="pc-desc">Art supply store run, then perhaps a walk to the park or a <em>refreshing beverage</em> together.</p></div>
+    <div class="plan-card ac-card"><span class="pc-icon">☕</span><span class="pc-what">// Saturday plan //</span><p class="pc-desc">The café with the <em>best pastries in town</em> — both had been meaning to go for a while.</p></div>
+    <div class="plan-card sh-card"><span class="pc-icon">🎬</span><span class="pc-what">// evening plan //</span><p class="pc-desc">A movie that recently came out — <em>supposedly really good</em>, they said with excitement.</p></div>
+  </div>
+  <p class="prose rev">As they continued talking, the conversation became more natural. They let each other know their schedules and popped ideas for the day. There was much understanding and companionship in these little moments — where they could experience <em>love in a low-key manner.</em></p>
+
+  <!-- III. THE MYSTERY GIFT -->
+  <div class="sec-div rev">
+    <span class="sec-div-label">// moment iii · the doorbell //</span>
+    <div class="sec-div-rule"></div>
+    <span class="sec-div-num">03</span>
+  </div>
+  <h2 class="scene-head rev">The <span class="vc">Mystery</span><br>at the Door</h2>
+  <p class="prose rev">Victoria was completely immersed in her painting, each brushstroke carefully placed to bring her vision to life. The room was silent, save for the soft sound of the brush gliding across the canvas. <em>Suddenly, the doorbell rang,</em> jolting her out of her creative flow.</p>
+  <p class="prose rev">She opened the door to find a delivery person holding a package. Confused, she accepted it — wracking her brain to remember if she had ordered anything recently. Nothing came to mind. She placed the package on the table and began to unwrap it slowly, <em>curiosity building.</em></p>
+
+  <div class="gift-reveal rev" id="giftReveal">
+    <div class="gr-top">
+      <div class="gr-box" id="giftBox" onclick="revealGift()">📦</div>
+      <div class="gr-info">
+        <span class="gr-label">// mystery package · delivered //</span>
+        <div class="gr-title">An Unexpected Gift</div>
+        <p class="gr-sub">No note. No name. Just a beautifully wrapped package waiting to be opened.</p>
+        <button class="gr-btn" id="giftBtn" onclick="revealGift()">✦ Unwrap the Package</button>
+      </div>
+    </div>
+    <div class="gr-reveal" id="giftRevealPanel">
+      <span class="gr-reveal-label">🎨 inside the package — premium art brushes</span>
+      <div class="brushes-row">
+        <div class="brush-item"><span class="brush-icon">🖌️</span>Fan Brush<br>No. 4</div>
+        <div class="brush-item"><span class="brush-icon">🖌️</span>Detail Liner<br>No. 0</div>
+        <div class="brush-item"><span class="brush-icon">🖌️</span>Round Wash<br>No. 12</div>
+        <div class="brush-item"><span class="brush-icon">🖌️</span>Flat Shader<br>No. 8</div>
+        <div class="brush-item"><span class="brush-icon">🖌️</span>Filbert<br>No. 6</div>
+      </div>
+      <p style="font-family:'EB Garamond',serif;font-style:italic;font-size:1.05rem;line-height:1.8;color:var(--ink2);">The exact kind she had been wanting but hadn't yet bought. They were perfect — precisely what she needed. But how did they end up here? <em>Then a suspicion crossed her mind, and a smirk tugged at the corner of her mouth.</em></p>
+    </div>
+  </div>
+
+  <div class="banter rev">
+    <div class="banter-header">
+      <span class="banter-title">// the reveal · brush-gate begins //</span>
+      <span class="banter-badge">✦ banter</span>
+    </div>
+    <div class="banter-body">
+      <div class="b-msg vic"><div class="b-who">Victoria</div><div class="b-bub">"So, you're the mysterious benefactor, huh? Care to explain why you're trying to buy your way into the title of 'best friend ever'?"</div></div>
+      <div class="b-msg luc"><div class="b-who">Lucifer</div><div class="b-bub">"Well, someone has to make sure you don't keep painting with those ratty old brushes. Consider it a public service."</div></div>
+      <div class="b-msg vic"><div class="b-who">Victoria</div><div class="b-bub">"Public service, huh? More like trying to make me feel bad for using you as my personal art supply sponsor."</div></div>
+      <div class="b-msg luc"><div class="b-who">Lucifer</div><div class="b-bub">"Please, you're lucky to have me. Now get back to work and make those brushes earn their keep."</div></div>
+    </div>
+    <div class="banter-more" id="banterMore">
+      <div class="b-msg vic"><div class="b-who">Victoria</div><div class="b-bub">"Fine, but next time I'm sending you a bill for my masterpiece."</div></div>
+      <div class="b-msg luc"><div class="b-who">Lucifer</div><div class="b-bub">"I'm swamped with work right now. Let's discuss everything in the evening. Until then, why don't you test out the kit and let me know how it feels?"</div></div>
+      <div class="b-msg vic"><div class="b-who">Victoria</div><div class="b-bub">"Alright, I'll put them to good use and let you know. Good luck with work!"</div></div>
+    </div>
+    <button class="banter-toggle" id="bt1" onclick="toggleBanter('banterMore','bt1','Continue conversation')">Continue conversation ↓</button>
+  </div>
+
+  <!-- IV. BRUSH REVIEW BANTER -->
+  <div class="sec-div rev">
+    <span class="sec-div-label">// moment iv · the verdict //</span>
+    <div class="sec-div-rule"></div>
+    <span class="sec-div-num">04</span>
+  </div>
+  <h2 class="scene-head rev">Artists vs <span class="lc">Engineers</span></h2>
+
+  <div class="banter rev">
+    <div class="banter-header">
+      <span class="banter-title">// brush review · with maximum sarcasm //</span>
+      <span class="banter-badge">✦ rivalry</span>
+    </div>
+    <div class="banter-body">
+      <div class="b-msg luc"><div class="b-who">Lucifer</div><div class="b-bub">"So, Miss Artist, you're saying it wasn't your talent all along — just the brushes, huh? 😉"</div></div>
+      <div class="b-msg vic"><div class="b-who">Victoria</div><div class="b-bub">"Oh please, these brushes just unlocked my true potential. Maybe you should get some too, so you can finally paint something other than stick figures!"</div></div>
+      <div class="b-msg luc"><div class="b-who">Lucifer</div><div class="b-bub">"Stick figures are underrated! But at least I don't need fancy brushes to get my work done. You artists are so dramatic."</div></div>
+      <div class="b-msg vic"><div class="b-who">Victoria</div><div class="b-bub">"Oh, is that so, Mr. Engineer? You wouldn't last a day without your gadgets. Maybe I should buy you a fancy pen so you can actually get some work done."</div></div>
+    </div>
+    <div class="banter-more" id="banterMore2">
+      <div class="b-msg luc"><div class="b-who">Lucifer</div><div class="b-bub">"Just wait till I send you a video of me drawing something amazing with your new brushes. You'll be so jealous."</div></div>
+      <div class="b-msg vic"><div class="b-who">Victoria</div><div class="b-bub">"Ha! I'd like to see you try. Just don't break them with your 'artistic skills.' 😂"</div></div>
+      <div class="b-msg luc"><div class="b-who">Lucifer</div><div class="b-bub">"You know, for someone who's supposed to be serious about art, you're pretty good at wasting time on nonsense."</div></div>
+      <div class="b-msg vic"><div class="b-who">Victoria</div><div class="b-bub">"And for someone who's supposed to be at work, you're pretty good at texting nonsense. Who's the real time-waster here?"</div></div>
+    </div>
+    <button class="banter-toggle" id="bt2" onclick="toggleBanter('banterMore2','bt2','Read more banter')">Read more banter ↓</button>
+  </div>
+
+  <!-- V. VICTORIA'S REFLECTION -->
+  <div class="sec-div rev">
+    <span class="sec-div-label">// moment v · quiet gratitude //</span>
+    <div class="sec-div-rule"></div>
+    <span class="sec-div-num">05</span>
+  </div>
+  <h2 class="scene-head rev">What <span class="vc">Victoria</span><br>Felt</h2>
+
+  <div class="reflection rev">
+    <span class="ref-label">// victoria's inner world //</span>
+    <div class="ref-title">A Bond Worth Everything</div>
+    <p class="ref-text">Victoria couldn't help but feel a wave of warmth as she reflected on her friendship with Lucifer. It wasn't just about the brushes — it was about <em>the thoughtfulness behind them.</em><br><br>Lucifer had a way of understanding her needs, often before she even voiced them. He had this uncanny ability to sense when she was struggling. Whether she was feeling stuck with her work or just needed a little boost of confidence, <strong>he always seemed to know exactly what to do or say to lift her spirits.</strong><br><br>In a world where people often looked out for their own interests, <em>Lucifer's selflessness stood out.</em> She was truly happy to have someone like him in her life — a friend who not only understood her but also made her feel seen, heard, and supported.</p>
+  </div>
+
+  <div class="pull rev">
+    <p>"In her heart, she knew that their friendship was something special — something to be treasured."</p>
+    <cite>— Victoria's Reflection · Chapter IV</cite>
+  </div>
+
+  <!-- VI. EVENING GAMING -->
+  <div class="sec-div rev">
+    <span class="sec-div-label">// moment vi · evening arena //</span>
+    <div class="sec-div-rule"></div>
+    <span class="sec-div-num">06</span>
+  </div>
+  <h2 class="scene-head rev">After <span class="ac">Work</span>,<br>Back to the Arena</h2>
+
+  <div class="game-strip rev">
+    <span class="gs-label">// online · co-op mode · synced //</span>
+    <div class="gs-title">Flawless Coordination</div>
+    <p class="gs-text">Lucifer and Victoria logged into their favourite online game, their screens lighting up with the familiar interface. <em>"You all set for another round?"</em> Victoria messaged eagerly. Lucifer, adjusting his strategy, replied: <em>"Absolutely. Let's show them what teamwork looks like."</em><br><br>Their coordination was flawless. Victoria dashed ahead with sharp reflexes, while Lucifer provided cover from a distance. <em>"Careful, they're flanking from the left!"</em> — <em>"Got it! You're my eyes and ears today."</em> Their communication was constant, filled with playful jabs and mutual encouragement.</p>
+  </div>
+
+  <div class="banter rev">
+    <div class="banter-header">
+      <span class="banter-title">// post-game · evening wind-down //</span>
+      <span class="banter-badge">✦ rivals in love</span>
+    </div>
+    <div class="banter-body">
+      <div class="b-msg vic"><div class="b-who">Victoria</div><div class="b-bub">"That was intense! But someone needs to teach you how to aim properly. 😴"</div></div>
+      <div class="b-msg luc"><div class="b-who">Lucifer</div><div class="b-bub">"Oh really? And here I thought you were auditioning for a dance-off with all those moves."</div></div>
+      <div class="b-msg vic"><div class="b-who">Victoria</div><div class="b-bub">"I had to rescue you more times than I can count tonight. Should I start calling you my 'strategic liability'?"</div></div>
+      <div class="b-msg luc"><div class="b-who">Lucifer</div><div class="b-bub">"Hey now — I wouldn't have needed rescuing if you didn't keep running headfirst into every ambush."</div></div>
+      <div class="b-msg vic"><div class="b-who">Victoria</div><div class="b-bub">"And miss out on all the fun? Besides, who would I tease if you weren't here to provide endless material?"</div></div>
+    </div>
+  </div>
+
+  <!-- VII. GOODNIGHT -->
+  <div class="sec-div rev">
+    <span class="sec-div-label">// moment vii · goodnight //</span>
+    <div class="sec-div-rule"></div>
+    <span class="sec-div-num">07</span>
+  </div>
+  <div class="goodnight rev">
+    <span class="gn-moon">🌙</span>
+    <div class="gn-title">The Best Kind of Ending</div>
+    <div class="gn-msgs">
+      <div class="gn-line gn-luc"><span class="gn-who">Lucifer</span>"Goodnight, queen of chaos. May your dreams be as adventurous as our gameplay. Catch you tomorrow!"</div>
+      <div class="gn-line gn-vic"><span class="gn-who">Victoria</span>"Goodnight, oh great strategist. Sleep tight and try not to dream of getting stuck in a never-ending ambush. 😉"</div>
+      <div class="gn-line gn-luc" style="font-size:1.4rem;text-align:center;padding:12px;border-radius:8px;">😴</div>
+    </div>
+  </div>
+
+  <p class="prose rev" style="text-align:center;font-style:italic;margin-top:28px;">Their conversation ended on a warm note, their teasing adding a layer of comfort to their friendship as they drifted off to sleep — <em>looking forward to their next session together.</em></p>
+
+  <div class="closing rev">
+    <div class="closing-ornament"><span>· · ·</span></div>
+    <p class="closing-quote">"As days fade, the relation of Lucifer and Victoria remains the same — their bond is unreal."</p>
+    <a href="c4index.html" class="btn-back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+      Return to Chapter Four
+    </a>
+  </div>
+</div>
+
+<script>
+/* Progress */
+const prog = document.getElementById('prog');
+window.addEventListener('scroll', () => {
+  const t = document.documentElement.scrollHeight - innerHeight;
+  prog.style.width = (t > 0 ? scrollY / t * 100 : 0) + '%';
+}, {passive:true});
+
+/* Floral canvas */
+(function(){
+  const c = document.getElementById('floralCanvas');
+  const ctx = c.getContext('2d');
+  const resize = () => { c.width = innerWidth; c.height = innerHeight; };
+  resize(); window.addEventListener('resize', resize);
+  const syms = ['✿','❀','·','◦','✦','❋','⁕'];
+  const cols = ['rgba(184,92,110,1)','rgba(74,124,95,1)','rgba(200,134,74,1)','rgba(156,138,116,1)'];
+  const pts = Array.from({length:32}, () => ({
+    x:Math.random()*innerWidth, y:Math.random()*innerHeight,
+    vy:-Math.random()*0.18-0.05, vx:(Math.random()-0.5)*0.1,
+    a:Math.random()*0.18+0.04, size:Math.random()*10+7,
+    sym:syms[Math.floor(Math.random()*syms.length)],
+    col:cols[Math.floor(Math.random()*cols.length)],
+    phase:Math.random()*Math.PI*2, rot:(Math.random()-0.5)*0.007, angle:0
+  }));
+  let t=0;
+  (function draw(){
+    ctx.clearRect(0,0,c.width,c.height);
+    pts.forEach(p => {
+      const alpha=p.a*(0.4+0.6*Math.abs(Math.sin(t*0.004+p.phase)));
+      ctx.save(); ctx.globalAlpha=alpha;
+      ctx.font=p.size+'px serif'; ctx.fillStyle=p.col;
+      ctx.translate(p.x,p.y); ctx.rotate(p.angle);
+      ctx.fillText(p.sym,-p.size/3,p.size/3); ctx.restore();
+      p.x+=p.vx+Math.sin(t*0.008+p.phase)*0.12; p.y+=p.vy; p.angle+=p.rot;
+      if(p.y<-20){p.y=innerHeight+20;p.x=Math.random()*innerWidth;}
+      if(p.x<-20)p.x=innerWidth+20; if(p.x>innerWidth+20)p.x=-20;
+    });
+    t++; requestAnimationFrame(draw);
+  })();
+})();
+
+/* Scroll reveal */
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting){e.target.classList.add('vis');io.unobserve(e.target);} });
+}, {threshold:0.08});
+document.querySelectorAll('.rev').forEach(el => io.observe(el));
+
+/* Sticker chat stagger */
+document.querySelectorAll('.sticker-chat').forEach(chat => {
+  chat.querySelectorAll('.sc-msg').forEach((m,i) => {
+    m.style.cssText=`opacity:0;transform:translateY(8px);transition:opacity .45s ease ${i*0.1}s,transform .45s ease ${i*0.1}s`;
+  });
+  const o=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.querySelectorAll('.sc-msg').forEach(m=>{m.style.opacity='1';m.style.transform='none';});o.unobserve(e.target);}});},{threshold:0.1});
+  o.observe(chat);
+});
+
+/* Banter stagger */
+document.querySelectorAll('.banter').forEach(chat => {
+  chat.querySelectorAll('.banter-body .b-msg').forEach((m,i) => {
+    m.style.cssText=`opacity:0;transform:translateY(8px);transition:opacity .4s ease ${i*0.08}s,transform .4s ease ${i*0.08}s`;
+  });
+  const o=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.querySelectorAll('.banter-body .b-msg').forEach(m=>{m.style.opacity='1';m.style.transform='none';});o.unobserve(e.target);}});},{threshold:0.1});
+  o.observe(chat);
+});
+
+/* Banter toggle */
+function toggleBanter(id, btnId, label) {
+  const el=document.getElementById(id);
+  const btn=document.getElementById(btnId);
+  const open=el.classList.toggle('open');
+  btn.textContent=open?'Collapse ↑':label+' ↓';
+  if(open){
+    el.querySelectorAll('.b-msg').forEach((m,i)=>{
+      m.style.opacity='0';m.style.transform='translateY(8px)';
+      setTimeout(()=>{m.style.transition='opacity .4s ease,transform .4s ease';m.style.opacity='1';m.style.transform='none';},i*80);
+    });
+  }
+}
+
+/* Gift reveal */
+let giftOpened=false;
+function revealGift(){
+  if(giftOpened) return;
+  giftOpened=true;
+  const box=document.getElementById('giftBox');
+  const panel=document.getElementById('giftRevealPanel');
+  const btn=document.getElementById('giftBtn');
+  box.classList.add('opened');
+  box.textContent='🎁';
+  setTimeout(()=>{box.textContent='🖌️';},500);
+  btn.textContent='✦ Opened!';
+  btn.disabled=true; btn.style.opacity='.5';
+  panel.classList.add('open');
+}
+
+/* Goodnight stagger */
+document.querySelectorAll('.gn-line').forEach((m,i)=>{
+  m.style.cssText=`opacity:0;transform:translateY(8px);transition:opacity .5s ease ${i*0.15}s,transform .5s ease ${i*0.15}s`;
+});
+const gnObs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.querySelectorAll('.gn-line').forEach(m=>{m.style.opacity='1';m.style.transform='none';});gnObs.unobserve(e.target);}});
+},{threshold:0.2});
+document.querySelectorAll('.goodnight').forEach(el=>gnObs.observe(el));
+</script>
+</body>
+</html>

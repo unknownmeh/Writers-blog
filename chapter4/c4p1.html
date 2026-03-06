@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Solitary Shadows — Chapter IV · Phase I · Whispers of Caring</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Josefin+Sans:ital,wght@0,200;0,300;0,400;0,600;1,300&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet"/>
+<style>
+
+/* ═══════════════════════════════════════
+   TOKENS — Noir Literary Journal
+═══════════════════════════════════════ */
+:root {
+  /* Core darks */
+  --ink:       #0c0b09;
+  --ink-2:     #111009;
+  --ink-3:     #191710;
+  --ink-4:     #231f16;
+  --charcoal:  #2e2a20;
+  --slate:     #3a3830;
+
+  /* Amber warmth */
+  --amber:     #d4902c;
+  --amber-2:   #e8a840;
+  --amber-dim: rgba(212,144,44,0.35);
+  --amber-trace: rgba(212,144,44,0.12);
+  --amber-glow:  rgba(232,168,64,0.08);
+
+  /* Gaming — cool indigo */
+  --game-bg:   #0a0e1a;
+  --game-2:    #111828;
+  --game-acc:  #4a88d4;
+  --game-acc2: #6aaae8;
+  --game-green:#38c880;
+
+  /* Terror — cold steel */
+  --terror-bg: #060810;
+  --terror-acc:#7090b8;
+  --terror-red:#c84040;
+  --terror-pale:rgba(200,210,230,0.6);
+
+  /* Typography */
+  --ff-prose:   'Crimson Pro', Georgia, serif;
+  --ff-display: 'Playfair Display', Georgia, serif;
+  --ff-ui:      'Josefin Sans', sans-serif;
+
+  --pp: clamp(20px, 5vw, 72px);
+  --max-w: 740px;
+  --timeline-w: 44px;
+}
+
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
+
+body {
+  font-family: var(--ff-prose);
+  background: var(--ink);
+  color: rgba(220,210,185,0.75);
+  overflow-x: hidden;
+  line-height: 1;
+}
+
+/* Grain */
+body::before {
+  content:''; position:fixed; inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.68' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0.15'/%3E%3C/filter%3E%3Crect width='260' height='260' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events:none; z-index:9000;
+}
+
+/* ─── Reading Progress ─── */
+#prog {
+  position:fixed; top:0; left:0; height:2px; width:0%;
+  background:linear-gradient(90deg, var(--amber), var(--game-acc), var(--terror-red));
+  z-index:800; transition:width .1s linear;
+}
+
+/* ═══════════════════════════════════════
+   NAV
+═══════════════════════════════════════ */
+nav {
+  position:fixed; top:0; left:0; right:0; z-index:700;
+  height:52px; display:flex; align-items:center; justify-content:space-between;
+  padding:0 var(--pp);
+  background:rgba(12,11,9,0.92);
+  backdrop-filter:blur(18px);
+  border-bottom:1px solid rgba(212,144,44,0.1);
+}
+.n-brand {
+  font-family: var(--ff-display);
+  font-size: clamp(0.85rem,2vw,1rem);
+  font-style:italic;
+  color:rgba(220,200,160,0.7);
+  text-decoration:none;
+}
+.n-right { display:flex; gap:clamp(12px,2.5vw,24px); align-items:center; }
+.n-link {
+  font-family:var(--ff-ui);
+  font-size:clamp(0.58rem,1.4vw,0.64rem);
+  font-weight:300; letter-spacing:0.25em; text-transform:uppercase;
+  color:rgba(200,180,140,0.3); text-decoration:none; transition:color .25s;
+  white-space:nowrap;
+}
+.n-link:hover { color:var(--amber); }
+.n-badge {
+  font-family:var(--ff-ui); font-size:0.54rem; font-weight:300;
+  letter-spacing:0.2em; color:rgba(212,144,44,0.35);
+  border:1px solid rgba(212,144,44,0.15); padding:3px 9px;
+  display:none;
+}
+@media(min-width:480px){.n-badge{display:block;}}
+
+/* ═══════════════════════════════════════
+   HERO
+═══════════════════════════════════════ */
+.hero {
+  min-height:100svh;
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:flex-end;
+  padding:80px var(--pp) 68px;
+  position:relative; overflow:hidden; text-align:center;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(30,24,12,0.6) 0%, transparent 65%),
+    radial-gradient(ellipse 100% 60% at 50% 110%, rgba(40,30,10,0.8) 0%, transparent 60%),
+    linear-gradient(170deg, #0c0a06 0%, #0e0d08 40%, #12100a 70%, #0a0908 100%);
+}
+
+/* Candle flicker light at top */
+.hero-light {
+  position:absolute; top:0; left:50%; transform:translateX(-50%);
+  width:clamp(200px,50vw,400px); height:clamp(150px,35vw,300px);
+  background:radial-gradient(ellipse 100% 100% at 50% 0%,
+    rgba(200,130,30,0.12) 0%,
+    rgba(180,110,20,0.06) 40%,
+    transparent 70%);
+  pointer-events:none;
+  animation:candleFlicker 4s ease-in-out infinite;
+}
+@keyframes candleFlicker {
+  0%,100%{opacity:0.8;}
+  25%{opacity:1;}
+  50%{opacity:0.65;}
+  75%{opacity:0.95;}
+}
+
+/* Floating dust motes */
+.hero-motes {
+  position:absolute; inset:0; pointer-events:none; overflow:hidden;
+}
+.mote {
+  position:absolute; border-radius:50%;
+  background:rgba(212,144,44,0.15);
+  animation:moteFloat linear infinite;
+}
+@keyframes moteFloat {
+  0%{transform:translateY(100vh) translateX(0) scale(1); opacity:0;}
+  10%{opacity:1;}
+  90%{opacity:0.3;}
+  100%{transform:translateY(-100px) translateX(var(--mx,20px)) scale(0.5); opacity:0;}
+}
+
+/* Mountain silhouette */
+.hero-terrain {
+  position:absolute; bottom:0; left:0; right:0;
+  height:clamp(80px,18vw,160px); pointer-events:none;
+}
+.hero-terrain svg { width:100%; height:100%; }
+
+.hero-content { position:relative; z-index:2; max-width:620px; width:100%; }
+
+.h-eyebrow {
+  font-family:var(--ff-ui); font-size:clamp(0.48rem,1.2vw,0.56rem);
+  font-weight:200; letter-spacing:0.6em; text-transform:uppercase;
+  color:rgba(212,144,44,0.35); display:block; margin-bottom:16px;
+  animation:riseUp .9s ease both;
+}
+.h-chapter {
+  font-family:var(--ff-ui); font-size:clamp(0.52rem,1.3vw,0.6rem);
+  font-weight:300; letter-spacing:0.5em; text-transform:uppercase;
+  color:rgba(212,144,44,0.5); display:block; margin-bottom:20px;
+  animation:riseUp .9s .08s ease both;
+}
+.h-title {
+  font-family:var(--ff-display); font-size:clamp(2rem,6vw,4.8rem);
+  font-weight:400; color:rgba(235,220,190,0.88);
+  line-height:1.05; margin-bottom:10px;
+  animation:riseUp .9s .15s ease both;
+}
+.h-subtitle {
+  font-family:var(--ff-display); font-size:clamp(1.1rem,3vw,2rem);
+  font-style:italic; font-weight:400;
+  color:var(--amber-dim); line-height:1.2; margin-bottom:28px;
+  animation:riseUp .9s .22s ease both;
+}
+
+/* Rule */
+.h-rule {
+  display:flex; align-items:center; justify-content:center; gap:14px;
+  margin:0 auto 24px;
+  animation:riseUp .9s .28s ease both;
+}
+.hr-line { height:1px; flex:1; max-width:70px; }
+.hr-line.l { background:linear-gradient(to right,transparent,rgba(212,144,44,0.4)); }
+.hr-line.r { background:linear-gradient(to left, transparent,rgba(212,144,44,0.4)); }
+.hr-gem { font-size:0.65rem; color:rgba(212,144,44,0.4); letter-spacing:3px; }
+
+.h-quote {
+  font-family:var(--ff-prose); font-size:clamp(0.95rem,2vw,1.12rem);
+  font-style:italic; font-weight:300; line-height:1.85;
+  color:rgba(180,165,130,0.5); max-width:480px; margin:0 auto 30px;
+  animation:riseUp .9s .34s ease both;
+}
+
+/* Mood chips */
+.h-moods {
+  display:flex; flex-wrap:wrap; gap:8px; justify-content:center;
+  margin-bottom:36px;
+  animation:riseUp .9s .42s ease both;
+}
+.h-mood {
+  padding:5px 13px;
+  font-family:var(--ff-ui); font-size:clamp(0.54rem,1.2vw,0.6rem);
+  font-weight:300; letter-spacing:0.12em;
+  color:rgba(200,180,140,0.45);
+  border:1px solid rgba(212,144,44,0.12);
+  background:rgba(212,144,44,0.05);
+  transition:all .25s;
+}
+.h-mood:hover { color:var(--amber-2); border-color:rgba(212,144,44,0.3); }
+
+.h-scroll {
+  display:flex; flex-direction:column; align-items:center; gap:7px;
+  animation:riseUp .9s .7s ease both;
+}
+.h-scroll span {
+  font-family:var(--ff-ui); font-size:0.48rem;
+  letter-spacing:0.5em; text-transform:uppercase;
+  color:rgba(200,180,140,0.2);
+}
+.h-scroll-line {
+  width:1px; height:34px;
+  background:linear-gradient(to bottom,rgba(212,144,44,0.4),transparent);
+  animation:tickPulse 2.3s ease-in-out infinite;
+}
+@keyframes tickPulse{0%,100%{opacity:.3;transform:scaleY(1);}50%{opacity:.9;transform:scaleY(1.2);}}
+
+/* ═══════════════════════════════════════
+   TIMELINE LAYOUT
+═══════════════════════════════════════ */
+.story-wrap {
+  display:grid;
+  grid-template-columns: var(--timeline-w) 1fr;
+  gap:0;
+  max-width:calc(var(--max-w) + var(--timeline-w) + 60px);
+  margin:0 auto;
+  padding:0 clamp(16px,4vw,48px);
+}
+
+/* Left timeline column */
+.timeline-col {
+  display:flex; flex-direction:column; align-items:center;
+  padding-top:clamp(50px,6vw,70px);
+  position:relative;
+}
+/* Vertical track */
+.timeline-col::before {
+  content:''; position:absolute; top:clamp(50px,6vw,70px); bottom:0;
+  left:50%; transform:translateX(-50%);
+  width:1px;
+  background:linear-gradient(to bottom,
+    rgba(212,144,44,0.3) 0%,
+    rgba(212,144,44,0.1) 60%,
+    rgba(100,150,200,0.1) 80%,
+    rgba(80,80,100,0.1) 100%);
+}
+/* Filled progress track */
+.timeline-fill {
+  position:absolute; top:clamp(50px,6vw,70px);
+  left:50%; transform:translateX(-50%);
+  width:1px; height:0%;
+  background:linear-gradient(to bottom,var(--amber),var(--game-acc),var(--terror-acc));
+  transition:height .1s linear;
+}
+
+/* Beat dots */
+.beat-dot {
+  width:10px; height:10px; border-radius:50%;
+  border:1px solid rgba(212,144,44,0.3);
+  background:var(--ink);
+  margin-bottom:0;
+  position:relative; z-index:1;
+  transition:all .4s;
+  cursor:pointer;
+  flex-shrink:0;
+}
+.beat-dot::before {
+  content:attr(data-label);
+  position:absolute; right:18px; top:50%; transform:translateY(-50%);
+  font-family:var(--ff-ui); font-size:0.48rem; letter-spacing:0.12em;
+  text-transform:uppercase; white-space:nowrap;
+  color:rgba(200,180,140,0.3); background:var(--ink);
+  padding:3px 8px; opacity:0; pointer-events:none;
+  transition:opacity .2s;
+}
+.beat-dot:hover::before,.beat-dot.active::before { opacity:1; }
+.beat-dot.active-amber { border-color:var(--amber); background:var(--amber); box-shadow:0 0 8px rgba(212,144,44,0.5); }
+.beat-dot.active-game { border-color:var(--game-acc); background:var(--game-acc); box-shadow:0 0 8px rgba(74,136,212,0.5); }
+.beat-dot.active-terror { border-color:var(--terror-red); background:var(--terror-red); box-shadow:0 0 8px rgba(200,64,64,0.5); }
+.beat-spacer { flex:1; }
+
+/* Right content column */
+.content-col { padding:0 0 0 clamp(18px,3vw,32px); }
+
+/* ═══════════════════════════════════════
+   SECTION STYLES (3 moods)
+═══════════════════════════════════════ */
+
+/* ── Solitude (amber/dark) ── */
+.s-solitude { padding:clamp(50px,7vw,80px) 0; }
+.s-gaming   { padding:clamp(50px,7vw,80px) 0; }
+.s-terror   { padding:clamp(50px,7vw,80px) 0; }
+
+/* Section opener */
+.sec-open { margin-bottom:clamp(32px,4vw,48px); }
+.so-eyebrow {
+  font-family:var(--ff-ui); font-size:clamp(0.48rem,1.2vw,0.56rem);
+  font-weight:300; letter-spacing:0.5em; text-transform:uppercase;
+  display:block; margin-bottom:10px;
+}
+.s-solitude .so-eyebrow { color:var(--amber); }
+.s-gaming   .so-eyebrow { color:var(--game-acc); }
+.s-terror   .so-eyebrow { color:var(--terror-red); }
+.so-title {
+  font-family:var(--ff-display); font-size:clamp(1.5rem,4vw,2.6rem);
+  font-weight:400; line-height:1.15; margin-bottom:8px;
+}
+.s-solitude .so-title { color:rgba(230,215,180,0.85); }
+.s-gaming   .so-title { color:rgba(180,210,240,0.8); }
+.s-terror   .so-title { color:rgba(200,210,230,0.65); }
+.so-sub {
+  font-family:var(--ff-prose); font-size:clamp(0.92rem,1.8vw,1.05rem);
+  font-style:italic; font-weight:300; line-height:1.75;
+}
+.s-solitude .so-sub { color:rgba(190,170,130,0.5); }
+.s-gaming   .so-sub { color:rgba(120,160,210,0.45); }
+.s-terror   .so-sub { color:rgba(160,170,200,0.4); }
+.so-rule { display:flex; align-items:center; gap:14px; margin-top:16px; }
+.so-rule::before,.so-rule::after { content:''; flex:1; height:1px; }
+.s-solitude .so-rule::before,.s-solitude .so-rule::after { background:linear-gradient(to right,rgba(212,144,44,0.2),transparent); }
+.s-solitude .so-rule::after { background:linear-gradient(to left,rgba(212,144,44,0.2),transparent); }
+.s-gaming .so-rule::before,.s-gaming .so-rule::after { background:linear-gradient(to right,rgba(74,136,212,0.2),transparent); }
+.s-gaming .so-rule::after { background:linear-gradient(to left,rgba(74,136,212,0.2),transparent); }
+.s-terror .so-rule::before,.s-terror .so-rule::after { background:linear-gradient(to right,rgba(200,64,64,0.15),transparent); }
+.s-terror .so-rule::after { background:linear-gradient(to left,rgba(200,64,64,0.15),transparent); }
+.so-rule span { font-size:.7rem; opacity:.2; }
+
+/* ── Prose ── */
+.prose p {
+  font-family:var(--ff-prose);
+  font-size:clamp(1.05rem,2.2vw,1.2rem);
+  font-weight:300; line-height:2.1;
+  margin-bottom:1.8em;
+  text-align:justify; hyphens:auto; -webkit-hyphens:auto;
+}
+.s-solitude .prose p { color:rgba(200,185,150,0.72); }
+.s-gaming   .prose p { color:rgba(160,190,225,0.6); }
+.s-terror   .prose p { color:rgba(170,182,210,0.6); }
+
+.prose p.drop::first-letter {
+  font-family:var(--ff-display);
+  font-size:clamp(3.5rem,8vw,5rem);
+  line-height:.82; float:left;
+  margin:0.04em 0.12em 0 0;
+}
+.s-solitude .prose p.drop::first-letter { color:var(--amber); }
+.s-gaming   .prose p.drop::first-letter { color:var(--game-acc); }
+.s-terror   .prose p.drop::first-letter { color:var(--terror-red); }
+
+/* ── Pull quote ── */
+.pq {
+  margin:clamp(2em,4vw,3em) 0;
+  padding:clamp(18px,3vw,24px) clamp(18px,3vw,26px);
+  text-align:center; position:relative;
+}
+.s-solitude .pq { border-top:1px solid rgba(212,144,44,0.15); border-bottom:1px solid rgba(212,144,44,0.15); }
+.s-gaming   .pq { border-top:1px solid rgba(74,136,212,0.15); border-bottom:1px solid rgba(74,136,212,0.15); }
+.s-terror   .pq { border-top:1px solid rgba(200,64,64,0.12); border-bottom:1px solid rgba(200,64,64,0.12); }
+.pq::before {
+  content:'"'; position:absolute; top:-12px; left:50%; transform:translateX(-50%);
+  font-family:var(--ff-display); font-size:clamp(3rem,7vw,5rem); line-height:.8;
+  opacity:.08;
+}
+.s-solitude .pq::before { color:var(--amber); }
+.s-gaming   .pq::before { color:var(--game-acc); }
+.s-terror   .pq::before { color:var(--terror-red); }
+.pq p {
+  font-family:var(--ff-prose);
+  font-size:clamp(1.05rem,2.3vw,1.25rem);
+  font-style:italic; font-weight:400; line-height:1.65; margin:0;
+}
+.s-solitude .pq p { color:rgba(220,200,160,0.7); }
+.s-gaming   .pq p { color:rgba(160,200,240,0.65); }
+.s-terror   .pq p { color:rgba(190,200,225,0.6); }
+
+/* ── Atmospheric cards ── */
+.atm-card {
+  margin:2.2em 0;
+  padding:clamp(18px,3vw,24px) clamp(18px,3vw,26px);
+  position:relative; overflow:hidden;
+}
+/* Solitude — warm amber */
+.atm-amber {
+  background:rgba(212,144,44,0.05);
+  border:1px solid rgba(212,144,44,0.14);
+  border-left:3px solid var(--amber);
+}
+/* Writing — slightly warmer */
+.atm-write {
+  background:rgba(180,120,30,0.06);
+  border:1px solid rgba(180,120,30,0.15);
+  border-left:3px solid rgba(200,140,50,0.7);
+}
+/* Gaming connection — indigo */
+.atm-game {
+  background:rgba(74,136,212,0.06);
+  border:1px solid rgba(74,136,212,0.14);
+  border-left:3px solid var(--game-acc);
+}
+/* Gaming terminal look */
+.atm-terminal {
+  background:var(--game-bg);
+  border:1px solid rgba(74,136,212,0.2);
+  font-family:'Courier New',monospace;
+}
+/* Terror */
+.atm-terror {
+  background:rgba(200,64,64,0.04);
+  border:1px solid rgba(200,64,64,0.14);
+  border-left:3px solid var(--terror-red);
+}
+.atm-card::after {
+  position:absolute; right:14px; bottom:6px;
+  font-size:clamp(1.8rem,4vw,2.8rem); opacity:.07; pointer-events:none;
+}
+.wm-aurora::after { content:'🏔'; }
+.wm-candle::after { content:'🕯'; }
+.wm-pen::after    { content:'✏'; }
+.wm-game::after   { content:'🎮'; }
+.wm-moon::after   { content:'🌙'; }
+.wm-fear::after   { content:'🌑'; }
+
+.atm-label {
+  font-family:var(--ff-ui); font-size:clamp(0.48rem,1.2vw,0.54rem);
+  font-weight:300; letter-spacing:0.42em; text-transform:uppercase;
+  display:block; margin-bottom:10px;
+}
+.atm-amber .atm-label { color:var(--amber); }
+.atm-write .atm-label { color:rgba(200,140,50,0.7); }
+.atm-game  .atm-label { color:var(--game-acc); }
+.atm-terminal .atm-label { color:var(--game-green); }
+.atm-terror .atm-label { color:var(--terror-red); }
+.atm-card p {
+  font-family:var(--ff-prose);
+  font-size:clamp(0.95rem,2vw,1.1rem);
+  font-style:italic; font-weight:300; line-height:1.9; margin-bottom:0;
+}
+.atm-amber p,.atm-write p { color:rgba(215,195,155,0.75); }
+.atm-game p { color:rgba(160,190,225,0.65); }
+.atm-terror p { color:rgba(185,195,220,0.65); }
+
+/* Terminal specific */
+.atm-terminal .atm-label { margin-bottom:14px; }
+.terminal-body {
+  font-family:'Courier New', monospace;
+  font-size:clamp(0.78rem,1.6vw,0.9rem);
+  line-height:1.85;
+  color:var(--game-green);
+}
+.t-prompt { color:rgba(74,136,212,0.7); }
+.t-dim { color:rgba(100,150,200,0.4); }
+.t-sys { color:rgba(150,180,220,0.5); font-style:italic; }
+
+/* ── Section break ── */
+.s-break {
+  display:flex; align-items:center; gap:18px;
+  margin:clamp(36px,5vw,52px) 0;
+}
+.s-break::before,.s-break::after {
+  content:''; flex:1; height:1px;
+  background:linear-gradient(to right,transparent,rgba(212,144,44,0.1),transparent);
+}
+.s-break span { font-size:.8rem; opacity:.2; }
+
+/* ── Character trait cards (writing hobby) ── */
+.traits-row {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));
+  gap:10px; margin:2em 0;
+}
+.trait-tile {
+  padding:clamp(14px,2.5vw,18px);
+  background:rgba(212,144,44,0.04);
+  border:1px solid rgba(212,144,44,0.1);
+  transition:transform .25s, border-color .25s;
+}
+.trait-tile:hover { transform:translateY(-3px); border-color:rgba(212,144,44,0.25); }
+.tt-icon  { font-size:clamp(1.1rem,2.5vw,1.4rem); display:block; margin-bottom:7px; }
+.tt-label {
+  font-family:var(--ff-ui); font-size:clamp(0.5rem,1.2vw,0.56rem);
+  font-weight:300; letter-spacing:0.3em; text-transform:uppercase;
+  color:var(--amber); display:block; margin-bottom:6px;
+}
+.tt-desc {
+  font-family:var(--ff-prose); font-size:clamp(0.88rem,1.8vw,0.98rem);
+  font-style:italic; font-weight:300; line-height:1.6;
+  color:rgba(185,165,125,0.65);
+}
+
+/* ── Terror scene ── */
+/* Heartbeat pulse on terror section */
+.terror-pulse {
+  position:relative;
+  margin:2em 0; padding:1px;
+}
+.terror-pulse::before {
+  content:''; position:absolute; inset:-1px;
+  border:1px solid rgba(200,64,64,0.0);
+  animation:heartbeatBorder 3s ease-in-out infinite;
+  pointer-events:none;
+}
+@keyframes heartbeatBorder {
+  0%,70%,100%{border-color:rgba(200,64,64,0);}
+  35%{border-color:rgba(200,64,64,0.25);}
+}
+
+/* Night alley atmospheric strip */
+.alley-strip {
+  background:linear-gradient(135deg,#040508 0%,#060810 40%,#080b14 100%);
+  border:1px solid rgba(100,120,160,0.1);
+  border-left:3px solid rgba(80,100,140,0.4);
+  padding:clamp(18px,3vw,26px);
+  margin:2em 0; position:relative; overflow:hidden;
+}
+.alley-strip::before {
+  content:''; position:absolute;
+  top:0; bottom:0; left:0; width:60%;
+  background:linear-gradient(to right,rgba(8,12,22,0.6),transparent);
+  pointer-events:none;
+}
+.alley-strip .atm-label { color:rgba(120,150,200,0.5); }
+.alley-strip p {
+  font-family:var(--ff-prose); font-size:clamp(0.95rem,2vw,1.1rem);
+  font-style:italic; line-height:1.9; color:rgba(150,168,205,0.6); margin-bottom:0;
+  position:relative; z-index:1;
+}
+
+/* Heartbeat line (SVG) */
+.heartbeat-wrap {
+  margin:1.8em 0; overflow:hidden; height:40px;
+  opacity:0.25;
+}
+.heartbeat-wrap svg { width:100%; height:40px; }
+.hb-path {
+  fill:none; stroke:var(--terror-red); stroke-width:1.5;
+  stroke-dasharray:800; stroke-dashoffset:800;
+  animation:drawHB 3s ease forwards, hbLoop 3s 3s linear infinite;
+}
+@keyframes drawHB { to{stroke-dashoffset:0;} }
+@keyframes hbLoop { 0%,100%{opacity:.25;} 50%{opacity:.5;} }
+
+/* ── Closing card ── */
+.closing-card {
+  margin:clamp(40px,5vw,60px) 0 0;
+  padding:clamp(20px,3.5vw,28px);
+  background:rgba(212,144,44,0.04);
+  border:1px solid rgba(212,144,44,0.1);
+  text-align:center;
+}
+.cc-text {
+  font-family:var(--ff-prose); font-size:clamp(0.95rem,2vw,1.1rem);
+  font-style:italic; line-height:1.85;
+  color:rgba(190,170,130,0.55); margin-bottom:0;
+}
+
+/* ═══════════════════════════════════════
+   SECTION DIVIDER BANDS
+═══════════════════════════════════════ */
+.mood-band {
+  padding:clamp(28px,4vw,40px) 0 clamp(28px,4vw,40px) calc(var(--timeline-w) + clamp(16px,4vw,48px) + clamp(18px,3vw,32px));
+  position:relative; overflow:hidden;
+}
+.mb-gaming {
+  background:linear-gradient(90deg,var(--game-bg) 0%,rgba(10,14,26,0.8) 60%,transparent 100%);
+  border-top:1px solid rgba(74,136,212,0.12);
+  border-bottom:1px solid rgba(74,136,212,0.12);
+  max-width:calc(var(--max-w) + var(--timeline-w) + 60px);
+  margin:0 auto;
+  padding-right: var(--pp);
+}
+.mb-terror {
+  background:linear-gradient(90deg,var(--terror-bg) 0%,rgba(6,8,16,0.8) 60%,transparent 100%);
+  border-top:1px solid rgba(200,64,64,0.1);
+  border-bottom:1px solid rgba(200,64,64,0.1);
+  max-width:calc(var(--max-w) + var(--timeline-w) + 60px);
+  margin:0 auto;
+  padding-right: var(--pp);
+}
+.mb-label {
+  font-family:var(--ff-ui); font-size:clamp(0.48rem,1.2vw,0.56rem);
+  font-weight:200; letter-spacing:0.55em; text-transform:uppercase;
+  display:block; margin-bottom:8px;
+}
+.mb-gaming .mb-label { color:rgba(74,136,212,0.4); }
+.mb-terror .mb-label { color:rgba(200,64,64,0.35); }
+.mb-title {
+  font-family:var(--ff-display); font-size:clamp(1.2rem,3vw,1.8rem);
+  font-weight:400;
+}
+.mb-gaming .mb-title { color:rgba(150,195,240,0.6); }
+.mb-terror .mb-title { color:rgba(170,185,215,0.45); }
+
+/* ═══════════════════════════════════════
+   FOOTER NAV
+═══════════════════════════════════════ */
+.foot-nav {
+  background:var(--ink-2);
+  padding:clamp(32px,5vw,52px) var(--pp);
+  display:flex; align-items:center; justify-content:space-between;
+  flex-wrap:wrap; gap:16px;
+  border-top:1px solid rgba(212,144,44,0.08);
+}
+.fn-info { }
+.fn-ch {
+  font-family:var(--ff-ui); font-size:clamp(0.48rem,1.2vw,0.54rem);
+  font-weight:200; letter-spacing:0.45em; text-transform:uppercase;
+  color:rgba(200,180,140,0.25); display:block; margin-bottom:7px;
+}
+.fn-title {
+  font-family:var(--ff-display); font-size:clamp(1rem,2.4vw,1.28rem);
+  font-weight:400; color:rgba(225,210,175,0.6); margin-bottom:3px;
+}
+.fn-sub {
+  font-family:var(--ff-display); font-size:clamp(0.88rem,1.7vw,1rem);
+  font-style:italic; color:rgba(190,170,130,0.35);
+}
+.btn-back {
+  display:inline-flex; align-items:center; gap:10px;
+  padding:clamp(10px,2vw,13px) clamp(20px,3.5vw,28px);
+  background:transparent;
+  border:1px solid rgba(212,144,44,0.25);
+  color:rgba(212,144,44,0.6);
+  text-decoration:none;
+  font-family:var(--ff-ui); font-size:clamp(0.58rem,1.4vw,0.64rem);
+  font-weight:300; letter-spacing:0.25em; text-transform:uppercase;
+  transition:all .3s; white-space:nowrap;
+}
+.btn-back:hover {
+  background:var(--amber); color:var(--ink);
+  border-color:var(--amber);
+  transform:translateY(-2px);
+  box-shadow:0 8px 28px rgba(212,144,44,0.25);
+}
+.btn-back svg { width:12px; height:12px; transition:transform .3s; }
+.btn-back:hover svg { transform:translateX(-3px); }
+.btn-next {
+  display:inline-flex; align-items:center; gap:10px;
+  padding:clamp(10px,2vw,13px) clamp(20px,3.5vw,28px);
+  background:var(--amber-trace);
+  border:1px solid rgba(212,144,44,0.25);
+  color:rgba(212,144,44,0.6);
+  text-decoration:none;
+  font-family:var(--ff-ui); font-size:clamp(0.58rem,1.4vw,0.64rem);
+  font-weight:300; letter-spacing:0.25em; text-transform:uppercase;
+  transition:all .3s; white-space:nowrap;
+}
+.btn-next:hover {
+  background:var(--amber); color:var(--ink);
+  border-color:var(--amber); transform:translateY(-2px);
+  box-shadow:0 8px 28px rgba(212,144,44,0.25);
+}
+.btn-next svg { width:12px; height:12px; transition:transform .3s; }
+.btn-next:hover svg { transform:translateX(3px); }
+.foot-btns { display:flex; gap:10px; flex-wrap:wrap; }
+
+/* ═══════════════════════════════════════
+   ANIMATIONS
+═══════════════════════════════════════ */
+@keyframes riseUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:none;}}
+.reveal{opacity:0;transform:translateY(16px);transition:opacity .65s ease,transform .65s ease;}
+.reveal.in{opacity:1;transform:none;}
+.rd1{transition-delay:.07s;} .rd2{transition-delay:.14s;} .rd3{transition-delay:.21s;}
+
+/* ═══════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════ */
+@media(max-width:640px){
+  :root{--timeline-w:0px;}
+  .timeline-col{display:none;}
+  .story-wrap{grid-template-columns:1fr;}
+  .content-col{padding-left:0;}
+  .mood-band{padding-left:var(--pp);}
+  .prose p{text-align:left;}
+}
+@media(max-width:380px){
+  .h-title{font-size:1.9rem;}
+  .h-subtitle{font-size:1rem;}
+}
+</style>
+</head>
+<body>
+
+<div id="prog"></div>
+
+<!-- ═══ NAV ═══ -->
+<nav>
+  <a href="../index.html" class="n-brand">Whispers of Caring</a>
+  <div class="n-right">
+   
+    <a href="c4index.html" class="n-link">HOME</a>
+   
+  </div>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+  <div class="hero-light"></div>
+  <div class="hero-motes" id="motes"></div>
+  <div class="hero-terrain">
+    <svg viewBox="0 0 1440 160" preserveAspectRatio="xMidYMax slice" fill="none">
+      <path d="M0 160 L0 110 L80 70 L180 115 L280 50 L380 100 L480 40 L580 95 L680 30 L780 85 L880 45 L980 100 L1080 35 L1180 90 L1280 55 L1440 80 L1440 160 Z" fill="rgba(6,5,3,0.7)"/>
+      <path d="M0 160 L0 130 L160 118 L320 130 L480 115 L640 128 L800 118 L960 130 L1120 120 L1300 130 L1440 122 L1440 160 Z" fill="rgba(10,9,7,0.85)"/>
+      <path d="M0 160 L0 148 L360 142 L720 148 L1080 143 L1440 148 L1440 160 Z" fill="rgba(12,11,9,0.95)"/>
+    </svg>
+  </div>
+
+  <div class="hero-content">
+    <span class="h-eyebrow">Whispers of Caring · Chapter Four</span>
+    <span class="h-chapter">Phase One</span>
+    <h1 class="h-title">Solitary Shadows</h1>
+    <h2 class="h-subtitle">The Lonely Quests of Nightshade</h2>
+    <div class="h-rule">
+      <div class="hr-line l"></div>
+      <span class="hr-gem">✦ ✧ ✦</span>
+      <div class="hr-line r"></div>
+    </div>
+    <p class="h-quote">"The beauty of Aurora Vista mirrored the duality of his own nature — an individual torn between the desire for connection and the need for seclusion."</p>
+    <div class="h-moods">
+      <span class="h-mood">🏔 Aurora Vista</span>
+      <span class="h-mood">✏ Writing & Solitude</span>
+      <span class="h-mood">🎮 Nightshade &amp; Starfire</span>
+      <span class="h-mood">🌑 The Night Alley</span>
+    </div>
+    <div class="h-scroll">
+      <span>Read the Phase</span>
+      <div class="h-scroll-line"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ STORY BODY ═══ -->
+<div class="story-wrap">
+
+  <!-- Timeline -->
+  <div class="timeline-col" id="timelineCol">
+    <div class="timeline-fill" id="timelineFill"></div>
+    <div class="beat-dot active-amber" data-label="Reflections" data-target="sec-solitude" onclick="scrollTo2('sec-solitude')"></div>
+    <div class="beat-spacer"></div>
+    <div class="beat-dot" data-label="Writing" data-target="sec-writing" onclick="scrollTo2('sec-writing')"></div>
+    <div class="beat-spacer"></div>
+    <div class="beat-dot" data-label="Gaming" data-target="sec-gaming" onclick="scrollTo2('sec-gaming')"></div>
+    <div class="beat-spacer"></div>
+    <div class="beat-dot" data-label="The Alley" data-target="sec-terror" onclick="scrollTo2('sec-terror')"></div>
+    <div class="beat-spacer"></div>
+    <div class="beat-dot" data-label="Rest" data-target="sec-rest" onclick="scrollTo2('sec-rest')"></div>
+    <div class="beat-spacer"></div>
+  </div>
+
+  <!-- Content -->
+  <div class="content-col">
+
+    <!-- ══ SECTION I: SOLITUDE ══ -->
+    <section class="s-solitude" id="sec-solitude">
+
+      <div class="sec-open reveal">
+        <span class="so-eyebrow">Aurora Vista · Morning · Reflection</span>
+        <h2 class="so-title">The Quiet World of Lucifer</h2>
+        <p class="so-sub">A man alone with the mountains — finding himself in the space between solitude and longing.</p>
+        <div class="so-rule"><span>◆</span></div>
+      </div>
+
+      <div class="prose">
+        <p class="drop reveal">Lucifer sat in his small apartment, nestled in the serene yet awe-inspiring village of Aurora Vista. The morning sunlight filtered through the window, casting gentle beams on the simple furnishings — a single bed, a small kitchen, a modest hall, and an attached bathroom. As he gazed out at the picturesque scenery, with the frozen waterfalls glistening in the winter sun and the mountains blanketed in pristine snow, his mind wandered into deep contemplation about his life, his journey, and his place in the world.</p>
+
+        <p class="reveal">Lucifer had always been an introvert — a silent observer in the bustling tapestry of life. He found solace in solitude and comfort in the quiet corners of his existence. The beauty of Aurora Vista, with its lush greenery in summer and icy wonderland in winter, mirrored the duality of his own nature: an individual torn between the desire for connection and the need for seclusion.</p>
+      </div>
+
+      <div class="atm-card atm-amber wm-aurora reveal">
+        <span class="atm-label">🌄 Aurora Vista · 10th Floor · Morning</span>
+        <p>As he sat by the window, watching the snowflakes dance in the gentle breeze, he reflected on his past, his present, and the uncertain future that lay ahead. Growing up, he had always been different from his peers — while others revelled in social gatherings and noisy camaraderie, he preferred the company of books and the quietude of his own thoughts.</p>
+      </div>
+
+      <div class="prose">
+        <p class="reveal">His introverted nature also shaped his career choice. As an Associate System Engineer, he found a profession that suited his temperament. The world of coding and algorithms was a sanctuary where he could immerse himself without the constant need for social interaction. But even in this technical realm, he often felt the pangs of isolation — a sense of being adrift in a sea of ones and zeros, disconnected from the human experiences that formed the essence of life.</p>
+      </div>
+
+      <div class="pq reveal">
+        <p>"The walls he had built to protect his inner world sometimes seemed impenetrable — keeping out not just the noise of the world, but also the warmth of human connection."</p>
+      </div>
+
+      <div class="prose">
+        <p class="reveal">In his moments of introspection, Lucifer often pondered the impact of his solitude on his personal relationships. He thought of Victoria — his closest friend and confidante, whose vibrant personality and imaginative spirit were the antithesis of his own reserved demeanour. Their friendship had been an anchor in his life, a source of joy and understanding that transcended the barriers of his introversion.</p>
+
+        <p class="reveal">Victoria's presence in his life was a testament to the power of genuine connection. Despite his reticence, she had seen through the layers of his silence and reached out with a kindness that was both rare and precious. Their conversations — whether through text messages, late-night calls, or shared gaming sessions — were a lifeline that kept him grounded. She brought colour to his monochrome world, her laughter a melody that brightened his darkest days.</p>
+      </div>
+
+      <div class="atm-card atm-amber wm-candle reveal">
+        <span class="atm-label">🕯 Introspection · Self-Understanding</span>
+        <p>He realized that his introversion was not a flaw but a fundamental aspect of who he was — an intricate part of his identity that shaped his worldview and his approach to life. The key lay in embracing this trait, in finding ways to connect with others without compromising his need for solitude. He understood that true friendships, like the one he shared with Victoria, were built on mutual respect and understanding.</p>
+      </div>
+
+    </section>
+
+    <!-- ══ SECTION II: WRITING ══ -->
+    <div class="s-break reveal" id="sec-writing"><span>✏</span></div>
+
+    <section class="s-solitude">
+      <div class="sec-open reveal">
+        <span class="so-eyebrow">The Writer · His Craft · Fantasy & Sci-Fi</span>
+        <h2 class="so-title">Stories from the Silence</h2>
+        <p class="so-sub">Writing was not just a hobby — it was a lifeline, an escape, and a bridge to the world he often struggled to reach.</p>
+        <div class="so-rule"><span>◆</span></div>
+      </div>
+
+      <div class="prose">
+        <p class="drop reveal">Lucifer's favourite hobby was writing. He found solace and expression in crafting stories and poems, pouring his thoughts and emotions onto paper. Writing allowed him to escape from the mundanity of everyday life and explore the depths of his creativity. Through his words, he could communicate his inner world and connect with others in a meaningful way, despite his introverted nature.</p>
+      </div>
+
+      <div class="traits-row reveal">
+        <div class="trait-tile">
+          <span class="tt-icon">⚔️</span>
+          <span class="tt-label">Fantasy Worlds</span>
+          <span class="tt-desc">Epic adventures, heroes on quests, ancient secrets in mystical forests — immersive worlds of intricate detail.</span>
+        </div>
+        <div class="trait-tile">
+          <span class="tt-icon">🚀</span>
+          <span class="tt-label">Science Fiction</span>
+          <span class="tt-desc">Futuristic cities, alien civilisations, advanced technology — stories where the human condition travels far into the cosmos.</span>
+        </div>
+        <div class="trait-tile">
+          <span class="tt-icon">🌊</span>
+          <span class="tt-label">Inner Lives</span>
+          <span class="tt-desc">Introspective pieces delving into characters' struggles, dreams, and the desire for meaning in a vast world.</span>
+        </div>
+        <div class="trait-tile">
+          <span class="tt-icon">🎨</span>
+          <span class="tt-label">Victoria Reads</span>
+          <span class="tt-desc">His biggest supporter — she reads his stories, offers feedback, and sometimes creates illustrations inspired by his narratives.</span>
+        </div>
+      </div>
+
+      <div class="atm-card atm-write wm-pen reveal">
+        <span class="atm-label">✏ The Creative Bond</span>
+        <p>Their shared passion for creativity strengthened their bond — Victoria's artistic talents complementing Lucifer's storytelling. She might even create illustrations inspired by his narratives, adding a new dimension to his stories. This collaborative dynamic not only enriched their friendship but also fuelled their individual artistic pursuits, creating a unique and harmonious blend of words and images.</p>
+      </div>
+
+    </section>
+
+  </div><!-- /content-col -->
+</div><!-- /story-wrap -->
+
+<!-- ══ GAMING BAND ══ -->
+<div class="mood-band mb-gaming reveal" id="sec-gaming">
+  <span class="mb-label">Section Two · The Connection</span>
+  <div class="mb-title">After the Game Closes</div>
+</div>
+
+<div class="story-wrap">
+  <div class="timeline-col"></div>
+  <div class="content-col">
+
+    <section class="s-gaming">
+      <div class="sec-open reveal">
+        <span class="so-eyebrow">Nightshade &amp; Starfire · The Virtual World</span>
+        <h2 class="so-title">The Space Between Sessions</h2>
+        <p class="so-sub">The laughter that filled the screen — and the silence that rushed in the moment it went dark.</p>
+        <div class="so-rule"><span>◆</span></div>
+      </div>
+
+      <div class="prose">
+        <p class="drop reveal">After closing the game with Victoria, a profound sense of loneliness often washed over Lucifer. The vibrant, shared virtual world they inhabited together — filled with adventure and camaraderie — faded away, leaving him in the quiet solitude of his apartment. The contrast was stark: from the exhilarating highs of battling enemies and achieving quests with Victoria by his side, to the stillness and isolation of his real-world environment.</p>
+
+        <p class="reveal">As the screen went dark, the silence in his room became palpable. The hum of his computer was a faint reminder of the lively conversations and the laughter they shared just moments before. Lucifer found himself missing the immediacy of their connection, the easy banter, and the comfort of knowing that someone who truly understood him was just a message or voice call away.</p>
+      </div>
+
+      <div class="atm-card atm-terminal wm-game reveal">
+        <span class="atm-label" style="font-family:'Courier New',monospace;">▶ LAST SESSION LOG</span>
+        <div class="terminal-body">
+          <span class="t-dim">[ SESSION ENDED — 23:42:18 ]</span><br/>
+          <span class="t-prompt">Nightshade</span> has disconnected.<br/>
+          <span class="t-prompt">Starfire</span>: "Good game tonight ✨ sleep well"<br/>
+          <span class="t-dim">─────────────────────────────</span><br/>
+          <span class="t-sys">// screen goes dark</span><br/>
+          <span class="t-sys">// the silence rushes back in</span>
+        </div>
+      </div>
+
+      <div class="prose">
+        <p class="reveal">In these moments, his introverted nature felt like both a blessing and a curse. While he cherished his solitude, the absence of Victoria's presence made the quiet feel emptier. He often replayed their recent game sessions in his mind — recalling the strategies they devised, the close calls, and the victories they celebrated together. These memories brought a bittersweet smile to his face, reminding him of the joy their friendship brought.</p>
+      </div>
+
+      <div class="pq reveal">
+        <p>"The loneliness he felt was a testament to the meaningful bond they shared — and it made their eventual reunion in the game all the more special."</p>
+      </div>
+
+      <div class="prose">
+        <p class="reveal">To cope with the loneliness, Lucifer sometimes turned to his writing. He channelled his emotions into his stories, creating characters who navigated their own journeys of connection and solitude. Writing became a therapeutic outlet, a way to bridge the gap until he and Victoria could play again. Yet, even as he immersed himself in his fictional worlds, the anticipation of their next gaming session lingered at the back of his mind — a beacon of light in his otherwise solitary routine.</p>
+      </div>
+
+      <div class="atm-card atm-game wm-moon reveal">
+        <span class="atm-label">🌙 Reconnection</span>
+        <p>When they finally logged in again and reconnected, the loneliness dissipated like mist under the morning sun. The screen lit up, the familiar sounds of the game welcomed him back, and Victoria's cheerful greeting brought an immediate sense of belonging. For Lucifer, these moments of reconnection reaffirmed the importance of their friendship — making the wait worthwhile and the shared adventures even more rewarding.</p>
+      </div>
+
+    </section>
+
+  </div>
+</div>
+
+<!-- ══ TERROR BAND ══ -->
+<div class="mood-band mb-terror reveal" id="sec-terror">
+  <span class="mb-label">Section Three · The Night</span>
+  <div class="mb-title">Shadows in the Alley</div>
+</div>
+
+<div class="story-wrap">
+  <div class="timeline-col"></div>
+  <div class="content-col">
+
+    <section class="s-terror">
+      <div class="sec-open reveal">
+        <span class="so-eyebrow">Late Night · Aurora Vista · The Alley</span>
+        <h2 class="so-title">The Fear in the Dark</h2>
+        <p class="so-sub">A walk to clear the mind — and a sound from the shadows that would not let him go.</p>
+        <div class="so-rule"><span>◆</span></div>
+      </div>
+
+      <div class="prose">
+        <p class="drop reveal">One evening, after a particularly intense gaming session, Lucifer decided to take a walk to clear his mind. The streets of Aurora Vista were quiet, and a gentle breeze rustled the leaves. As he strolled down a dimly lit alley, his phone buzzed with a message from Victoria. Distracted, he looked down at his phone to read her message. Suddenly, he heard a faint rustling sound behind him.</p>
+
+        <p class="reveal">Lucifer turned around, but the alley was empty. He dismissed it as his imagination and continued walking. Yet, the sound came again — louder this time, sending a chill down his spine. He began to worry that someone might be following him.</p>
+      </div>
+
+      <div class="terror-pulse reveal">
+        <div class="alley-strip">
+          <span class="atm-label">🌑 The Alley · Dimly Lit · Silence</span>
+          <p>His heart raced as he quickened his pace. Every step seemed to echo loudly in the narrow alley, amplifying his growing sense of dread. He glanced back repeatedly, but the shadows seemed to play tricks on his eyes, obscuring any clear view. Fear gripped him tightly. He regretted taking this secluded route and wished he had stayed on the main streets.</p>
+        </div>
+      </div>
+
+      <!-- Heartbeat line -->
+      <div class="heartbeat-wrap reveal">
+        <svg viewBox="0 0 800 40" preserveAspectRatio="none">
+          <path class="hb-path" d="M0,20 L60,20 L80,20 L100,2 L120,38 L140,2 L160,38 L180,20 L200,20 L240,20 L260,2 L280,38 L300,2 L320,38 L340,20 L380,20 L400,2 L420,38 L440,20 L500,20 L530,20 L540,6 L555,34 L570,6 L585,34 L600,20 L700,20 L800,20"/>
+        </svg>
+      </div>
+
+      <div class="prose">
+        <p class="reveal">Summoning all his courage, he broke into a run, driven by sheer panic. The narrow alley seemed endless, and every sound made him jump. As he neared the end, the sight of the streetlights ahead brought a sense of relief. He sprinted towards them, his heart pounding in his chest, and his legs feeling heavy from the adrenaline.</p>
+
+        <p class="reveal">Once he reached the well-lit street, he looked back — panting heavily — but saw no one following him. The eerie silence of the alley was replaced by the comforting noise of the street. Trembling, he hurried home, constantly checking over his shoulder.</p>
+      </div>
+
+      <div class="atm-card atm-terror wm-fear reveal">
+        <span class="atm-label">🔒 Home · The Door Locked</span>
+        <p>Once inside his apartment, Lucifer locked the door and sank to the floor, trying to calm his racing heart. The fear from the alley lingered, and he struggled to shake the feeling of being watched. That night, sleep eluded him as he replayed the terrifying experience — haunted by the unknown figure in the shadows and the vulnerability he felt in those tense moments.</p>
+      </div>
+
+    </section>
+
+    <!-- ══ REST ══ -->
+    <section class="s-terror" id="sec-rest">
+      <div class="sec-open reveal">
+        <span class="so-eyebrow">After the Fear · Dinner · Sleep</span>
+        <h2 class="so-title">Finding Rest</h2>
+        <p class="so-sub">A shower, a simple meal, and the hope that sleep would wash it all away.</p>
+        <div class="so-rule"><span>◆</span></div>
+      </div>
+
+      <div class="prose">
+        <p class="drop reveal">After feeling down, Lucifer decided to take a shower to try and relax. He then made himself a simple dinner and sat at the dining table. His mind was preoccupied with thoughts about the previous experience, unsure if it was real or just his imagination. Feeling saddened, he finished his dinner and went to bed early — hoping to forget everything and find peace in sleep.</p>
+      </div>
+
+      <div class="closing-card reveal">
+        <p class="cc-text">"As the day progressed and the sunlight began to fade, casting long shadows across his room, Lucifer felt a renewed sense of purpose — guided by the light of his own understanding and the unwavering support of those who truly mattered."</p>
+      </div>
+
+    </section>
+
+  </div>
+</div>
+
+<!-- ═══ FOOTER NAV ═══ -->
+<div class="foot-nav reveal">
+  <div class="fn-info">
+    <span class="fn-ch">Chapter Four · Whispers of Caring</span>
+    <div class="fn-title">Phase One — Solitary Shadows</div>
+    <div class="fn-sub">The Lonely Quests of Nightshade</div>
+  </div>
+  <div class="foot-btns">
+    <a href="c4index.html" class="btn-back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+      Chapter IV
+    </a>
+    <a href="c4p2.html" class="btn-next">
+      Phase Two
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+    </a>
+  </div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+
+  /* ── Progress bar ── */
+  const prog = document.getElementById('prog');
+  const updateProg = () => {
+    const t = document.documentElement.scrollHeight - window.innerHeight;
+    prog.style.width = (t > 0 ? window.scrollY / t * 100 : 0) + '%';
+  };
+  window.addEventListener('scroll', updateProg, { passive: true });
+
+  /* ── Scroll reveal ── */
+  const revObs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); revObs.unobserve(e.target); } });
+  }, { threshold: 0.06 });
+  document.querySelectorAll('.reveal').forEach(el => revObs.observe(el));
+
+  /* ── Timeline fill + dot activation ── */
+  const tlFill = document.getElementById('timelineFill');
+  const tlCol  = document.getElementById('timelineCol');
+  const dots   = document.querySelectorAll('.beat-dot');
+  const secs   = ['sec-solitude','sec-writing','sec-gaming','sec-terror','sec-rest'];
+
+  const updateTimeline = () => {
+    if (!tlFill || !tlCol) return;
+    const colRect = tlCol.getBoundingClientRect();
+    const scrolled = window.scrollY;
+    const total = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = total > 0 ? (scrolled / total) * 100 : 0;
+    tlFill.style.height = pct + '%';
+
+    /* Activate nearest dot */
+    let closestIdx = 0;
+    let closestDist = Infinity;
+    secs.forEach((id, i) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const dist = Math.abs(el.getBoundingClientRect().top - window.innerHeight * 0.35);
+      if (dist < closestDist) { closestDist = dist; closestIdx = i; }
+    });
+    dots.forEach((d, i) => {
+      d.classList.remove('active-amber','active-game','active-terror');
+      if (i === closestIdx) {
+        if (i <= 1) d.classList.add('active-amber');
+        else if (i === 2) d.classList.add('active-game');
+        else d.classList.add('active-terror');
+      }
+    });
+  };
+  window.addEventListener('scroll', updateTimeline, { passive: true });
+  updateTimeline();
+
+  /* ── Scroll to section ── */
+  window.scrollTo2 = function(id) {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  /* ── Dust motes ── */
+  const motesEl = document.getElementById('motes');
+  if (motesEl) {
+    for (let i = 0; i < 12; i++) {
+      const m = document.createElement('div');
+      m.className = 'mote';
+      const size = Math.random() * 3 + 1;
+      m.style.cssText = `
+        width:${size}px; height:${size}px;
+        left:${Math.random()*100}%;
+        animation-duration:${8 + Math.random()*14}s;
+        animation-delay:${-Math.random()*20}s;
+        --mx:${(Math.random()-0.5)*80}px;
+      `;
+      motesEl.appendChild(m);
+    }
+  }
+
+})();
+</script>
+</body>
+</html>

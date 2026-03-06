@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+<title>Lucid Dreams of Friendship — Ch IV · Phase VI · Whispers of Caring</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Josefin+Slab:ital,wght@0,100;0,300;0,400;0,600;1,100;1,300;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  /* LUCIFER — cold sapphire midnight */
+  --L-ink:#020409;--L-bg:#040a1a;--L-mid:#071428;--L-surf:#0a1d3a;
+  --L-acc:#3a78d4;--L-bright:#5a9ef8;--L-pale:#a8ccf8;--L-txt:#cce0ff;
+  --L-dim:rgba(90,158,248,0.55);--L-faint:rgba(58,120,212,0.12);
+  --L-line:rgba(58,120,212,0.22);
+  /* VICTORIA — warm amber lantern */
+  --V-ink:#0c0602;--V-bg:#1e0e04;--V-mid:#2c1508;--V-surf:#3a1e0c;
+  --V-acc:#e07828;--V-bright:#f4a040;--V-pale:#fcd898;--V-txt:#fce8c4;
+  --V-dim:rgba(244,160,64,0.55);--V-faint:rgba(224,120,40,0.12);
+  --V-line:rgba(224,120,40,0.22);
+  /* SHARED */
+  --void:#010206;--silk:rgba(220,235,255,0.1);
+  --ff-disp:"Cormorant Garamond",Georgia,serif;
+  --ff-body:"Libre Baskerville",Georgia,serif;
+  --ff-ui:"Josefin Slab","Georgia",serif;
+  --pp:clamp(18px,5vw,68px);
+  --gap:clamp(10px,2vw,20px);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
+body{font-family:var(--ff-body);background:var(--void);color:var(--L-txt);overflow-x:hidden;-webkit-font-smoothing:antialiased;}
+
+/* grain */
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:9800;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.042'/%3E%3C/svg%3E");
+  mix-blend-mode:overlay;}
+
+/* PROGRESS */
+#prog{position:fixed;top:0;left:0;height:2px;width:0%;z-index:900;
+  background:linear-gradient(90deg,var(--L-acc),var(--L-pale),var(--V-pale),var(--V-acc));}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:800;height:52px;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 var(--pp);background:rgba(2,3,9,0.93);
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  border-bottom:1px solid rgba(255,255,255,0.04);}
+.nb{font-family:var(--ff-disp);font-style:italic;font-size:clamp(.88rem,2vw,1.05rem);
+  color:rgba(200,220,255,.55);text-decoration:none;white-space:nowrap;}
+.nr{display:flex;gap:clamp(10px,2.5vw,22px);align-items:center;}
+.nl{font-family:var(--ff-ui);font-size:clamp(.56rem,1.4vw,.64rem);font-weight:300;
+  letter-spacing:.2em;text-transform:uppercase;color:rgba(160,195,240,.3);
+  text-decoration:none;transition:color .25s;white-space:nowrap;}
+.nl:hover{color:var(--L-bright);}
+.np{font-family:var(--ff-ui);font-size:.52rem;font-weight:100;
+  letter-spacing:.2em;color:rgba(150,185,240,.35);
+  border:1px solid rgba(150,185,240,.14);padding:3px 10px;display:none;}
+@media(min-width:480px){.np{display:block;}}
+
+/* ═══════════════════ HERO ═══════════════════ */
+.hero{min-height:100svh;position:relative;overflow:hidden;
+  display:flex;flex-direction:column;align-items:center;justify-content:flex-end;
+  padding:80px var(--pp) 68px;text-align:center;}
+.hero-bg{position:absolute;inset:0;
+  background:radial-gradient(ellipse 60% 55% at 20% 60%,rgba(4,10,30,.95) 0%,transparent 70%),
+    radial-gradient(ellipse 60% 55% at 80% 60%,rgba(20,8,2,.95) 0%,transparent 70%),
+    radial-gradient(ellipse 100% 40% at 50% 100%,rgba(1,2,6,.9) 0%,transparent 60%),
+    linear-gradient(180deg,#010206 0%,#030818 30%,#060410 70%,#010206 100%);}
+#c-hero{position:absolute;inset:0;z-index:1;pointer-events:none;}
+/* shooting star overlay */
+#c-shoot{position:absolute;inset:0;z-index:2;pointer-events:none;}
+/* vignette edges */
+.hero-vig{position:absolute;inset:0;z-index:3;pointer-events:none;
+  background:radial-gradient(ellipse 90% 90% at 50% 50%,transparent 40%,rgba(1,2,6,.8) 100%);}
+/* centre meridian thread */
+.hero-meridian{position:absolute;top:0;bottom:0;left:50%;transform:translateX(-50%);
+  width:1px;z-index:4;pointer-events:none;
+  background:linear-gradient(to bottom,transparent 0%,rgba(200,218,255,.09) 25%,
+    rgba(220,235,255,.14) 50%,rgba(255,210,160,.08) 75%,transparent 100%);}
+
+.hero-inner{position:relative;z-index:5;max-width:960px;width:100%;}
+
+/* floating location labels */
+.hero-locs{display:flex;align-items:flex-start;justify-content:space-between;
+  gap:clamp(8px,3vw,28px);width:100%;margin-bottom:clamp(24px,4vw,44px);}
+.hl-l,.hl-r{flex:1;animation:riseUp .9s ease both;}
+.hl-l{text-align:left;}
+.hl-r{text-align:right;animation-delay:.12s;}
+.hl-name{font-family:var(--ff-disp);font-size:clamp(1.6rem,5.5vw,4.2rem);
+  font-weight:300;line-height:1;display:block;margin-bottom:4px;}
+.hl-l .hl-name{color:var(--L-pale);}
+.hl-r .hl-name{color:var(--V-pale);}
+.hl-loc{font-family:var(--ff-ui);font-size:clamp(.5rem,1.3vw,.62rem);
+  font-weight:100;letter-spacing:.38em;text-transform:uppercase;display:block;margin-bottom:7px;}
+.hl-l .hl-loc{color:var(--L-dim);}
+.hl-r .hl-loc{color:var(--V-dim);}
+.hl-q{font-family:var(--ff-disp);font-style:italic;
+  font-size:clamp(.82rem,1.8vw,1rem);line-height:1.55;display:block;}
+.hl-l .hl-q{color:rgba(90,158,248,.42);}
+.hl-r .hl-q{color:rgba(244,160,64,.42);}
+/* middle connector */
+.hl-mid{display:flex;flex-direction:column;align-items:center;gap:6px;flex-shrink:0;padding-top:6px;}
+.hl-orb{width:8px;height:8px;border-radius:50%;animation:orbPulse 3s ease-in-out infinite;}
+.hl-orb.l{background:var(--L-acc);box-shadow:0 0 10px var(--L-acc);}
+.hl-orb.r{background:var(--V-acc);box-shadow:0 0 10px var(--V-acc);animation-delay:.8s;}
+.hl-sep{font-family:var(--ff-ui);font-size:clamp(.4rem,.9vw,.48rem);
+  font-weight:100;letter-spacing:.5em;text-transform:uppercase;
+  color:rgba(200,218,255,.15);writing-mode:vertical-lr;transform:rotate(180deg);}
+@keyframes orbPulse{0%,100%{transform:scale(1);opacity:.35;}50%{transform:scale(1.6);opacity:.85;}}
+
+/* main title */
+.hero-title{margin-bottom:clamp(16px,3vw,28px);animation:riseUp .9s .18s ease both;}
+.ht-eye{font-family:var(--ff-ui);font-size:clamp(.48rem,1.2vw,.58rem);
+  font-weight:100;letter-spacing:.6em;text-transform:uppercase;
+  color:rgba(200,218,255,.2);display:block;margin-bottom:12px;}
+.ht-main{font-family:var(--ff-disp);font-size:clamp(2rem,6.5vw,5rem);
+  font-weight:300;line-height:1.05;display:block;margin-bottom:7px;}
+.ht-l{color:var(--L-pale);}
+.ht-b{color:rgba(210,228,255,.38);}
+.ht-v{color:var(--V-pale);}
+.ht-sub{font-family:var(--ff-disp);font-style:italic;
+  font-size:clamp(1rem,3vw,2rem);color:rgba(200,218,255,.3);display:block;}
+/* ornamental rule */
+.h-orn{display:flex;align-items:center;justify-content:center;gap:14px;
+  margin:16px auto;animation:riseUp .9s .26s ease both;}
+.h-orn-l{height:1px;flex:1;max-width:90px;
+  background:linear-gradient(to right,transparent,rgba(58,120,212,.35));}
+.h-orn-r{height:1px;flex:1;max-width:90px;
+  background:linear-gradient(to left,transparent,rgba(224,120,40,.35));}
+.h-orn-c{font-family:var(--ff-disp);font-size:.8rem;color:rgba(200,218,255,.2);letter-spacing:6px;}
+.h-verse{font-family:var(--ff-disp);font-style:italic;
+  font-size:clamp(.92rem,2vw,1.1rem);line-height:1.9;
+  color:rgba(200,218,255,.36);max-width:520px;margin:0 auto 28px;
+  animation:riseUp .9s .32s ease both;}
+.h-scrl{display:flex;flex-direction:column;align-items:center;gap:6px;animation:riseUp .9s .7s ease both;}
+.h-scrl-lbl{font-family:var(--ff-ui);font-size:.47rem;letter-spacing:.5em;
+  text-transform:uppercase;color:rgba(200,218,255,.17);}
+.h-scrl-tick{width:1px;height:32px;
+  background:linear-gradient(to bottom,rgba(160,204,248,.35),transparent);
+  animation:tickBob 2.4s ease-in-out infinite;}
+@keyframes tickBob{0%,100%{opacity:.3;transform:scaleY(1);}55%{opacity:1;transform:scaleY(1.2);}}
+@keyframes riseUp{from{opacity:0;transform:translateY(22px);}to{opacity:1;transform:none;}}
+
+/* ═══════════════════ SPLIT NARRATIVE ═══════════════════ */
+.chapter-wrap{max-width:1300px;margin:0 auto;}
+
+/* full bleed dual tone band */
+.dual-band{
+  display:grid;grid-template-columns:1fr 1px 1fr;
+  position:relative;
+}
+.db-luc{background:var(--L-bg);padding:clamp(36px,5.5vw,72px) var(--gap) clamp(36px,5.5vw,72px) var(--pp);position:relative;overflow:hidden;}
+.db-luc::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background:repeating-linear-gradient(-46deg,rgba(58,120,212,.014) 0,rgba(58,120,212,.014) 1px,transparent 1px,transparent 40px);}
+.db-vic{background:var(--V-bg);padding:clamp(36px,5.5vw,72px) var(--pp) clamp(36px,5.5vw,72px) var(--gap);position:relative;overflow:hidden;}
+.db-vic::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background:repeating-linear-gradient(46deg,rgba(224,120,40,.014) 0,rgba(224,120,40,.014) 1px,transparent 1px,transparent 40px);}
+.db-div{background:linear-gradient(to bottom,transparent,rgba(200,218,255,.12) 25%,rgba(200,218,255,.08) 75%,transparent);position:relative;}
+.db-div::after{content:"";position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);width:7px;height:7px;border-radius:50%;
+  background:rgba(210,228,255,.22);box-shadow:0 0 16px rgba(180,208,255,.28);}
+
+/* section header */
+.sh{margin-bottom:clamp(20px,3.5vw,36px);}
+.sh-tag{font-family:var(--ff-ui);font-size:clamp(.47rem,1.2vw,.56rem);
+  font-weight:100;letter-spacing:.45em;text-transform:uppercase;display:block;margin-bottom:9px;}
+.db-luc .sh-tag{color:var(--L-dim);}
+.db-vic .sh-tag{color:var(--V-dim);}
+.sh-h{font-family:var(--ff-disp);font-size:clamp(1.3rem,3.5vw,2.3rem);
+  font-weight:300;line-height:1.12;margin-bottom:7px;}
+.db-luc .sh-h{color:var(--L-txt);}
+.db-vic .sh-h{color:var(--V-txt);}
+.sh-s{font-family:var(--ff-disp);font-style:italic;
+  font-size:clamp(.88rem,1.8vw,1rem);line-height:1.62;}
+.db-luc .sh-s{color:var(--L-dim);}
+.db-vic .sh-s{color:var(--V-dim);}
+.sh-rule{display:flex;align-items:center;gap:12px;margin-top:11px;}
+.sh-rule::before,.sh-rule::after{content:"";flex:1;height:1px;}
+.db-luc .sh-rule::before{background:linear-gradient(to right,rgba(58,120,212,.25),transparent);}
+.db-luc .sh-rule::after{background:linear-gradient(to left,rgba(58,120,212,.25),transparent);}
+.db-vic .sh-rule::before{background:linear-gradient(to right,rgba(224,120,40,.25),transparent);}
+.db-vic .sh-rule::after{background:linear-gradient(to left,rgba(224,120,40,.25),transparent);}
+.sh-rule span{font-size:.6rem;opacity:.18;}
+
+/* prose */
+.prose p{font-family:var(--ff-body);font-size:clamp(.98rem,2vw,1.12rem);
+  font-weight:400;line-height:2.05;margin-bottom:1.55em;
+  hyphens:auto;-webkit-hyphens:auto;}
+.db-luc .prose p{color:rgba(110,160,220,.75);}
+.db-vic .prose p{color:rgba(204,148,80,.75);}
+.prose p.drop::first-letter{font-family:var(--ff-disp);
+  font-size:clamp(3rem,7vw,4.5rem);float:left;line-height:.82;margin:.04em .1em 0 0;}
+.db-luc .prose p.drop::first-letter{color:var(--L-acc);}
+.db-vic .prose p.drop::first-letter{color:var(--V-acc);}
+
+/* moment card */
+.mcard{margin:1.9em 0;padding:clamp(14px,2.5vw,22px) clamp(14px,2.5vw,22px) clamp(14px,2.5vw,22px) clamp(16px,3vw,24px);
+  position:relative;overflow:hidden;}
+.db-luc .mcard{background:var(--L-faint);border:1px solid var(--L-line);border-left:3px solid var(--L-acc);}
+.db-vic .mcard{background:var(--V-faint);border:1px solid var(--V-line);border-left:3px solid var(--V-acc);}
+.mcard::after{position:absolute;right:10px;bottom:4px;font-size:clamp(1.7rem,4vw,2.6rem);opacity:.07;pointer-events:none;}
+.wm-phone::after{content:"📱";}.wm-art::after{content:"🎨";}
+.wm-moon::after{content:"🌙";}.wm-city::after{content:"🌆";}
+.wm-game::after{content:"🎮";}.wm-mail::after{content:"💌";}
+.wm-star::after{content:"✦";}
+.mc-tag{font-family:var(--ff-ui);font-size:clamp(.46rem,1.1vw,.54rem);
+  font-weight:100;letter-spacing:.42em;text-transform:uppercase;display:block;margin-bottom:9px;}
+.db-luc .mc-tag{color:var(--L-bright);}
+.db-vic .mc-tag{color:var(--V-bright);}
+.mcard p{font-family:var(--ff-disp);font-size:clamp(.92rem,1.9vw,1.05rem);
+  font-style:italic;font-weight:300;line-height:1.85;margin:0;}
+.db-luc .mcard p{color:var(--L-txt);}
+.db-vic .mcard p{color:var(--V-txt);}
+
+/* pull quote */
+.pq{margin:2em 0;padding:clamp(14px,2.5vw,22px) clamp(12px,2vw,18px);text-align:center;position:relative;}
+.db-luc .pq{border-top:1px solid var(--L-line);border-bottom:1px solid var(--L-line);}
+.db-vic .pq{border-top:1px solid var(--V-line);border-bottom:1px solid var(--V-line);}
+.pq::before{content:"\201C";position:absolute;top:-6px;left:50%;transform:translateX(-50%);
+  font-family:var(--ff-disp);font-size:clamp(2.5rem,5vw,4rem);line-height:.8;opacity:.09;}
+.db-luc .pq::before{color:var(--L-acc);}
+.db-vic .pq::before{color:var(--V-acc);}
+.pq p{font-family:var(--ff-disp);font-style:italic;font-weight:300;
+  font-size:clamp(.95rem,1.9vw,1.12rem);line-height:1.65;margin:0;}
+.db-luc .pq p{color:var(--L-txt);}
+.db-vic .pq p{color:var(--V-txt);}
+
+/* ═══════ SOLO GAMING — full width interlude ═══════ */
+.gaming{background:linear-gradient(160deg,#03060f 0%,#060310 50%,#050307 100%);
+  padding:clamp(40px,6vw,80px) var(--pp);
+  border-top:1px solid rgba(58,120,212,.1);border-bottom:1px solid rgba(58,120,212,.1);
+  position:relative;overflow:hidden;}
+.gaming::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background:repeating-linear-gradient(-52deg,rgba(58,120,212,.013) 0,rgba(58,120,212,.013) 1px,transparent 1px,transparent 36px);}
+.g-inner{max-width:760px;margin:0 auto;position:relative;z-index:1;}
+.g-tag{font-family:var(--ff-ui);font-size:clamp(.47rem,1.2vw,.56rem);
+  font-weight:100;letter-spacing:.5em;text-transform:uppercase;
+  color:var(--L-dim);display:block;margin-bottom:9px;}
+.g-title{font-family:var(--ff-disp);font-size:clamp(1.4rem,4vw,2.8rem);
+  color:var(--L-txt);line-height:1.1;margin-bottom:7px;}
+.g-sub{font-family:var(--ff-disp);font-style:italic;
+  font-size:clamp(.9rem,1.9vw,1.05rem);color:var(--L-dim);line-height:1.62;}
+.g-rule{display:flex;align-items:center;gap:12px;margin-top:11px;margin-bottom:clamp(22px,4vw,38px);}
+.g-rule::before,.g-rule::after{content:"";flex:1;height:1px;
+  background:linear-gradient(to right,rgba(58,120,212,.22),transparent);}
+.g-rule::after{background:linear-gradient(to left,rgba(58,120,212,.22),transparent);}
+.g-rule span{font-size:.6rem;opacity:.18;}
+
+/* stat tiles */
+.g-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,145px),1fr));
+  gap:clamp(8px,1.8vw,13px);margin:0 0 clamp(22px,4vw,36px);}
+.gs{padding:clamp(12px,2.5vw,20px);background:rgba(58,120,212,.07);
+  border:1px solid var(--L-line);text-align:center;
+  transition:transform .25s,border-color .25s;}
+.gs:hover{transform:translateY(-3px);border-color:rgba(58,120,212,.38);}
+.gs-i{font-size:clamp(1.2rem,3vw,1.7rem);display:block;margin-bottom:6px;}
+.gs-l{font-family:var(--ff-ui);font-size:clamp(.46rem,1.1vw,.54rem);
+  font-weight:100;letter-spacing:.25em;text-transform:uppercase;
+  color:var(--L-bright);display:block;margin-bottom:5px;}
+.gs-v{font-family:var(--ff-disp);font-size:clamp(1.1rem,2.8vw,1.6rem);color:var(--L-txt);display:block;}
+
+.g-prose p{font-family:var(--ff-body);font-size:clamp(.98rem,2vw,1.12rem);
+  font-weight:400;line-height:2.05;margin-bottom:1.55em;color:rgba(110,160,220,.7);}
+.g-prose p.drop::first-letter{font-family:var(--ff-disp);
+  font-size:clamp(3rem,7vw,4.5rem);float:left;line-height:.82;margin:.04em .1em 0 0;color:var(--L-acc);}
+.g-pq{margin:2em 0;padding:clamp(14px,2.5vw,22px);text-align:center;position:relative;
+  border-top:1px solid var(--L-line);border-bottom:1px solid var(--L-line);}
+.g-pq::before{content:"\201C";position:absolute;top:-6px;left:50%;transform:translateX(-50%);
+  font-family:var(--ff-disp);font-size:clamp(2.5rem,5vw,4rem);line-height:.8;opacity:.09;color:var(--L-acc);}
+.g-pq p{font-family:var(--ff-disp);font-style:italic;font-weight:300;
+  font-size:clamp(.95rem,1.9vw,1.12rem);line-height:1.65;margin:0;color:var(--L-txt);}
+
+/* ═══════ NIGHTFALL CLOSING ═══════ */
+.nightfall{background:linear-gradient(175deg,#010307 0%,#040209 40%,#030107 100%);
+  padding:clamp(56px,8vw,110px) var(--pp) clamp(44px,6vw,80px);
+  text-align:center;position:relative;overflow:hidden;
+  border-top:1px solid rgba(200,218,255,.05);}
+#c-night{position:absolute;inset:0;z-index:0;pointer-events:none;}
+.nf-inner{position:relative;z-index:1;max-width:820px;margin:0 auto;}
+.nf-tag{font-family:var(--ff-ui);font-size:clamp(.47rem,1.2vw,.56rem);
+  font-weight:100;letter-spacing:.55em;text-transform:uppercase;
+  color:rgba(180,205,255,.22);display:block;margin-bottom:14px;}
+.nf-h{font-family:var(--ff-disp);font-size:clamp(1.7rem,5.5vw,3.8rem);
+  color:rgba(200,220,255,.7);line-height:1.08;margin-bottom:9px;}
+.nf-s{font-family:var(--ff-disp);font-style:italic;
+  font-size:clamp(1rem,3vw,1.9rem);color:rgba(244,160,64,.38);margin-bottom:38px;}
+.nf-div{display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:clamp(26px,4vw,44px);}
+.nfd-l{height:1px;flex:1;max-width:80px;background:linear-gradient(to right,transparent,rgba(58,120,212,.32));}
+.nfd-r{height:1px;flex:1;max-width:80px;background:linear-gradient(to left,transparent,rgba(224,120,40,.32));}
+.nfd-c{font-family:var(--ff-disp);font-size:.8rem;color:rgba(200,218,255,.18);letter-spacing:6px;}
+
+/* dual sleep cards */
+.sleep-grid{display:grid;grid-template-columns:1fr 1fr;
+  gap:clamp(12px,2.5vw,20px);margin-bottom:clamp(26px,4vw,40px);text-align:left;}
+.sc{padding:clamp(16px,2.8vw,26px);}
+.sc-l{background:rgba(58,120,212,.08);border:1px solid var(--L-line);}
+.sc-r{background:rgba(224,120,40,.08);border:1px solid var(--V-line);}
+.sc-hdr{display:flex;align-items:center;gap:9px;margin-bottom:14px;flex-wrap:wrap;}
+.sc-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;animation:orbPulse 3s ease-in-out infinite;}
+.sc-l .sc-dot{background:var(--L-acc);box-shadow:0 0 8px var(--L-acc);}
+.sc-r .sc-dot{background:var(--V-acc);box-shadow:0 0 8px var(--V-acc);animation-delay:.7s;}
+.sc-who{font-family:var(--ff-ui);font-size:clamp(.52rem,1.3vw,.62rem);
+  font-weight:300;letter-spacing:.25em;text-transform:uppercase;}
+.sc-l .sc-who{color:var(--L-bright);}
+.sc-r .sc-who{color:var(--V-bright);}
+.sc-loc{font-family:var(--ff-ui);font-size:clamp(.44rem,1vw,.52rem);
+  font-weight:100;letter-spacing:.18em;margin-left:auto;}
+.sc-l .sc-loc{color:rgba(58,120,212,.35);}
+.sc-r .sc-loc{color:rgba(224,120,40,.35);}
+.sc-txt{font-family:var(--ff-body);font-size:clamp(.88rem,1.7vw,.98rem);
+  font-weight:400;line-height:1.88;}
+.sc-l .sc-txt{color:rgba(110,160,220,.7);}
+.sc-r .sc-txt{color:rgba(204,148,80,.7);}
+
+/* good night bubble */
+.gn-row{display:flex;justify-content:flex-end;margin:clamp(16px,3vw,28px) 0;}
+.gn-bbl{max-width:min(88%,440px);padding:clamp(12px,2.5vw,18px) clamp(14px,2.5vw,22px);
+  background:rgba(224,120,40,.09);border:1px solid var(--V-line);
+  border-radius:14px 2px 14px 14px;text-align:left;}
+.gn-who{font-family:var(--ff-ui);font-size:.5rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--V-bright);display:block;margin-bottom:7px;text-align:right;}
+.gn-txt{font-family:var(--ff-disp);font-size:clamp(.9rem,1.9vw,1.05rem);
+  font-style:italic;font-weight:300;color:var(--V-txt);line-height:1.8;}
+
+/* bridge text */
+.bridge-p{max-width:600px;margin:clamp(18px,3vw,28px) auto;}
+.bridge-p p{font-family:var(--ff-disp);font-style:italic;font-weight:300;
+  font-size:clamp(.98rem,2vw,1.15rem);line-height:1.92;
+  color:rgba(200,218,255,.4);text-align:center;}
+
+/* closing card */
+.close-card{padding:clamp(18px,3.5vw,32px);
+  background:rgba(200,218,255,.03);border:1px solid rgba(200,218,255,.06);
+  max-width:720px;margin:clamp(20px,3.5vw,36px) auto 0;}
+.cc-txt{font-family:var(--ff-disp);font-style:italic;font-weight:300;
+  font-size:clamp(1rem,2.4vw,1.32rem);line-height:1.88;
+  color:rgba(200,220,255,.52);margin-bottom:10px;}
+.cc-attr{font-family:var(--ff-ui);font-size:clamp(.46rem,1.1vw,.54rem);
+  font-weight:100;letter-spacing:.32em;text-transform:uppercase;
+  color:rgba(180,205,255,.18);}
+
+/* ═══════ FOOTER ═══════ */
+.foot{background:var(--L-ink);padding:clamp(28px,5vw,52px) var(--pp) clamp(32px,5vw,56px);
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;
+  border-top:1px solid rgba(255,255,255,.04);}
+.fi-ch{font-family:var(--ff-ui);font-size:clamp(.46rem,1.1vw,.54rem);font-weight:100;
+  letter-spacing:.38em;text-transform:uppercase;color:rgba(140,170,220,.22);display:block;margin-bottom:6px;}
+.fi-t{font-family:var(--ff-disp);font-size:clamp(.95rem,2.3vw,1.22rem);color:rgba(180,208,255,.42);margin-bottom:3px;}
+.fi-s{font-family:var(--ff-disp);font-style:italic;font-size:clamp(.84rem,1.7vw,.98rem);color:rgba(140,170,220,.28);}
+.foot-btns{display:flex;gap:10px;flex-wrap:wrap;}
+.btn-nav{display:inline-flex;align-items:center;gap:8px;
+  padding:clamp(9px,1.8vw,13px) clamp(16px,3vw,26px);
+  font-family:var(--ff-ui);font-size:clamp(.55rem,1.3vw,.62rem);
+  font-weight:300;letter-spacing:.2em;text-transform:uppercase;
+  text-decoration:none;transition:all .3s;white-space:nowrap;
+  border:1px solid rgba(58,120,212,.2);background:transparent;color:var(--L-dim);}
+.btn-nav:hover{background:var(--L-acc);color:#fff;border-color:var(--L-acc);
+  transform:translateY(-2px);box-shadow:0 8px 28px rgba(58,120,212,.28);}
+.btn-nav svg{width:12px;height:12px;transition:transform .3s;flex-shrink:0;}
+.btn-nav.prev:hover svg{transform:translateX(-3px);}
+.btn-nav.next:hover svg{transform:translateX(3px);}
+
+/* REVEAL SYSTEM */
+.reveal{opacity:0;transform:translateY(13px);transition:opacity .65s ease,transform .65s ease;}
+.reveal.in{opacity:1;transform:none;}
+.rd1{transition-delay:.07s;}.rd2{transition-delay:.14s;}.rd3{transition-delay:.21s;}
+
+/* RESPONSIVE */
+@media(max-width:860px){
+  .dual-band{grid-template-columns:1fr;}
+  .db-div{display:none;}
+  .db-luc{padding:clamp(32px,5vw,56px) var(--pp);border-bottom:2px solid rgba(58,120,212,.1);}
+  .db-vic{padding:clamp(32px,5vw,56px) var(--pp);border-top:2px solid rgba(224,120,40,.1);}
+  .sleep-grid{grid-template-columns:1fr;}
+}
+@media(max-width:600px){
+  .hero-locs{flex-wrap:wrap;justify-content:center;gap:18px;}
+  .hl-l,.hl-r{text-align:center;flex:0 0 calc(50% - 9px);}
+  .hl-mid{display:none;}
+  .ht-main{font-size:clamp(1.7rem,7.5vw,2.6rem);}
+  .ht-sub{font-size:clamp(.88rem,4.5vw,1.1rem);}
+  .g-stats{grid-template-columns:repeat(2,1fr);}
+  .foot{flex-direction:column;align-items:flex-start;}
+  .gn-bbl{max-width:92%;}
+}
+@media(max-width:400px){
+  .hl-l,.hl-r{flex:0 0 100%;}.hl-name{font-size:1.6rem;}
+  .g-stats{grid-template-columns:1fr;}
+}
+@media(min-width:1400px){.chapter-wrap,.dual-band{max-width:1400px;margin:0 auto;}}
+@media(prefers-reduced-motion:reduce){
+  .reveal{transition:opacity .3s ease;transform:none!important;}
+  *{animation-duration:.01ms!important;}
+}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="../index.html" class="nb">Whispers of Caring</a>
+  <div class="nr">
+    
+    <a href="c4index.html" class="nl">HOME</a>
+    
+    
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <canvas id="c-hero"></canvas>
+  <canvas id="c-shoot"></canvas>
+  <div class="hero-vig"></div>
+  <div class="hero-meridian"></div>
+
+  <div class="hero-inner">
+    <div class="hero-locs">
+      <div class="hl-l">
+        <span class="hl-name">Lucifer</span>
+        <span class="hl-loc">&#127956; Aurora Vista</span>
+        <span class="hl-q">&#8220;Every glance at his phone &mdash; a twinge of disappointment.&#8221;</span>
+      </div>
+      <div class="hl-mid">
+        <div class="hl-orb l"></div>
+        <span class="hl-sep">miles apart</span>
+        <div class="hl-orb r"></div>
+      </div>
+      <div class="hl-r">
+        <span class="hl-name">Victoria</span>
+        <span class="hl-loc">&#127912; Riverton</span>
+        <span class="hl-q">&#8220;She stared at her screen, hoping for a reply.&#8221;</span>
+      </div>
+    </div>
+
+    <div class="hero-title">
+      <span class="ht-eye">Whispers of Caring &middot; Chapter IV &middot; Phase VI</span>
+      <span class="ht-main">
+        <span class="ht-l">Lucid </span><span class="ht-b">Dreams of </span><span class="ht-v">Friendship</span>
+      </span>
+      <span class="ht-sub">from Aurora Vista to Riverton</span>
+    </div>
+
+    <div class="h-orn">
+      <div class="h-orn-l"></div>
+      <span class="h-orn-c">&#10022; &#9790; &#10022;</span>
+      <div class="h-orn-r"></div>
+    </div>
+
+    <p class="h-verse">&#8220;The distance between them was a mere physical separation &mdash; their thoughts and good wishes for each other bridged the gap.&#8221;</p>
+
+    <div class="h-scrl">
+      <span class="h-scrl-lbl">Two worlds &middot; one story</span>
+      <div class="h-scrl-tick"></div>
+    </div>
+  </div>
+</section>
+
+<!-- DUAL BAND I — MORNING ABSENCE -->
+<div class="chapter-wrap">
+<div class="dual-band reveal">
+  <div class="db-luc">
+    <div class="sh">
+      <span class="sh-tag">Lucifer &middot; Aurora Vista &middot; Morning</span>
+      <h2 class="sh-h">The Silent Apartment</h2>
+      <p class="sh-s">A morning without her familiar ping felt impossibly quiet.</p>
+      <div class="sh-rule"><span>&#9670;</span></div>
+    </div>
+    <div class="prose">
+      <p class="drop">As Victoria embarked on her journey to Riverton for the art expo, Lucifer&#8217;s day unfolded with a profound sense of emptiness and longing. Her absence was felt deeply in every aspect of his daily routine, casting a shadow over even the simplest tasks.</p>
+      <p>The quiet of his apartment was a stark contrast to the lively start of the day they usually shared. As he went through his morning routine &mdash; from brewing his coffee to preparing breakfast &mdash; every action seemed tinged with the void left by her absence.</p>
+    </div>
+    <div class="mcard wm-phone">
+      <span class="mc-tag">&#128241; Every glance at his phone</span>
+      <p>The playful texts and cheerful greetings that usually kicked off his day were replaced by a quiet solitude. His phone felt unusually silent &mdash; every glance met with a twinge of disappointment, missing the familiar ping of her messages and the way she would brighten his mornings.</p>
+    </div>
+  </div>
+  <div class="db-div"></div>
+  <div class="db-vic">
+    <div class="sh">
+      <span class="sh-tag">Victoria &middot; Riverton &middot; Art Expo</span>
+      <h2 class="sh-h">Amid the Bustle</h2>
+      <p class="sh-s">Colours, conversations &mdash; and a quiet gap where his messages used to be.</p>
+      <div class="sh-rule"><span>&#9670;</span></div>
+    </div>
+    <div class="prose">
+      <p class="drop">Victoria&#8217;s journey to Riverton for the art expo had taken her far from her familiar surroundings in Evervale. The city, bustling with activity and new faces, contrasted sharply with the serene and close-knit community she was used to.</p>
+      <p>In the initial days of the expo, Victoria was absorbed in the whirlwind of preparations and exhibitions. Every moment was a blur of colours and conversations &mdash; but amidst the hectic schedule, she felt a growing void.</p>
+    </div>
+    <div class="mcard wm-art">
+      <span class="mc-tag">&#127912; A noticeable gap in her routine</span>
+      <p>The lack of frequent communication with Lucifer left a noticeable gap in her routine. Their usual exchanges of jokes, encouragement, and everyday musings were absent, creating a sense of isolation she hadn&#8217;t anticipated.</p>
+    </div>
+  </div>
+</div>
+
+<!-- DUAL BAND II — WORKDAY -->
+<div class="dual-band reveal rd1">
+  <div class="db-luc">
+    <div class="sh">
+      <span class="sh-tag">Lucifer &middot; Workday &middot; Drifting Thoughts</span>
+      <h2 class="sh-h">Pride &amp; Absence</h2>
+      <p class="sh-s">He pictured her in her element &mdash; and felt the distance more sharply.</p>
+      <div class="sh-rule"><span>&#9670;</span></div>
+    </div>
+    <div class="prose">
+      <p>Throughout his workday, Lucifer found it challenging to concentrate. His thoughts were frequently interrupted by images of Victoria at the expo &mdash; setting up her art and interacting with attendees. There was a deep pride in knowing she was pursuing her passion, but it was accompanied by a feeling of sadness and exclusion.</p>
+    </div>
+    <div class="pq">
+      <p>&#8220;He imagined her vividly in her element &mdash; surrounded by art enthusiasts, engaged in conversations about her work. The joy he felt was tinged with a profound sense of missing out.&#8221;</p>
+    </div>
+    <div class="mcard wm-moon">
+      <span class="mc-tag">&#127759; Lunch break solitude</span>
+      <p>The conversations they usually shared over lunch &mdash; filled with laughter and playful banter &mdash; were now replaced by a solitary meal. The brief updates she had sent only served to highlight the distance between them.</p>
+    </div>
+  </div>
+  <div class="db-div"></div>
+  <div class="db-vic">
+    <div class="sh">
+      <span class="sh-tag">Victoria &middot; Expo Days &middot; Missing Him</span>
+      <h2 class="sh-h">The Quiet Moments</h2>
+      <p class="sh-s">Between booths and conversations &mdash; her thoughts kept returning to Aurora Vista.</p>
+      <div class="sh-rule"><span>&#9670;</span></div>
+    </div>
+    <div class="prose">
+      <p>Victoria missed the comfort of her familiar chats with Lucifer, where she would often share the small triumphs and challenges of her day. Without his texts to look forward to, the quiet moments in her hotel room felt lonelier. She often found herself staring at her phone, hoping for a reply.</p>
+    </div>
+    <div class="pq">
+      <p>&#8220;She also worried about how Lucifer was managing without her &mdash; wondering if he was finding the same joy in playing alone, hoping he wasn&#8217;t feeling too lonely.&#8221;</p>
+    </div>
+    <div class="mcard wm-mail">
+      <span class="mc-tag">&#128140; Thoughtful updates</span>
+      <p>Despite the busyness of the expo, Victoria made a conscious effort to send thoughtful updates to Lucifer &mdash; pictures of her art setup, brief updates about her day &mdash; hoping to bridge the distance and remind him of their connection.</p>
+    </div>
+  </div>
+</div>
+</div><!-- /chapter-wrap -->
+
+<!-- SOLO GAMING INTERLUDE -->
+<div class="gaming reveal">
+  <div class="g-inner">
+    <span class="g-tag">Lucifer &middot; Solo Session &middot; Nightshade</span>
+    <div class="g-title">The Game Without Her</div>
+    <p class="g-sub">The familiar world &mdash; quieter now, without Starfire&#8217;s voice in the chat.</p>
+    <div class="g-rule"><span>&#9670;</span></div>
+    <div class="g-stats reveal rd1">
+      <div class="gs"><span class="gs-i">&#9876;</span><span class="gs-l">Enemy Squads</span><span class="gs-v">Cleared</span></div>
+      <div class="gs"><span class="gs-i">&#128506;</span><span class="gs-l">Quests</span><span class="gs-v">Completed</span></div>
+      <div class="gs"><span class="gs-i">&#128126;</span><span class="gs-l">Boss Fight</span><span class="gs-v">Defeated</span></div>
+      <div class="gs"><span class="gs-i">&#128172;</span><span class="gs-l">Partner</span><span class="gs-v">Absent</span></div>
+    </div>
+    <div class="g-prose reveal rd2">
+      <p class="drop">The game, which was usually a cooperative endeavour, now felt like a personal challenge. Lucifer logged in and was greeted by the familiar interface &mdash; a world where he and Victoria had spent countless hours strategizing and battling together. He noticed the absence of Victoria&#8217;s vibrant presence in the chat, and it took a moment to adjust to the quiet.</p>
+      <p>One particular challenge was a large boss fight, a scenario that required careful planning and execution. Lucifer, undeterred by the lack of his partner, used the time to analyse the boss&#8217;s attack patterns and identify weaknesses. With a strategic approach and a few close calls, he succeeded in defeating the boss alone &mdash; a significant accomplishment.</p>
+      <p>Throughout the gameplay, Lucifer occasionally glanced at his phone, hoping for a message or update from Victoria. The absence of her usual comments and encouragement made the victories feel less celebratory &mdash; but also gave him a chance to reflect on the partnership they shared. Each win in the game was a testament to their teamwork, even in her absence.</p>
+    </div>
+    <div class="g-pq reveal rd3">
+      <p>&#8220;The experience reinforced his appreciation for their collaborative gaming sessions &mdash; and deepened his sense of longing for her presence.&#8221;</p>
+    </div>
+  </div>
+</div>
+
+<!-- DUAL BAND III — EVENING -->
+<div class="chapter-wrap">
+<div class="dual-band reveal">
+  <div class="db-luc">
+    <div class="sh">
+      <span class="sh-tag">Lucifer &middot; Evening &middot; Introspection</span>
+      <h2 class="sh-h">The Quiet Evening</h2>
+      <p class="sh-s">Preparing dinner alone &mdash; every update from her a bittersweet reminder.</p>
+      <div class="sh-rule"><span>&#9670;</span></div>
+    </div>
+    <div class="prose">
+      <p>As the day transitioned into evening, Lucifer&#8217;s reflections grew more introspective. The routine of preparing dinner, once a shared activity, now felt monotonous and unfulfilling. The absence of Victoria&#8217;s presence was felt deeply in the quiet of his apartment, where the usual warmth and vibrancy of their interactions were missing.</p>
+    </div>
+    <div class="mcard wm-star">
+      <span class="mc-tag">&#10022; The anticipation of return</span>
+      <p>The emptiness of his evening routine was punctuated by the anticipation of her return and the hope of rekindling their shared moments. The day had been filled with reminders of her absence, but the thought of their reunion brought a hopeful end to his otherwise solitary day.</p>
+    </div>
+  </div>
+  <div class="db-div"></div>
+  <div class="db-vic">
+    <div class="sh">
+      <span class="sh-tag">Victoria &middot; Hotel Room &middot; Reflection</span>
+      <h2 class="sh-h">The Value of Distance</h2>
+      <p class="sh-s">The expo&#8217;s bustle faded &mdash; and in the quiet, she found clarity.</p>
+      <div class="sh-rule"><span>&#9670;</span></div>
+    </div>
+    <div class="prose">
+      <p>Victoria tried to stay focused on the expo and her art, but the occasional quiet moments brought her back to her thoughts of Lucifer. It was during these reflective moments that she truly realized how much her friend meant to her &mdash; the shared laughter, the understanding during tough times, the comfort of knowing someone was always there to listen.</p>
+    </div>
+    <div class="mcard wm-city">
+      <span class="mc-tag">&#127750; City lights, distant thoughts</span>
+      <p>As the expo continued, Victoria found solace in the fact that their friendship was strong enough to endure this temporary separation. The distance had highlighted the value of their bond and made her even more grateful for the understanding and patience they had for each other.</p>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- NIGHTFALL -->
+<div class="nightfall reveal" id="nightfall">
+  <canvas id="c-night"></canvas>
+  <div class="nf-inner">
+    <span class="nf-tag">Nightfall &middot; Aurora Vista &amp; Riverton &middot; Together Apart</span>
+    <h2 class="nf-h">As Darkness Fell on Both Worlds</h2>
+    <p class="nf-s">Two cities. Two rooms. One unbreakable thread.</p>
+    <div class="nf-div">
+      <div class="nfd-l"></div><span class="nfd-c">&#10022; &#9790; &#10022;</span><div class="nfd-r"></div>
+    </div>
+
+    <div class="sleep-grid reveal">
+      <div class="sc sc-l">
+        <div class="sc-hdr">
+          <div class="sc-dot"></div>
+          <span class="sc-who">Lucifer</span>
+          <span class="sc-loc">Aurora Vista</span>
+        </div>
+        <p class="sc-txt">Lucifer lay in bed, the soft glow of the bedside lamp casting gentle shadows on the walls. His thoughts were filled with images of Victoria navigating the art expo in Riverton. The quiet of the night seemed to amplify his feelings of longing and appreciation for their friendship. With a sigh of contentment and a gentle smile, he whispered a quiet wish for her success and well-being.</p>
+      </div>
+      <div class="sc sc-r">
+        <div class="sc-hdr">
+          <div class="sc-dot"></div>
+          <span class="sc-who">Victoria</span>
+          <span class="sc-loc">Riverton</span>
+        </div>
+        <p class="sc-txt">Victoria settled into her hotel room after a long day at the expo. The city lights twinkled outside her window, but her mind was focused on Lucifer back in Aurora Vista. She felt a pang of nostalgia as she remembered their gaming sessions and the way he would encourage her during challenging times. She hoped Lucifer was managing well and finding joy in his daily routines.</p>
+      </div>
+    </div>
+
+    <div class="gn-row reveal rd1">
+      <div class="gn-bbl">
+        <span class="gn-who">Victoria &middot; Starfire &middot; 23:58</span>
+        <p class="gn-txt">With a contented sigh and a soft smile, she sent him a final good night message &mdash; hoping it would convey her warm thoughts and appreciation. As she drifted off to sleep, she cherished the bond they shared and eagerly awaited the day when they could reconnect and share their stories.</p>
+      </div>
+    </div>
+
+    <div class="bridge-p reveal rd2">
+      <p>In their separate corners of the world, both Lucifer and Victoria found solace in the connection they had. The distance between them was a mere physical separation &mdash; their thoughts and good wishes for each other bridged the gap. As they each settled into their beds, their hearts were warmed by the memories and anticipation of their next encounter.</p>
+    </div>
+
+    <div class="close-card reveal rd3">
+      <p class="cc-txt">&#8220;With the morning sun just peeking over the horizon, both Lucifer and Victoria awoke with lingering thoughts of each other &mdash; ready to face the new day, but still carrying the warmth of their midnight reflections.&#8221;</p>
+      <span class="cc-attr">&mdash; Phase VI &middot; Lucid Dreams of Friendship &middot; Chapter IV</span>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="foot reveal">
+  <div>
+    <span class="fi-ch">Chapter IV &middot; Phase VI &middot; Whispers of Caring</span>
+    <div class="fi-t">Lucid Dreams of Friendship</div>
+    <div class="fi-s">From Aurora Vista to Riverton</div>
+  </div>
+  <div class="foot-btns">
+    <a href="c4p5.html" class="btn-nav prev">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>Phase V
+    </a>
+    <a href="c4index.html" class="btn-nav next">
+      Chapter IV<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+    </a>
+  </div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+  const noAnim = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+
+  /* ── DPR-aware canvas ── */
+  function mkCvs(id, parentEl){
+    const c = document.getElementById(id);
+    if(!c) return null;
+    const ctx = c.getContext('2d');
+    const dpr = Math.min(window.devicePixelRatio||1, 2);
+    const el  = parentEl || c.parentElement;
+    function resize(){
+      const r = el.getBoundingClientRect();
+      c.width  = Math.round(r.width  * dpr);
+      c.height = Math.round(r.height * dpr);
+      c.style.width  = r.width  + 'px';
+      c.style.height = r.height + 'px';
+      ctx.setTransform(dpr,0,0,dpr,0,0);
+    }
+    resize();
+    let tid;
+    window.addEventListener('resize',()=>{
+      clearTimeout(tid);
+      tid=setTimeout(()=>{ctx.setTransform(1,0,0,1,0,0);resize();},140);
+    });
+    return {c, ctx, dpr, W:()=>c.width/dpr, H:()=>c.height/dpr};
+  }
+
+  /* progress */
+  const prg = document.getElementById('prog');
+  window.addEventListener('scroll',()=>{
+    const t = document.documentElement.scrollHeight - window.innerHeight;
+    prg.style.width=(t>0?window.scrollY/t*100:0)+'%';
+  },{passive:true});
+
+  /* reveals */
+  const robs = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');robs.unobserve(e.target);}});
+  },{threshold:0.05});
+  document.querySelectorAll('.reveal').forEach(el=>robs.observe(el));
+
+  if(noAnim) return;
+
+  /* ═══ HERO CANVAS — dual star fields + bokeh ═══ */
+  const hc = mkCvs('c-hero');
+  if(hc){
+    const isMob = ()=>window.innerWidth<600;
+    let stars=[], lights=[];
+    function buildParticles(){
+      const mob = isMob();
+      stars = Array.from({length:mob?70:170},()=>({
+        x:Math.random()*(mob?1:.54),
+        y:Math.random()*.88,
+        r:Math.random()*1.1+.2,
+        a:Math.random()*.6+.15,
+        sp:Math.random()*.35+.1,
+        ph:Math.random()*Math.PI*2
+      }));
+      lights = Array.from({length:mob?45:110},()=>({
+        x:(mob?0:.46)+Math.random()*(mob?1:.54),
+        y:.25+Math.random()*.72,
+        r:Math.random()*3.5+1.5,
+        a:Math.random()*.28+.06,
+        sp:Math.random()*.25+.08,
+        ph:Math.random()*Math.PI*2,
+        hue:22+Math.random()*30
+      }));
+    }
+    buildParticles();
+    window.addEventListener('resize',buildParticles);
+    let t=0;
+    (function loop(){
+      const W=hc.W(),H=hc.H();
+      hc.ctx.clearRect(0,0,W,H);
+      /* cold stars left */
+      stars.forEach(s=>{
+        const tw=s.a*(0.4+0.6*Math.sin(t*0.0022*s.sp+s.ph));
+        hc.ctx.beginPath();
+        hc.ctx.arc(s.x*W,s.y*H,s.r,0,Math.PI*2);
+        hc.ctx.fillStyle=`rgba(188,215,255,${tw})`;
+        hc.ctx.fill();
+      });
+      /* warm bokeh right */
+      lights.forEach(l=>{
+        const tw=l.a*(0.35+0.65*Math.sin(t*0.0018*l.sp+l.ph));
+        const grd=hc.ctx.createRadialGradient(l.x*W,l.y*H,0,l.x*W,l.y*H,l.r*4);
+        grd.addColorStop(0,`hsla(${l.hue},94%,72%,${tw})`);
+        grd.addColorStop(1,`hsla(${l.hue},80%,48%,0)`);
+        hc.ctx.beginPath();
+        hc.ctx.arc(l.x*W,l.y*H,l.r*4,0,Math.PI*2);
+        hc.ctx.fillStyle=grd; hc.ctx.fill();
+      });
+      t++; requestAnimationFrame(loop);
+    })();
+  }
+
+  /* ═══ SHOOTING STAR CANVAS ═══ */
+  const sc = mkCvs('c-shoot');
+  if(sc){
+    let shoot=null, nextShoot=Date.now()+3000;
+    function launchStar(W,H){
+      const fromRight=Math.random()>.5;
+      shoot={
+        x:fromRight?W*.85:W*.08,
+        y:H*(0.25+Math.random()*.3),
+        vx:fromRight?-(W*.0028):W*.0028,
+        vy:H*(Math.random()*.0006-.0003),
+        tail:[], maxTail:28,
+        alpha:0, phase:'in',
+        fromRight
+      };
+    }
+    (function loop(){
+      const W=sc.W(),H=sc.H();
+      sc.ctx.clearRect(0,0,W,H);
+      const now=Date.now();
+      if(!shoot && now>nextShoot) launchStar(W,H);
+      if(shoot){
+        /* update */
+        if(shoot.phase==='in'){ shoot.alpha=Math.min(1,shoot.alpha+.06); if(shoot.alpha>=1)shoot.phase='fly';}
+        else if(shoot.phase==='fly'){
+          const atEnd=shoot.fromRight?(shoot.x<W*.15):(shoot.x>W*.85);
+          if(atEnd) shoot.phase='out';
+        } else {
+          shoot.alpha=Math.max(0,shoot.alpha-.05);
+          if(shoot.alpha<=0){ shoot=null; nextShoot=now+6000+Math.random()*5000; return requestAnimationFrame(loop); }
+        }
+        shoot.tail.unshift({x:shoot.x,y:shoot.y});
+        if(shoot.tail.length>shoot.maxTail) shoot.tail.pop();
+        shoot.x+=shoot.vx; shoot.y+=shoot.vy;
+        /* draw tail */
+        for(let i=1;i<shoot.tail.length;i++){
+          const a=shoot.alpha*(1-i/shoot.tail.length)*0.7;
+          /* colour: blue on left half, amber on right */
+          const inLucSide=shoot.tail[i].x<W*.5;
+          const col=inLucSide?`rgba(140,200,255,${a})`:`rgba(255,190,100,${a})`;
+          sc.ctx.beginPath();
+          sc.ctx.moveTo(shoot.tail[i-1].x,shoot.tail[i-1].y);
+          sc.ctx.lineTo(shoot.tail[i].x,shoot.tail[i].y);
+          sc.ctx.strokeStyle=col;
+          sc.ctx.lineWidth=Math.max(.5,2*(1-i/shoot.tail.length));
+          sc.ctx.stroke();
+        }
+        /* head glow */
+        if(shoot.tail.length>0){
+          const hx=shoot.tail[0].x,hy=shoot.tail[0].y;
+          const inLucSide=hx<W*.5;
+          const hgrd=sc.ctx.createRadialGradient(hx,hy,0,hx,hy,6);
+          hgrd.addColorStop(0,inLucSide?`rgba(180,220,255,${shoot.alpha*0.9})`:`rgba(255,210,140,${shoot.alpha*0.9})`);
+          hgrd.addColorStop(1,'rgba(0,0,0,0)');
+          sc.ctx.beginPath(); sc.ctx.arc(hx,hy,6,0,Math.PI*2);
+          sc.ctx.fillStyle=hgrd; sc.ctx.fill();
+        }
+      }
+      requestAnimationFrame(loop);
+    })();
+  }
+
+  /* ═══ NIGHTFALL CANVAS — dual-tone drifting particles ═══ */
+  const nc = mkCvs('c-night');
+  if(nc){
+    const mob=window.innerWidth<600;
+    const pts=Array.from({length:mob?38:88},()=>({
+      x:Math.random(),y:Math.random(),
+      r:Math.random()*1.1+.2,
+      a:Math.random()*.2+.04,
+      vx:(Math.random()-.5)*.00007,
+      vy:-(Math.random()*.00005+.00001),
+      hue:Math.random()>.5?215:32,
+      sp:Math.random()*.0022+.001,
+      ph:Math.random()*Math.PI*2
+    }));
+    let t=0;
+    (function loop(){
+      const W=nc.W(),H=nc.H();
+      nc.ctx.clearRect(0,0,W,H);
+      pts.forEach(p=>{
+        p.x+=p.vx; p.y+=p.vy;
+        if(p.x<0)p.x=1; if(p.x>1)p.x=0; if(p.y<0)p.y=1;
+        const tw=p.a*(0.38+0.62*Math.sin(t*p.sp+p.ph));
+        nc.ctx.beginPath();
+        nc.ctx.arc(p.x*W,p.y*H,p.r,0,Math.PI*2);
+        nc.ctx.fillStyle=`hsla(${p.hue},72%,72%,${tw})`;
+        nc.ctx.fill();
+      });
+      t++; requestAnimationFrame(loop);
+    })();
+  }
+
+})();
+</script>
+</body>
+</html>

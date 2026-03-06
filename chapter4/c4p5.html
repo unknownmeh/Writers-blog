@@ -1,0 +1,1489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<title>Across the Miles — Whispers of Caring · Chapter IV</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Spectral:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+
+/* ═══════════════════════════════════════════
+   DESIGN TOKENS — Midnight Train
+═══════════════════════════════════════════ */
+:root {
+  --night:     #050810;
+  --midnight:  #080d1a;
+  --deep:      #0c1225;
+  --navy:      #101830;
+  --panel:     #141f38;
+  --card:      #192540;
+  --card2:     #1e2d4e;
+
+  --star:      #e8eef8;
+  --star2:     #a8b8d4;
+  --star3:     #607088;
+  --star4:     #364058;
+  --star5:     #1e2838;
+
+  /* Amber — station lights, warmth */
+  --amber:     #e8a040;
+  --amber2:    #c07820;
+  --amber3:    #8a5010;
+  --amber-g:   rgba(232,160,64,0.1);
+  --amber-b:   rgba(232,160,64,0.2);
+  --amber-glow: 0 0 24px rgba(232,160,64,0.35);
+
+  /* Rail blue — Lucifer's voice */
+  --rail:      #4898e8;
+  --rail2:     #2870c0;
+  --rail-g:    rgba(72,152,232,0.1);
+  --rail-b:    rgba(72,152,232,0.2);
+
+  /* Rose gold — Victoria */
+  --rose:      #e87878;
+  --rose2:     #c05050;
+  --rose-g:    rgba(232,120,120,0.1);
+  --rose-b:    rgba(232,120,120,0.2);
+
+  /* Sage — arrival/safe */
+  --sage:      #48c890;
+  --sage2:     #2a9068;
+  --sage-g:    rgba(72,200,144,0.1);
+  --sage-b:    rgba(72,200,144,0.2);
+
+  --sep:  rgba(255,255,255,0.06);
+  --sep2: rgba(255,255,255,0.1);
+  --sep3: rgba(255,255,255,0.16);
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+
+body {
+  font-family:'Spectral', serif;
+  background: var(--night);
+  color: var(--star);
+  overflow-x: hidden;
+  line-height: 1.75;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* ── Grain ── */
+body::after {
+  content:''; position:fixed; inset:0; z-index:1; pointer-events:none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+}
+
+/* ── Progress ── */
+#prog {
+  position:fixed; top:0; left:0; height:2px; width:0%; z-index:600;
+  background: linear-gradient(90deg, var(--rail), var(--amber), var(--rose));
+  transition:width .1s linear;
+  box-shadow: 0 0 8px rgba(232,160,64,0.5);
+}
+
+/* ── NAV ── */
+nav {
+  position:fixed; top:0; left:0; right:0; z-index:500;
+  height:54px; display:flex; align-items:center; justify-content:space-between;
+  padding: 0 clamp(16px,5vw,64px);
+  padding-left: max(clamp(16px,5vw,64px), env(safe-area-inset-left));
+  padding-right: max(clamp(16px,5vw,64px), env(safe-area-inset-right));
+  background: rgba(5,8,16,0.92); backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--sep);
+}
+nav::after {
+  content:''; position:absolute; bottom:-1px; left:0; right:0; height:1px;
+  background: linear-gradient(90deg,transparent,var(--amber-b),transparent);
+}
+.nav-brand {
+  font-family:'Cormorant Garamond',serif; font-style:italic; font-size:1.05rem;
+  color:var(--star); text-decoration:none; transition:color .3s;
+  letter-spacing:0.03em;
+}
+.nav-brand:hover { color:var(--amber); }
+.nav-right { display:flex; align-items:center; gap:10px; }
+.nav-tag {
+  font-family:'Space Mono',monospace; font-size:0.5rem; letter-spacing:0.14em;
+  color:var(--amber); border:1px solid var(--amber-b); padding:3px 10px; border-radius:3px;
+}
+.nav-link {
+  font-family:'Space Mono',monospace; font-size:0.5rem; letter-spacing:0.14em;
+  text-transform:uppercase; color:var(--star3); text-decoration:none;
+  border:1px solid var(--sep2); padding:5px 14px; border-radius:3px;
+  transition:all .25s;
+}
+.nav-link:hover { color:var(--amber); border-color:var(--amber-b); background:var(--amber-g); }
+
+/* ══════════════════════════════════════
+   HERO — Train Window
+══════════════════════════════════════ */
+.hero {
+  position:relative; min-height:100vh; min-height:100svh; overflow:hidden;
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  text-align:center; padding:100px 24px 80px;
+  background: radial-gradient(ellipse 120% 80% at 50% 60%, var(--deep) 0%, var(--night) 70%);
+  z-index:2;
+}
+
+/* Stars */
+#starCanvas { position:absolute; inset:0; z-index:0; pointer-events:none; }
+
+/* Rain streaks on glass */
+#rainCanvas { position:absolute; inset:0; z-index:1; pointer-events:none; opacity:0.5; }
+
+/* Moving landscape lights */
+#lightsCanvas { position:absolute; inset:0; z-index:2; pointer-events:none; }
+
+/* Window frame */
+.train-window {
+  position:absolute; inset:20px; z-index:3; pointer-events:none;
+  border: 2px solid rgba(232,160,64,0.12);
+  border-radius:40px / 30px;
+  box-shadow:
+    inset 0 0 80px rgba(0,0,0,0.4),
+    0 0 0 8px rgba(232,160,64,0.04),
+    0 0 60px rgba(232,160,64,0.06);
+}
+.train-window::before {
+  content:''; position:absolute; inset:8px;
+  border:1px solid rgba(232,160,64,0.06);
+  border-radius:34px / 24px;
+}
+
+.hero-inner { position:relative; z-index:4; max-width:700px; }
+
+.h-over {
+  font-family:'Space Mono',monospace; font-size:0.52rem;
+  letter-spacing:0.28em; text-transform:uppercase;
+  color:var(--star4); display:block; margin-bottom:18px;
+  opacity:0; animation:fadeUp .7s ease .15s forwards;
+}
+.h-kicker {
+  font-family:'Space Mono',monospace; font-size:0.58rem;
+  letter-spacing:0.18em; text-transform:uppercase;
+  color:var(--amber); display:block; margin-bottom:14px;
+  opacity:0; animation:fadeUp .7s ease .3s forwards;
+}
+.h-title {
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(3.2rem,9vw,7rem);
+  font-weight:700; line-height:0.97; letter-spacing:-0.02em;
+  color:var(--star); margin-bottom:6px;
+  opacity:0; animation:fadeUp 1s ease .45s forwards;
+  text-shadow: 0 0 60px rgba(232,160,64,0.15);
+}
+.h-title .across { font-style:italic; font-weight:300; }
+.h-title .miles { color:var(--amber); }
+.h-subtitle {
+  font-family:'Cormorant Garamond',serif; font-style:italic;
+  font-size:clamp(0.9rem,2vw,1.2rem); font-weight:300;
+  color:var(--star3); letter-spacing:0.08em; margin-bottom:22px;
+  opacity:0; animation:fadeUp .7s ease .65s forwards;
+}
+.h-rule {
+  display:flex; align-items:center; justify-content:center;
+  gap:14px; margin:18px auto 22px;
+  opacity:0; animation:fadeUp .7s ease .8s forwards;
+}
+.h-rule::before,.h-rule::after {
+  content:''; width:60px; height:1px;
+  background:linear-gradient(90deg,transparent,var(--sep2));
+}
+.h-rule::after{transform:scaleX(-1);}
+.h-rule span { font-size:0.5rem; letter-spacing:14px; color:var(--star5); }
+.h-desc {
+  font-family:'Spectral',serif; font-style:italic;
+  font-size:1.05rem; line-height:1.9; color:var(--star2);
+  max-width:460px; margin:0 auto 28px;
+  opacity:0; animation:fadeUp .7s ease .95s forwards;
+}
+.h-tags {
+  display:flex; flex-wrap:wrap; justify-content:center; gap:8px;
+  opacity:0; animation:fadeUp .7s ease 1.1s forwards;
+}
+.h-tag {
+  font-family:'Space Mono',monospace; font-size:0.5rem; letter-spacing:0.1em;
+  padding:5px 14px; border-radius:3px; border:1px solid var(--sep2); color:var(--star3);
+}
+.h-tag.a { color:var(--amber); border-color:var(--amber-b); background:var(--amber-g); }
+.h-tag.r { color:var(--rail); border-color:var(--rail-b); background:var(--rail-g); }
+.h-tag.v { color:var(--rose); border-color:var(--rose-b); background:var(--rose-g); }
+.h-tag.s { color:var(--sage); border-color:var(--sage-b); background:var(--sage-g); }
+
+/* distance badge */
+.h-dist {
+  position:absolute; bottom:32px; left:25%; transform:translateX(-50%);
+  z-index:4; display:flex; flex-direction:column; align-items:center; gap:8px;
+  opacity:0; animation:fadeUp .7s ease 1.5s forwards;
+}
+.h-dist-num {
+  font-family:'Cormorant Garamond',serif; font-weight:700;
+  font-size:2.5rem; color:var(--amber); line-height:1;
+  text-shadow: 0 0 20px rgba(232,160,64,0.4);
+}
+.h-dist-label {
+  font-family:'Space Mono',monospace; font-size:0.46rem;
+  letter-spacing:0.25em; text-transform:uppercase; color:var(--star4);
+}
+.h-dist-line {
+  width:1px; height:30px;
+  background:linear-gradient(180deg,var(--amber),transparent);
+  animation:lineGrow 2s ease-in-out infinite;
+}
+@keyframes lineGrow{0%,100%{opacity:.3;}50%{opacity:1;}}
+
+/* ══════════════════════════════════════
+   PAGE
+══════════════════════════════════════ */
+.page {
+  position:relative; z-index:2;
+  max-width:840px; margin:0 auto;
+  padding:0 clamp(20px,5vw,52px) 100px;
+}
+
+/* ── Section header ── */
+.sec-head {
+  display:flex; align-items:center; gap:14px;
+  margin:72px 0 32px;
+}
+.sec-label {
+  font-family:'Space Mono',monospace; font-size:0.5rem;
+  letter-spacing:0.22em; text-transform:uppercase;
+  color:var(--star3); white-space:nowrap;
+}
+.sec-line { flex:1; height:1px; background:var(--sep); }
+.sec-icon { font-size:0.75rem; opacity:.5; }
+
+/* ── Scene title ── */
+.scene-title {
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1.9rem,4.5vw,3rem);
+  font-weight:700; line-height:1.1; letter-spacing:-0.01em;
+  color:var(--star); margin-bottom:22px;
+}
+.scene-title em { font-style:italic; font-weight:300; color:var(--star2); }
+.scene-title .ac { color:var(--amber); }
+.scene-title .rc { color:var(--rail); }
+.scene-title .vc { color:var(--rose); }
+.scene-title .sc { color:var(--sage); }
+
+/* ── Prose ── */
+.prose {
+  font-size:1.12rem; line-height:2.08;
+  color:var(--star2); margin-bottom:22px;
+}
+.prose em  { font-style:italic; color:var(--star); }
+.prose strong { font-weight:500; color:var(--star); }
+
+.drop::first-letter {
+  font-family:'Cormorant Garamond',serif;
+  font-size:5rem; font-weight:700; font-style:italic;
+  float:left; line-height:.78; margin:.04em .16em 0 0;
+  color:var(--amber);
+  text-shadow: 0 0 20px rgba(232,160,64,0.4);
+}
+
+/* ── Atmosphere card ── */
+.atmo-card {
+  background:var(--panel); border:1px solid var(--sep2);
+  border-radius:10px; padding:26px 30px; margin:28px 0;
+  position:relative; overflow:hidden;
+}
+.atmo-card::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:2px;
+}
+.atmo-amber::before { background:linear-gradient(90deg,var(--amber),transparent); }
+.atmo-rail::before  { background:linear-gradient(90deg,var(--rail),transparent); }
+.atmo-rose::before  { background:linear-gradient(90deg,var(--rose),transparent); }
+.atmo-sage::before  { background:linear-gradient(90deg,var(--sage),transparent); }
+.atmo-amber { box-shadow:inset 0 0 50px rgba(232,160,64,0.04); }
+.atmo-rail  { box-shadow:inset 0 0 50px rgba(72,152,232,0.04); }
+.atmo-sage  { box-shadow:inset 0 0 50px rgba(72,200,144,0.04); }
+.atmo-label {
+  font-family:'Space Mono',monospace; font-size:0.5rem;
+  letter-spacing:0.2em; text-transform:uppercase;
+  display:block; margin-bottom:14px;
+}
+.atmo-amber .atmo-label { color:var(--amber); }
+.atmo-rail  .atmo-label { color:var(--rail); }
+.atmo-rose  .atmo-label { color:var(--rose); }
+.atmo-sage  .atmo-label { color:var(--sage); }
+.atmo-text {
+  font-family:'Spectral',serif; font-style:italic;
+  font-size:1.05rem; line-height:1.9; color:var(--star2);
+}
+
+/* ── Pull quote ── */
+.pull {
+  margin:38px 0; padding:26px 0;
+  border-top:1px solid var(--sep);
+  border-bottom:1px solid var(--sep);
+  text-align:center; position:relative;
+}
+.pull::before,.pull::after {
+  content:''; position:absolute;
+  left:20%; right:20%; height:1px;
+}
+.pull::before { top:0; background:linear-gradient(90deg,transparent,var(--amber-b),transparent); }
+.pull::after  { bottom:0; background:linear-gradient(90deg,transparent,var(--amber-b),transparent); }
+.pull p {
+  font-family:'Cormorant Garamond',serif; font-style:italic;
+  font-size:clamp(1.1rem,2.2vw,1.45rem);
+  color:var(--star); line-height:1.65;
+}
+.pull cite {
+  display:block; margin-top:12px;
+  font-family:'Space Mono',monospace; font-style:normal;
+  font-size:0.48rem; letter-spacing:0.2em; color:var(--star4);
+}
+
+/* ── Messenger chat ── */
+.chat-window {
+  background:var(--panel); border:1px solid var(--sep2);
+  border-radius:12px; margin:28px 0; overflow:hidden;
+  box-shadow: 0 4px 30px rgba(0,0,0,0.3);
+}
+.cw-bar {
+  display:flex; align-items:center; gap:8px;
+  padding:12px 20px; border-bottom:1px solid var(--sep);
+  background:var(--deep);
+}
+.cw-dots{display:flex;gap:5px;}
+.cw-dots span{width:8px;height:8px;border-radius:50%;}
+.d1{background:#ff605a;}.d2{background:#ffbc2c;}.d3{background:#28c840;}
+.cw-title {
+  font-family:'Space Mono',monospace; font-size:0.5rem;
+  letter-spacing:0.16em; text-transform:uppercase; color:var(--star4); margin-left:8px;
+}
+.cw-status {
+  margin-left:auto; font-family:'Space Mono',monospace; font-size:0.5rem;
+  color:var(--rose); display:flex; align-items:center; gap:5px;
+}
+.cw-status::before {
+  content:''; width:5px; height:5px; border-radius:50%;
+  background:var(--rose); box-shadow:0 0 5px var(--rose); animation:blink 2.2s infinite;
+}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:.2;}}
+.cw-body { padding:20px; display:flex; flex-direction:column; gap:12px; }
+.cw-more { display:none; flex-direction:column; gap:12px; }
+.cw-more.open { display:flex; }
+.cw-toggle {
+  display:block; width:100%; padding:10px; background:none;
+  border:none; border-top:1px solid var(--sep);
+  font-family:'Space Mono',monospace; font-size:0.48rem;
+  letter-spacing:0.18em; text-transform:uppercase;
+  color:var(--star3); cursor:pointer; transition:color .2s,background .2s;
+}
+.cw-toggle:hover { color:var(--amber); background:var(--amber-g); }
+
+.cmsg { display:flex; flex-direction:column; max-width:80%; }
+.cmsg.luc { align-self:flex-end; align-items:flex-end; }
+.cmsg.vic { align-self:flex-start; }
+.cmsg-who {
+  font-family:'Space Mono',monospace; font-size:0.46rem;
+  letter-spacing:0.16em; text-transform:uppercase; margin-bottom:5px;
+}
+.cmsg.luc .cmsg-who { color:var(--rail); text-align:right; }
+.cmsg.vic .cmsg-who { color:var(--rose); }
+.cmsg-bub {
+  padding:11px 17px;
+  font-family:'Spectral',serif; font-style:italic;
+  font-size:0.98rem; line-height:1.72; color:var(--star);
+}
+.cmsg.luc .cmsg-bub {
+  background:var(--rail-g); border:1px solid var(--rail-b);
+  border-radius:10px 0 10px 10px;
+}
+.cmsg.vic .cmsg-bub {
+  background:var(--rose-g); border:1px solid var(--rose-b);
+  border-radius:0 10px 10px 10px;
+}
+
+/* ── Train tracker — ANIMATED ── */
+.tracker {
+  background:var(--deep); border:1px solid var(--sep2);
+  border-radius:12px; margin:32px 0; overflow:hidden;
+  box-shadow: 0 4px 40px rgba(0,0,0,0.4);
+}
+.tracker-bar {
+  background:var(--panel); padding:13px 20px;
+  border-bottom:1px solid var(--sep);
+  display:flex; align-items:center; justify-content:space-between;
+}
+.tracker-title {
+  font-family:'Space Mono',monospace; font-size:0.55rem;
+  font-weight:700; letter-spacing:0.18em; text-transform:uppercase;
+  color:var(--star);
+}
+.tracker-live {
+  font-family:'Space Mono',monospace; font-size:0.5rem;
+  letter-spacing:0.14em; color:var(--sage);
+  display:flex; align-items:center; gap:6px;
+}
+.tracker-live::before {
+  content:''; width:6px; height:6px; border-radius:50%;
+  background:var(--sage); box-shadow:0 0 6px var(--sage);
+  animation:blink 1.4s infinite;
+}
+.tracker-body { padding:24px; }
+
+/* Route line */
+.route-line {
+  position:relative; margin:20px 0; height:4px;
+  background:var(--star5); border-radius:2px;
+}
+.route-fill {
+  position:absolute; top:0; left:0; height:100%;
+  background:linear-gradient(90deg,var(--rail),var(--amber),var(--sage));
+  border-radius:2px; width:0%;
+  transition:width 2s cubic-bezier(.4,0,.2,1);
+  box-shadow: 0 0 10px rgba(72,200,144,0.4);
+}
+.route-train {
+  position:absolute; top:50%; transform:translateY(-50%);
+  width:18px; height:18px; border-radius:50%;
+  background:var(--amber); border:2px solid var(--night);
+  box-shadow: 0 0 12px rgba(232,160,64,0.6);
+  transition:left 2s cubic-bezier(.4,0,.2,1);
+  left:0%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:0.65rem;
+}
+
+/* Stations */
+.stations {
+  display:flex; justify-content:space-between;
+  margin-bottom:12px;
+}
+.station {
+  display:flex; flex-direction:column; align-items:center; gap:4px;
+  position:relative;
+}
+.station-dot {
+  width:10px; height:10px; border-radius:50%;
+  border:2px solid var(--star4); background:var(--deep);
+  transition:all .5s;
+}
+.station.passed .station-dot { background:var(--sage); border-color:var(--sage); box-shadow:0 0 8px rgba(72,200,144,0.5); }
+.station.active .station-dot { background:var(--amber); border-color:var(--amber); box-shadow:0 0 10px rgba(232,160,64,0.7); animation:pulse-station 1.5s infinite; }
+@keyframes pulse-station{0%,100%{box-shadow:0 0 6px rgba(232,160,64,0.5);}50%{box-shadow:0 0 18px rgba(232,160,64,0.9);}}
+.station-name {
+  font-family:'Space Mono',monospace; font-size:0.44rem;
+  letter-spacing:0.1em; text-transform:uppercase;
+  color:var(--star4); text-align:center; max-width:70px;
+}
+.station.passed .station-name { color:var(--sage); }
+.station.active .station-name { color:var(--amber); }
+
+/* Tracker stats */
+.tracker-stats {
+  display:grid; grid-template-columns:repeat(4,1fr); gap:1px;
+  background:var(--sep); border-top:1px solid var(--sep);
+  margin-top:16px;
+}
+.ts-cell {
+  background:var(--panel); padding:14px 16px; text-align:center;
+}
+.ts-val {
+  font-family:'Cormorant Garamond',serif; font-size:1.4rem; font-weight:700;
+  color:var(--amber); display:block; line-height:1;
+  transition:all .8s;
+}
+.ts-key {
+  font-family:'Space Mono',monospace; font-size:0.42rem;
+  letter-spacing:0.14em; text-transform:uppercase;
+  color:var(--star4); display:block; margin-top:4px;
+}
+
+/* Start button */
+.tracker-btn {
+  display:block; width:100%; padding:12px;
+  background:var(--amber-g); border:1px solid var(--amber-b);
+  color:var(--amber); cursor:pointer;
+  font-family:'Space Mono',monospace; font-size:0.54rem;
+  letter-spacing:0.18em; text-transform:uppercase;
+  transition:all .25s; border-top:1px solid var(--sep);
+}
+.tracker-btn:hover { background:rgba(232,160,64,0.18); box-shadow:var(--amber-glow); }
+.tracker-btn:disabled { opacity:.3; cursor:not-allowed; }
+
+/* ── Night vigil card ── */
+.vigil-card {
+  background:linear-gradient(160deg,rgba(72,152,232,0.05),rgba(5,8,16,0.5));
+  border:1px solid var(--rail-b); border-radius:12px;
+  padding:34px 40px; margin:36px 0;
+  text-align:center; position:relative; overflow:hidden;
+}
+.vigil-card::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:1px;
+  background:linear-gradient(90deg,transparent,var(--rail-b),transparent);
+}
+.vc-icon { font-size:2.5rem; display:block; margin-bottom:14px; }
+.vc-title {
+  font-family:'Cormorant Garamond',serif; font-style:italic;
+  font-size:1.5rem; font-weight:400; color:var(--star); margin-bottom:12px;
+}
+.vc-text {
+  font-family:'Spectral',serif; font-style:italic;
+  font-size:1.05rem; line-height:1.9; color:var(--star2);
+}
+.vc-text em { color:var(--rail); }
+
+/* ── Arrival card ── */
+.arrival-card {
+  background:linear-gradient(160deg,rgba(72,200,144,0.06),rgba(5,8,16,0.3));
+  border:1px solid var(--sage-b); border-radius:12px;
+  padding:36px 42px; margin:40px 0;
+  position:relative; overflow:hidden;
+}
+.arrival-card::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:2px;
+  background:linear-gradient(90deg,transparent,var(--sage),transparent);
+  opacity:.6;
+}
+.arr-icon { font-size:2.2rem; display:block; margin-bottom:14px; text-align:center; }
+.arr-title {
+  font-family:'Cormorant Garamond',serif; font-size:1.8rem; font-weight:700;
+  color:var(--sage); text-align:center; margin-bottom:8px;
+  text-shadow:0 0 20px rgba(72,200,144,0.3);
+}
+.arr-sub {
+  font-family:'Space Mono',monospace; font-size:0.54rem; letter-spacing:0.18em;
+  text-align:center; color:var(--star3); margin-bottom:20px;
+}
+.arr-text {
+  font-family:'Spectral',serif; font-style:italic;
+  font-size:1.05rem; line-height:1.9; color:var(--star2);
+}
+.arr-text em { color:var(--sage); }
+.arr-text strong { color:var(--star); font-weight:500; }
+
+/* ── Final messages ── */
+.final-msgs {
+  background:var(--panel); border:1px solid var(--sep2);
+  border-radius:12px; margin:28px 0; overflow:hidden;
+  box-shadow:0 4px 30px rgba(0,0,0,0.3);
+}
+.fm-header {
+  background:linear-gradient(90deg,rgba(72,200,144,0.06),transparent);
+  padding:13px 20px; border-bottom:1px solid var(--sep);
+  display:flex; align-items:center; justify-content:space-between;
+}
+.fm-title {
+  font-family:'Space Mono',monospace; font-size:0.5rem;
+  letter-spacing:0.18em; text-transform:uppercase; color:var(--sage);
+}
+.fm-badge {
+  font-family:'Space Mono',monospace; font-size:0.46rem;
+  letter-spacing:0.14em; padding:3px 10px; border-radius:3px;
+  color:var(--sage); border:1px solid var(--sage-b); background:var(--sage-g);
+}
+.fm-body { padding:20px; display:flex; flex-direction:column; gap:12px; }
+
+/* ── Closing ── */
+.closing {
+  text-align:center; padding:64px 0 90px;
+  border-top:1px solid var(--sep); margin-top:64px;
+}
+.closing-ornament {
+  display:flex; align-items:center; justify-content:center;
+  gap:14px; margin-bottom:24px;
+}
+.closing-ornament::before,.closing-ornament::after {
+  content:''; width:56px; height:1px;
+  background:linear-gradient(90deg,transparent,var(--sep3));
+}
+.closing-ornament::after{transform:scaleX(-1);}
+.closing-ornament span{font-size:0.5rem;letter-spacing:10px;color:var(--star5);}
+.closing-quote {
+  font-family:'Cormorant Garamond',serif; font-style:italic;
+  font-size:clamp(1.1rem,2vw,1.4rem);
+  color:var(--star2); line-height:1.8;
+  max-width:540px; margin:0 auto 36px;
+}
+.btn-back {
+  display:inline-flex; align-items:center; gap:9px;
+  padding:12px 30px; border-radius:4px;
+  border:1px solid var(--amber-b); color:var(--amber);
+  text-decoration:none; background:var(--amber-g);
+  font-family:'Space Mono',monospace; font-size:0.52rem;
+  letter-spacing:0.18em; text-transform:uppercase;
+  transition:all .3s;
+}
+.btn-back:hover { background:rgba(232,160,64,0.18); box-shadow:var(--amber-glow); }
+.btn-back svg{width:12px;height:12px;transition:transform .25s;}
+.btn-back:hover svg{transform:translateX(-3px);}
+
+/* ── REVEAL ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:none;}}
+.rev{opacity:0;transform:translateY(14px);transition:opacity .75s ease,transform .75s ease;}
+.rev.vis{opacity:1;transform:none;}
+
+/* ══════════════════════════════════════════
+   RESPONSIVE — Full Adaptive System
+   Breakpoints: 320 · 480 · 640 · 768 · 1024 · 1280 · 1440+
+══════════════════════════════════════════ */
+
+/* ── Base fluid improvements (all sizes) ── */
+img, canvas { max-width:100%; }
+.page { width:100%; }
+
+/* chat bubble max-width scales with viewport */
+.cmsg { max-width: min(80%, 520px); }
+
+/* tracker stat values scale fluidly */
+.ts-val { font-size: clamp(1rem, 3vw, 1.4rem); }
+
+/* section labels truncate gracefully */
+.sec-label { overflow:hidden; text-overflow:ellipsis; }
+
+/* ── 1440px+ Large desktops ── */
+@media (min-width:1440px) {
+  .page { max-width:960px; padding:0 40px 120px; }
+  .hero-inner { max-width:800px; }
+  .h-title { font-size:7.5rem; }
+  .prose { font-size:1.18rem; line-height:2.1; }
+  .tracker-body { padding:32px; }
+  .ts-cell { padding:18px 20px; }
+  .vigil-card, .arrival-card { padding:44px 52px; }
+}
+
+/* ── 1024px–1279px Laptops ── */
+@media (min-width:1024px) and (max-width:1279px) {
+  .page { max-width:840px; }
+  .h-title { font-size:clamp(4rem,7vw,6.5rem); }
+}
+
+/* ── 768px–1023px Tablets landscape / small laptops ── */
+@media (min-width:768px) and (max-width:1023px) {
+  .page { max-width:720px; padding:0 clamp(24px,4vw,44px) 100px; }
+  .hero { padding:90px 32px 100px; }
+  .hero-inner { max-width:580px; }
+  .h-title { font-size:clamp(3.2rem,7vw,5.5rem); }
+  .h-over { font-size:0.5rem; }
+  .h-dist { bottom:28px; }
+  .h-dist-num { font-size:2rem; }
+  .train-window { inset:16px; border-radius:30px / 22px; }
+  .train-window::before { inset:7px; border-radius:25px / 17px; }
+  .scene-title { font-size:clamp(1.7rem,4vw,2.6rem); }
+  .prose { font-size:1.08rem; }
+  .tracker-stats { grid-template-columns:repeat(4,1fr); }
+  .ts-cell { padding:12px 10px; }
+  .ts-val { font-size:1.1rem; }
+  .tracker-body { padding:18px; }
+  .tracker-bar { padding:11px 16px; }
+  .tracker-title { font-size:0.5rem; }
+  .station-name { font-size:0.42rem; max-width:60px; }
+  .vigil-card, .arrival-card { padding:28px 32px; }
+  .atmo-card { padding:22px 24px; }
+  .cw-bar { padding:10px 16px; }
+  .cw-body, .fm-body { padding:16px; }
+  .cmsg-bub { padding:10px 14px; font-size:0.95rem; }
+  .cmsg { max-width:85%; }
+}
+
+/* ── 640px–767px Tablets portrait ── */
+@media (min-width:640px) and (max-width:767px) {
+  .page { padding:0 clamp(20px,4vw,36px) 90px; }
+  .hero { padding:84px 28px 90px; }
+  .hero-inner { max-width:520px; }
+  .h-title { font-size:clamp(2.8rem,8vw,4.5rem); }
+  .h-over { font-size:0.48rem; letter-spacing:0.2em; }
+  .h-kicker { font-size:0.52rem; letter-spacing:0.14em; }
+  .h-subtitle { font-size:0.95rem; }
+  .h-desc { font-size:1rem; }
+  .h-tags { gap:6px; }
+  .h-tag { font-size:0.46rem; padding:4px 11px; }
+  .h-dist-num { font-size:2rem; }
+  .h-dist { bottom:24px; }
+  .train-window { inset:14px; border-radius:24px / 18px; }
+  .train-window::before { inset:6px; border-radius:20px / 14px; }
+  .scene-title { font-size:clamp(1.6rem,4.5vw,2.2rem); }
+  .prose { font-size:1.05rem; line-height:1.95; }
+  .sec-head { margin:56px 0 26px; }
+  .tracker-stats { grid-template-columns:repeat(4,1fr); }
+  .ts-cell { padding:11px 8px; }
+  .ts-val { font-size:1.0rem; }
+  .ts-key { font-size:0.38rem; letter-spacing:0.1em; }
+  .tracker-body { padding:16px; }
+  .station-name { font-size:0.4rem; max-width:54px; }
+  .route-train { width:16px; height:16px; font-size:0.6rem; }
+  .atmo-card { padding:20px 22px; }
+  .vigil-card, .arrival-card { padding:26px 28px; }
+  .cw-body, .fm-body { padding:14px; }
+  .cmsg { max-width:88%; }
+  .cmsg-bub { font-size:0.94rem; padding:9px 13px; }
+  .nav-tag { display:none; }
+}
+
+/* ── 480px–639px Large phones ── */
+@media (min-width:480px) and (max-width:639px) {
+  nav { padding:0 16px; height:50px; }
+  .nav-brand { font-size:0.9rem; }
+  .nav-tag { display:none; }
+  .nav-link { font-size:0.46rem; padding:4px 10px; letter-spacing:0.1em; }
+
+  .hero { padding:80px 20px 90px; min-height:100svh; }
+  .hero-inner { max-width:100%; padding:0 4px; }
+  .h-over { font-size:0.44rem; letter-spacing:0.16em; margin-bottom:12px; }
+  .h-kicker { font-size:0.5rem; letter-spacing:0.12em; margin-bottom:10px; }
+  .h-title { font-size:clamp(2.6rem,10vw,3.6rem); margin-bottom:4px; }
+  .h-subtitle { font-size:0.9rem; margin-bottom:16px; }
+  .h-rule { margin:12px auto 16px; }
+  .h-rule::before,.h-rule::after { width:36px; }
+  .h-desc { font-size:0.96rem; line-height:1.75; margin-bottom:20px; }
+  .h-tags { gap:5px; }
+  .h-tag { font-size:0.44rem; padding:4px 10px; }
+  .h-dist { bottom:20px; gap:5px; }
+  .h-dist-num { font-size:1.8rem; }
+  .h-dist-label { font-size:0.42rem; letter-spacing:0.16em; }
+  .train-window { inset:10px; border-radius:18px / 14px; }
+  .train-window::before { inset:5px; border-radius:14px / 10px; }
+
+  .page { padding:0 16px 80px; }
+  .sec-head { margin:50px 0 22px; gap:10px; }
+  .sec-label { font-size:0.44rem; letter-spacing:0.14em; white-space:normal; }
+  .scene-title { font-size:clamp(1.5rem,6vw,2rem); margin-bottom:16px; }
+  .prose { font-size:1.02rem; line-height:1.9; }
+  .drop::first-letter { font-size:3.8rem; }
+
+  .atmo-card { padding:18px 16px; margin:20px 0; }
+  .atmo-text { font-size:0.97rem; }
+  .pull { margin:26px 0; padding:20px 0; }
+  .pull p { font-size:1.0rem; }
+  .pull::before,.pull::after { left:8%; right:8%; }
+
+  .chat-window, .final-msgs { margin:20px 0; border-radius:10px; }
+  .cw-bar { padding:10px 14px; }
+  .cw-title { font-size:0.44rem; letter-spacing:0.1em; }
+  .cw-status { font-size:0.44rem; }
+  .cw-dots span { width:7px; height:7px; }
+  .cw-body, .fm-body { padding:14px 12px; gap:10px; }
+  .cw-toggle { font-size:0.44rem; padding:9px; }
+  .cmsg { max-width:90%; }
+  .cmsg-who { font-size:0.42rem; }
+  .cmsg-bub { font-size:0.92rem; padding:9px 12px; line-height:1.65; }
+
+  .tracker { margin:22px 0; }
+  .tracker-bar { padding:10px 14px; flex-wrap:wrap; gap:6px; }
+  .tracker-title { font-size:0.46rem; }
+  .tracker-body { padding:14px 12px; }
+  .stations { gap:0; }
+  .station-name { font-size:0.38rem; max-width:48px; letter-spacing:0.06em; }
+  .station-dot { width:9px; height:9px; }
+  .route-train { width:15px; height:15px; font-size:0.55rem; }
+  .route-line { margin:16px 0; }
+  .tracker-stats { grid-template-columns:1fr 1fr; gap:1px; margin-top:12px; }
+  .ts-cell { padding:12px 8px; }
+  .ts-val { font-size:1.1rem; }
+  .ts-key { font-size:0.38rem; letter-spacing:0.1em; margin-top:3px; }
+  .tracker-btn { font-size:0.48rem; padding:11px; letter-spacing:0.12em; }
+
+  .vigil-card { padding:22px 18px; margin:24px 0; }
+  .vc-icon { font-size:2rem; }
+  .vc-title { font-size:1.2rem; }
+  .vc-text { font-size:0.97rem; }
+
+  .arrival-card { padding:22px 18px; margin:28px 0; }
+  .arr-title { font-size:1.4rem; }
+  .arr-sub { font-size:0.46rem; }
+  .arr-text { font-size:0.97rem; }
+
+  .fm-header { padding:11px 14px; flex-wrap:wrap; gap:6px; }
+  .fm-title { font-size:0.44rem; letter-spacing:0.12em; }
+  .fm-badge { font-size:0.42rem; padding:2px 8px; }
+
+  .closing { padding:44px 0 70px; }
+  .closing-quote { font-size:1.0rem; }
+  .btn-back { font-size:0.46rem; padding:10px 20px; }
+}
+
+/* ── 320px–479px Small phones ── */
+@media (max-width:479px) {
+  nav { padding:0 12px; height:48px; }
+  .nav-brand { font-size:0.82rem; letter-spacing:0; }
+  .nav-tag { display:none; }
+  .nav-link { font-size:0.42rem; padding:4px 9px; letter-spacing:0.08em; }
+
+  .hero { padding:72px 14px 88px; min-height:100svh; }
+  .hero-inner { max-width:100%; }
+  .h-over { font-size:0.4rem; letter-spacing:0.12em; margin-bottom:10px; }
+  .h-kicker { font-size:0.46rem; letter-spacing:0.1em; margin-bottom:8px; }
+  .h-title { font-size:clamp(2.2rem,11vw,3.2rem); line-height:0.95; }
+  .h-subtitle { font-size:0.82rem; letter-spacing:0.05em; }
+  .h-rule { margin:10px auto 14px; }
+  .h-rule::before,.h-rule::after { width:24px; }
+  .h-desc { font-size:0.9rem; line-height:1.7; max-width:100%; margin-bottom:16px; }
+  .h-tags { gap:4px; }
+  .h-tag { font-size:0.4rem; padding:3px 8px; letter-spacing:0.06em; }
+  .h-dist { bottom:16px; gap:4px; }
+  .h-dist-num { font-size:1.5rem; }
+  .h-dist-label { font-size:0.38rem; letter-spacing:0.12em; }
+  .h-dist-line { height:22px; }
+  /* Simplify window on tiny screens */
+  .train-window { inset:6px; border-radius:12px / 9px; border-width:1px; }
+  .train-window::before { display:none; }
+
+  .page { padding:0 12px 70px; }
+  .sec-head { margin:44px 0 18px; gap:8px; }
+  .sec-label { font-size:0.4rem; letter-spacing:0.1em; }
+  .sec-icon { font-size:0.65rem; }
+  .scene-title { font-size:clamp(1.35rem,6.5vw,1.8rem); margin-bottom:14px; line-height:1.15; }
+  .prose { font-size:0.97rem; line-height:1.85; margin-bottom:16px; }
+  .drop::first-letter { font-size:3.2rem; margin-right:0.1em; }
+
+  .atmo-card { padding:16px 14px; margin:18px 0; border-radius:8px; }
+  .atmo-label { font-size:0.42rem; letter-spacing:0.12em; margin-bottom:10px; }
+  .atmo-text { font-size:0.93rem; line-height:1.75; }
+
+  .pull { margin:22px 0; padding:16px 0; }
+  .pull p { font-size:0.95rem; line-height:1.6; }
+  .pull::before,.pull::after { left:4%; right:4%; }
+  .pull cite { font-size:0.4rem; letter-spacing:0.12em; }
+
+  .chat-window, .final-msgs { margin:18px 0; border-radius:9px; }
+  .cw-bar { padding:9px 12px; gap:6px; flex-wrap:wrap; }
+  .cw-title { font-size:0.4rem; letter-spacing:0.08em; }
+  .cw-status { font-size:0.4rem; gap:4px; }
+  .cw-status::before { width:4px; height:4px; }
+  .cw-dots span { width:6px; height:6px; }
+  .cw-body, .fm-body { padding:12px 10px; gap:9px; }
+  .cw-toggle { font-size:0.4rem; padding:8px; letter-spacing:0.12em; }
+  .cmsg { max-width:92%; }
+  .cmsg-who { font-size:0.38rem; letter-spacing:0.1em; margin-bottom:4px; }
+  .cmsg-bub { font-size:0.88rem; padding:8px 11px; line-height:1.6; border-radius:8px !important; }
+  /* Simplify border-radius asymmetry on very small screens */
+  .cmsg.luc .cmsg-bub { border-radius:8px 2px 8px 8px !important; }
+  .cmsg.vic .cmsg-bub { border-radius:2px 8px 8px 8px !important; }
+
+  .tracker { margin:18px 0; border-radius:9px; }
+  .tracker-bar { padding:9px 12px; flex-wrap:wrap; gap:5px; }
+  .tracker-title { font-size:0.42rem; letter-spacing:0.1em; }
+  .tracker-live { font-size:0.42rem; }
+  .tracker-body { padding:12px 10px; }
+  .stations { margin-bottom:8px; }
+  .station { gap:3px; }
+  .station-dot { width:8px; height:8px; border-width:1px; }
+  .station-name { font-size:0.34rem; max-width:42px; letter-spacing:0.04em; }
+  .route-line { margin:12px 0; height:3px; }
+  .route-train { width:14px; height:14px; font-size:0.5rem; border-width:1px; }
+  .tracker-stats { grid-template-columns:1fr 1fr; gap:1px; margin-top:10px; }
+  .ts-cell { padding:10px 6px; }
+  .ts-val { font-size:0.95rem; }
+  .ts-key { font-size:0.34rem; letter-spacing:0.08em; margin-top:2px; }
+  .tracker-btn { font-size:0.42rem; padding:10px; letter-spacing:0.1em; }
+
+  .vigil-card { padding:18px 14px; margin:20px 0; border-radius:9px; }
+  .vc-icon { font-size:1.8rem; margin-bottom:10px; }
+  .vc-title { font-size:1.1rem; }
+  .vc-text { font-size:0.93rem; }
+
+  .arrival-card { padding:18px 14px; margin:22px 0; border-radius:9px; }
+  .arr-icon { font-size:1.8rem; margin-bottom:10px; }
+  .arr-title { font-size:1.25rem; }
+  .arr-sub { font-size:0.42rem; letter-spacing:0.12em; margin-bottom:14px; }
+  .arr-text { font-size:0.93rem; line-height:1.75; }
+
+  .fm-header { padding:10px 12px; flex-direction:column; align-items:flex-start; gap:5px; }
+  .fm-title { font-size:0.4rem; letter-spacing:0.1em; }
+  .fm-badge { font-size:0.38rem; padding:2px 7px; }
+
+  .closing { padding:36px 0 60px; margin-top:44px; }
+  .closing-ornament::before,.closing-ornament::after { width:32px; }
+  .closing-quote { font-size:0.95rem; line-height:1.7; }
+  .btn-back { font-size:0.42rem; padding:9px 16px; gap:6px; letter-spacing:0.12em; }
+  .btn-back svg { width:10px; height:10px; }
+}
+
+/* ── Touch devices — remove hover-only effects ── */
+@media (hover:none) {
+  .nav-link:hover,
+  .tracker-btn:hover,
+  .cw-toggle:hover,
+  .btn-back:hover { box-shadow:none; }
+}
+
+/* ── Reduce motion preference ── */
+@media (prefers-reduced-motion:reduce) {
+  *, *::before, *::after { animation-duration:0.01ms !important; transition-duration:0.01ms !important; }
+  #starCanvas, #rainCanvas, #lightsCanvas { display:none; }
+  .rev { opacity:1 !important; transform:none !important; transition:none !important; }
+}
+</style>
+</head>
+<body>
+
+<div id="prog"></div>
+
+<nav>
+  <a href="index.html" class="nav-brand">Whispers of Caring</a>
+  <div class="nav-right">
+    <span class="nav-tag">CHAPTER IV</span>
+    <a href="c4index.html" class="nav-link">HOME</a>
+  </div>
+</nav>
+
+<!-- ════ HERO ════ -->
+<section class="hero">
+  <canvas id="starCanvas"></canvas>
+  <canvas id="rainCanvas"></canvas>
+  <canvas id="lightsCanvas"></canvas>
+  <div class="train-window"></div>
+
+  <div class="hero-inner">
+    <span class="h-over">// chapter iv · phase v · night journey //</span>
+    <span class="h-kicker">▶ Evervale → Riverton · 350 km</span>
+    <h1 class="h-title">
+      <span class="across">Across</span><br>
+      <span class="miles">the Miles</span>
+    </h1>
+    <div class="h-subtitle">A Journey of Support and Care</div>
+    <div class="h-rule"><span>· · ·</span></div>
+    <p class="h-desc">She boards the midnight train. He watches from afar. Some distances are measured in kilometres — and some in the depth of care.</p>
+    <div class="h-tags">
+      <span class="h-tag r">🚂 The Train</span>
+      <span class="h-tag v">🎨 Victoria's Journey</span>
+      <span class="h-tag a">🌙 Night Vigil</span>
+      <span class="h-tag s">✓ Safe Arrival</span>
+    </div>
+  </div>
+
+  <div class="h-dist">
+    <div class="h-dist-num">350</div>
+    <div class="h-dist-label">kilometres apart</div>
+    <div class="h-dist-line"></div>
+  </div>
+</section>
+
+<!-- ════ PAGE ════ -->
+<div class="page">
+
+  <!-- ── I. MORNING & NEWS ── -->
+  <div class="sec-head rev">
+    <span class="sec-label">// act i · the ordinary day //</span>
+    <div class="sec-line"></div>
+    <span class="sec-icon">🌅</span>
+  </div>
+  <h2 class="scene-title rev">A Morning<br><em>Like Any Other</em></h2>
+
+  <p class="prose drop rev">Lucifer woke up with a pleasant morning and a little bit of laziness. He slowly got out of bed, folded his blanket, and went to freshen up for work. He prepared a simple breakfast with some nuts and milk, and had two pieces of bread. While eating, he sent a morning message to Victoria — playfully teasing her: <em>"Hello Miss Painter, did you wake up from bed or are you still sleeping like a dried oil painted brush?"</em></p>
+
+  <div class="chat-window rev">
+    <div class="cw-bar">
+      <div class="cw-dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
+      <span class="cw-title">End-of-Day Chat · Evervale</span>
+      <span class="cw-status">Online</span>
+    </div>
+    <div class="cw-body">
+      <div class="cmsg luc">
+        <div class="cmsg-who">Lucifer</div>
+        <div class="cmsg-bub">"Finally done with work! It was a bit of a grind today, but I managed to wrap everything up. How was your day? Did you finish the painting?"</div>
+      </div>
+      <div class="cmsg vic">
+        <div class="cmsg-who">Victoria</div>
+        <div class="cmsg-bub">"Yes! Just put the finishing touches on it. It took longer than I expected, but I'm really happy with how it turned out. I've been staring at it for the past hour, just trying to decide if it's really done."</div>
+      </div>
+      <div class="cmsg luc">
+        <div class="cmsg-who">Lucifer</div>
+        <div class="cmsg-bub">"I'm sure it's perfect. Can't wait to see it! My day was the usual — meetings, reports, and trying to keep my sanity. The highlight was definitely finishing that presentation, though."</div>
+      </div>
+      <div class="cmsg vic">
+        <div class="cmsg-who">Victoria</div>
+        <div class="cmsg-bub">"Sounds like a busy day. I get that feeling — it's like you can't fully relax until everything's done. But hey, at least now we're both free!"</div>
+      </div>
+    </div>
+    <div class="cw-more" id="cwMore1">
+      <div class="cmsg luc">
+        <div class="cmsg-who">Lucifer</div>
+        <div class="cmsg-bub">"Exactly! I was thinking about our game later. It'll be nice to unwind with some virtual adventure after all the real-world tasks."</div>
+      </div>
+      <div class="cmsg vic">
+        <div class="cmsg-who">Victoria</div>
+        <div class="cmsg-bub">"Definitely! Let's meet up in the game after dinner. But first, I'll send you a picture of the painting. I want to hear what you think!"</div>
+      </div>
+      <div class="cmsg luc">
+        <div class="cmsg-who">Lucifer</div>
+        <div class="cmsg-bub">"I'm sure it's amazing. Can't wait to see it and then kick some enemy butt together later!"</div>
+      </div>
+    </div>
+    <button class="cw-toggle" id="t1" onclick="toggleChat('cwMore1','t1')">Continue conversation ↓</button>
+  </div>
+
+  <!-- ── II. THE BIG NEWS ── -->
+  <div class="sec-head rev">
+    <span class="sec-label">// act ii · the announcement //</span>
+    <div class="sec-line"></div>
+    <span class="sec-icon">🎨</span>
+  </div>
+  <h2 class="scene-title rev">The <span class="ac">News</span><br>That Changed the Evening</h2>
+
+  <p class="prose rev">As the evening settled into a quiet rhythm, Lucifer was relaxing on his couch, scrolling through his phone — when a message from Victoria popped up. The tone was different from their usual banter, and he immediately felt a <em>shift in the air.</em></p>
+
+  <div class="atmo-card atmo-rose rev">
+    <span class="atmo-label">// victoria's message · the announcement //</span>
+    <p class="atmo-text">"Hey, Lucifer, I have something to tell you. I've been selected to present my artwork at a big competition in <strong>Riverton!</strong> But... it's quite far from Evervale — about <strong>350 km</strong> away. I'll have to leave tonight by train."</p>
+  </div>
+
+  <p class="prose rev">Lucifer stared at the message, feeling a mix of pride and a pang of something else — something he couldn't quite place. After all, he was so used to their daily routine of texts, calls, and gaming sessions that the thought of her being so far away felt strangely unsettling. But more than anything, <em>he was thrilled for her.</em> This was a big opportunity.</p>
+
+  <div class="pull rev">
+    <p>"She had been selected. All that work, all those hours — it was paying off now, in the most beautiful way."</p>
+    <cite>— Across the Miles · The Announcement</cite>
+  </div>
+
+  <!-- The farewell exchange -->
+  <div class="chat-window rev">
+    <div class="cw-bar">
+      <div class="cw-dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
+      <span class="cw-title">Evening Chat · The Farewell</span>
+      <span class="cw-status" style="color:var(--amber)">Departing</span>
+    </div>
+    <div class="cw-body">
+      <div class="cmsg luc">
+        <div class="cmsg-who">Lucifer</div>
+        <div class="cmsg-bub">"Victoria, that's amazing! I knew your work would get recognized. You've worked so hard for this, and now it's paying off! But 350 km... that's quite a distance. How do you feel about it?"</div>
+      </div>
+      <div class="cmsg vic">
+        <div class="cmsg-who">Victoria</div>
+        <div class="cmsg-bub">"I'm excited, of course. But I'm also nervous. It's a big step, and I'll be away from home for a few days. I'm going to miss our chats, our games... everything. It just feels a bit overwhelming."</div>
+      </div>
+      <div class="cmsg luc">
+        <div class="cmsg-who">Lucifer</div>
+        <div class="cmsg-bub">"You're going to do great, Victoria. I have no doubt about that. I'm going to miss you, too, but I know this is something you need to do. Think of it as an adventure — a new experience."</div>
+      </div>
+      <div class="cmsg vic">
+        <div class="cmsg-who">Victoria</div>
+        <div class="cmsg-bub">"You always know how to make me feel better, Lucifer. I'm just worried about being alone in a new place. But I guess I can handle it, knowing you're cheering me on from here."</div>
+      </div>
+    </div>
+    <div class="cw-more" id="cwMore2">
+      <div class="cmsg luc">
+        <div class="cmsg-who">Lucifer</div>
+        <div class="cmsg-bub">"You're never alone, even if we're miles apart. I'll be right here, just a text or call away. And hey, you can tell me all about Riverton, the people you meet, and how the competition goes. It'll be like I'm right there with you."</div>
+      </div>
+      <div class="cmsg vic">
+        <div class="cmsg-who">Victoria</div>
+        <div class="cmsg-bub">"You're right. I'll keep you updated on everything, and when I come back, we'll celebrate no matter the outcome. I'm glad I have you in my corner, Lucifer."</div>
+      </div>
+      <div class="cmsg luc">
+        <div class="cmsg-who">Lucifer</div>
+        <div class="cmsg-bub">"Of course. And when you get back, we'll dive into the game and make up for all the lost time. Maybe I'll even let you win a round."</div>
+      </div>
+      <div class="cmsg vic">
+        <div class="cmsg-who">Victoria</div>
+        <div class="cmsg-bub">"Oh, we both know you won't have to let me win. But I'm holding you to that celebration."</div>
+      </div>
+      <div class="cmsg luc">
+        <div class="cmsg-who">Lucifer</div>
+        <div class="cmsg-bub">"Always, Victoria. Go out there and show them what you're made of. You've got this. I'll be waiting to hear all about your victory."</div>
+      </div>
+    </div>
+    <button class="cw-toggle" id="t2" onclick="toggleChat('cwMore2','t2')">Read full farewell ↓</button>
+  </div>
+
+  <!-- Ticket exchange -->
+  <div class="atmo-card atmo-amber rev">
+    <span class="atmo-label">// the ticket · shared with a laugh //</span>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <div class="cmsg vic" style="max-width:100%;">
+        <div class="cmsg-who" style="color:var(--rose);">Victoria</div>
+        <div class="cmsg-bub" style="background:var(--rose-g);border:1px solid var(--rose-b);border-radius:0 10px 10px 10px;">"Here's my ticket and the train number, just in case you need to track me down if I disappear into some art-induced coma. Haha!"</div>
+      </div>
+      <div class="cmsg luc" style="max-width:100%;align-self:flex-end;align-items:flex-end;">
+        <div class="cmsg-who" style="color:var(--rail);text-align:right;">Lucifer</div>
+        <div class="cmsg-bub" style="background:var(--rail-g);border:1px solid var(--rail-b);border-radius:10px 0 10px 10px;">"Very funny, Victoria. I'll be tracking your every move, so no sneaking off to another dimension, okay? I've got eyes on you."</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── III. THE LIVE TRACKER ── -->
+  <div class="sec-head rev">
+    <span class="sec-label">// act iii · the night vigil //</span>
+    <div class="sec-line"></div>
+    <span class="sec-icon">🚂</span>
+  </div>
+  <h2 class="scene-title rev"><span class="rc">Train</span> in Motion<br><em>Lucifer's Watch</em></h2>
+
+  <p class="prose rev">Despite the light-hearted exchange, Lucifer's mind was already working overtime. He bookmarked the train schedule, double-checked the arrival time, and found himself <em>refreshing the page more often than necessary.</em> As the train pulled out of Evervale, he kept an eye on its progress, watching as the minutes ticked by and the miles passed.</p>
+
+  <!-- Interactive train tracker -->
+  <div class="tracker rev" id="trainTracker">
+    <div class="tracker-bar">
+      <span class="tracker-title">🚂 Train · Evervale → Riverton</span>
+      <span class="tracker-live" id="trackerLive">LIVE</span>
+    </div>
+    <div class="tracker-body">
+      <div class="stations" id="stationsRow">
+        <div class="station active" id="st0">
+          <div class="station-dot"></div>
+          <div class="station-name">Evervale</div>
+        </div>
+        <div class="station" id="st1">
+          <div class="station-dot"></div>
+          <div class="station-name">Halcyon</div>
+        </div>
+        <div class="station" id="st2">
+          <div class="station-dot"></div>
+          <div class="station-name">Mireford</div>
+        </div>
+        <div class="station" id="st3">
+          <div class="station-dot"></div>
+          <div class="station-name">Velmont</div>
+        </div>
+        <div class="station" id="st4">
+          <div class="station-dot"></div>
+          <div class="station-name">Riverton</div>
+        </div>
+      </div>
+      <div class="route-line">
+        <div class="route-fill" id="routeFill"></div>
+        <div class="route-train" id="routeTrain">🚂</div>
+      </div>
+      <div class="tracker-stats">
+        <div class="ts-cell">
+          <span class="ts-val" id="statKm">0</span>
+          <span class="ts-key">km covered</span>
+        </div>
+        <div class="ts-cell">
+          <span class="ts-val" id="statRemain">350</span>
+          <span class="ts-key">km remaining</span>
+        </div>
+        <div class="ts-cell">
+          <span class="ts-val" id="statEta">—</span>
+          <span class="ts-key">est. arrival</span>
+        </div>
+        <div class="ts-cell">
+          <span class="ts-val" id="statStatus">Ready</span>
+          <span class="ts-key">status</span>
+        </div>
+      </div>
+    </div>
+    <button class="tracker-btn" id="trackerBtn" onclick="startJourney()">▶ Depart from Evervale</button>
+  </div>
+
+  <div class="vigil-card rev">
+    <span class="vc-icon">🌙</span>
+    <div class="vc-title">The Night Owl</div>
+    <p class="vc-text">Hours passed, and the night grew quieter. The world outside was asleep, but <em>Lucifer was wide awake,</em> his phone always within reach. Every time he checked the train's status, a small wave of relief would wash over him, knowing she was that much closer to her destination.</p>
+  </div>
+
+  <!-- Night check-in chat -->
+  <div class="chat-window rev">
+    <div class="cw-bar">
+      <div class="cw-dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
+      <span class="cw-title">Midnight · En Route</span>
+      <span class="cw-status" style="color:var(--amber);">In Transit</span>
+    </div>
+    <div class="cw-body">
+      <div class="cmsg luc">
+        <div class="cmsg-who">Lucifer</div>
+        <div class="cmsg-bub">"How's the ride going? You still with us, or has the train turned into a ghost express?"</div>
+      </div>
+      <div class="cmsg vic">
+        <div class="cmsg-who">Victoria</div>
+        <div class="cmsg-bub">"Still here, Lucifer. The train's a bit cold, but I'm wrapped up like a burrito in my scarf. I even managed to get some sleep, surprisingly. How about you? Don't tell me you're staying up all night to track this train!"</div>
+      </div>
+      <div class="cmsg luc">
+        <div class="cmsg-who">Lucifer</div>
+        <div class="cmsg-bub">"Who, me? Staying up? Never. Just… making sure you don't get lost along the way. You know, someone's gotta keep an eye on things."</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── IV. ARRIVAL ── -->
+  <div class="sec-head rev">
+    <span class="sec-label">// act iv · riverton //</span>
+    <div class="sec-line"></div>
+    <span class="sec-icon">✓</span>
+  </div>
+  <h2 class="scene-title rev"><span class="sc">Safe</span><br>in Riverton</h2>
+
+  <div class="arrival-card rev">
+    <span class="arr-icon">🚉</span>
+    <div class="arr-title">Arrived · Riverton Station</div>
+    <div class="arr-sub">// 350 km · journey complete //</div>
+    <p class="arr-text">When Victoria finally messaged him that the train was slowing down, preparing to pull into the station, Lucifer felt a sense of accomplishment — <em>as if he had made the journey himself.</em><br><br>As he finally watched the train come to a halt on the tracker, Victoria had made it. His job as <strong>the self-appointed guardian of her journey</strong> was done. The thought of her stepping off that train, ready to face whatever challenges the competition would bring, made him feel proud and connected to her in a way <em>words couldn't express.</em></p>
+  </div>
+
+  <!-- Arrival chat -->
+  <div class="chat-window rev">
+    <div class="cw-bar">
+      <div class="cw-dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
+      <span class="cw-title">Riverton Station · Arrival</span>
+      <span class="cw-status" style="color:var(--sage);">Arrived ✓</span>
+    </div>
+    <div class="cw-body">
+      <div class="cmsg vic">
+        <div class="cmsg-who">Victoria</div>
+        <div class="cmsg-bub">"Almost there, Lucifer. The train's pulling into Riverton. I'm still in one piece, and I didn't sneeze on anyone!"</div>
+      </div>
+      <div class="cmsg luc">
+        <div class="cmsg-who">Lucifer</div>
+        <div class="cmsg-bub">"Mission accomplished. Now, get off that train, grab your stuff, and try not to trip over your own feet. And hey — welcome to Riverton. Enjoy the art show and all the judging eyes!"</div>
+      </div>
+      <div class="cmsg vic">
+        <div class="cmsg-who">Victoria</div>
+        <div class="cmsg-bub">"I'll be sure to wow them, just for you. Thanks for watching over me, night owl. I'll check in once I'm settled."</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── V. FINAL GOODNIGHTS ── -->
+  <div class="sec-head rev">
+    <span class="sec-label">// act v · checked in · goodnight //</span>
+    <div class="sec-line"></div>
+    <span class="sec-icon">🏨</span>
+  </div>
+  <h2 class="scene-title rev">Hotel<br><em>&amp; Sweet Dreams</em></h2>
+
+  <div class="final-msgs rev">
+    <div class="fm-header">
+      <span class="fm-title">// hotel check-in · final exchange //</span>
+      <span class="fm-badge">✓ safe &amp; settled</span>
+    </div>
+    <div class="fm-body">
+      <div class="cmsg luc">
+        <div class="cmsg-who">Lucifer</div>
+        <div class="cmsg-bub">"Glad to hear you've arrived safely! Now, settle in and get some well-deserved rest. You've got a big day ahead at the art expo tomorrow. Once you're all set up and comfortable, just drop me a message so I know you're good. You've got this, Victoria. Can't wait to hear all about it!"</div>
+      </div>
+      <div class="cmsg vic">
+        <div class="cmsg-who">Victoria</div>
+        <div class="cmsg-bub">"I'm all checked in and my room is cosy. I'll definitely send you a message once I'm ready. Thanks for being my night owl and keeping an eye on me. I'll do my best to make you proud tomorrow. Time for some rest now. Talk soon!"</div>
+      </div>
+      <div class="cmsg luc">
+        <div class="cmsg-who">Lucifer</div>
+        <div class="cmsg-bub">"Rest up, artist extraordinaire. I'm sure you'll knock everyone's socks off at the expo. Sleep well and recharge — you've earned it. I'll be here, eager to hear about your big day. Sweet dreams!"</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pull rev">
+    <p>"They were connected in a way that distance couldn't touch — and he knew that, no matter what, their bond would remain as strong as ever."</p>
+    <cite>— Across the Miles · Epilogue</cite>
+  </div>
+
+  <div class="closing rev">
+    <div class="closing-ornament"><span>· · ·</span></div>
+    <p class="closing-quote">"As he finally closed his eyes, exhaustion washing over him, he was content knowing she was safe — all thanks to his watchful eye."</p>
+    <a href="c4index.html" class="btn-back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+      Return to Chapter Four
+    </a>
+  </div>
+
+</div>
+
+<script>
+/* ── Progress ── */
+const prog = document.getElementById('prog');
+window.addEventListener('scroll', () => {
+  const t = document.documentElement.scrollHeight - innerHeight;
+  prog.style.width = (t > 0 ? scrollY / t * 100 : 0) + '%';
+}, {passive:true});
+
+/* ══ STAR CANVAS ══ */
+(function(){
+  const c = document.getElementById('starCanvas');
+  const ctx = c.getContext('2d');
+  let W, H, stars = [];
+  function resize(){ W=c.width=innerWidth; H=c.height=innerHeight; }
+  resize(); window.addEventListener('resize', resize);
+  function makeStars(){
+    stars = Array.from({length:200}, ()=>({
+      x:Math.random()*W, y:Math.random()*H,
+      r:Math.random()*1.2+0.2,
+      a:Math.random()*0.7+0.2,
+      phase:Math.random()*Math.PI*2,
+      speed:Math.random()*0.006+0.002
+    }));
+  }
+  makeStars();
+  let t=0;
+  (function draw(){
+    ctx.clearRect(0,0,W,H);
+    stars.forEach(s=>{
+      const tw = s.a*(0.5+0.5*Math.sin(t*s.speed+s.phase));
+      ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(232,238,248,${tw})`;
+      ctx.fill();
+    });
+    t++;
+    requestAnimationFrame(draw);
+  })();
+})();
+
+/* ══ RAIN CANVAS ══ */
+(function(){
+  const c = document.getElementById('rainCanvas');
+  const ctx = c.getContext('2d');
+  let W, H, drops = [];
+  function resize(){ W=c.width=innerWidth; H=c.height=innerHeight; initDrops(); }
+  function initDrops(){
+    drops = Array.from({length:80}, ()=>({
+      x:Math.random()*W, y:Math.random()*H,
+      len:Math.random()*60+20, speed:Math.random()*3+2,
+      a:Math.random()*0.15+0.04
+    }));
+  }
+  resize(); window.addEventListener('resize', resize);
+  (function draw(){
+    ctx.clearRect(0,0,W,H);
+    drops.forEach(d=>{
+      ctx.beginPath();
+      ctx.moveTo(d.x, d.y);
+      ctx.lineTo(d.x-d.len*0.15, d.y+d.len);
+      ctx.strokeStyle=`rgba(168,184,212,${d.a})`;
+      ctx.lineWidth=0.5;
+      ctx.stroke();
+      d.y+=d.speed;
+      d.x-=d.speed*0.15;
+      if(d.y>H+80){ d.y=-80; d.x=Math.random()*W; }
+    });
+    requestAnimationFrame(draw);
+  })();
+})();
+
+/* ══ PASSING LIGHTS CANVAS ══ */
+(function(){
+  const c = document.getElementById('lightsCanvas');
+  const ctx = c.getContext('2d');
+  let W, H, lights = [];
+  function resize(){ W=c.width=innerWidth; H=c.height=innerHeight; }
+  resize(); window.addEventListener('resize', resize);
+
+  const cols = ['rgba(232,160,64,VAL)','rgba(255,220,120,VAL)','rgba(200,240,255,VAL)','rgba(255,200,100,VAL)'];
+  lights = Array.from({length:18}, ()=>({
+    x:Math.random()*W,
+    y:Math.random()*H*0.7+H*0.15,
+    r:Math.random()*18+4,
+    speed:Math.random()*6+3,
+    col:cols[Math.floor(Math.random()*cols.length)],
+    a:Math.random()*0.35+0.08,
+    phase:Math.random()*Math.PI*2
+  }));
+
+  let t=0;
+  (function draw(){
+    ctx.clearRect(0,0,W,H);
+    lights.forEach(l=>{
+      const ta = l.a*(0.4+0.6*Math.abs(Math.sin(t*0.007+l.phase)));
+      // glow
+      const grd=ctx.createRadialGradient(l.x,l.y,0,l.x,l.y,l.r*3);
+      grd.addColorStop(0,l.col.replace('VAL',ta));
+      grd.addColorStop(1,l.col.replace('VAL',0));
+      ctx.beginPath(); ctx.arc(l.x,l.y,l.r*3,0,Math.PI*2);
+      ctx.fillStyle=grd; ctx.fill();
+      // core
+      ctx.beginPath(); ctx.arc(l.x,l.y,l.r*0.4,0,Math.PI*2);
+      ctx.fillStyle=l.col.replace('VAL',ta*1.5);
+      ctx.fill();
+
+      l.x -= l.speed;
+      if(l.x < -l.r*4){
+        l.x = W + l.r*4;
+        l.y = Math.random()*H*0.7+H*0.15;
+        l.speed = Math.random()*6+3;
+      }
+    });
+    t++;
+    requestAnimationFrame(draw);
+  })();
+})();
+
+/* ══ SCROLL REVEAL ══ */
+const io = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{ if(e.isIntersecting){e.target.classList.add('vis');io.unobserve(e.target);} });
+},{threshold:0.08});
+document.querySelectorAll('.rev').forEach(el=>io.observe(el));
+
+/* ══ CHAT STAGGER ══ */
+document.querySelectorAll('.chat-window, .final-msgs').forEach(chat=>{
+  chat.querySelectorAll('.cw-body .cmsg, .fm-body .cmsg').forEach((m,i)=>{
+    m.style.cssText=`opacity:0;transform:translateY(8px);transition:opacity .45s ease ${i*0.09}s,transform .45s ease ${i*0.09}s`;
+  });
+  const o=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        e.target.querySelectorAll('.cw-body .cmsg, .fm-body .cmsg').forEach(m=>{m.style.opacity='1';m.style.transform='none';});
+        o.unobserve(e.target);
+      }
+    });
+  },{threshold:0.1});
+  o.observe(chat);
+});
+
+/* ══ CHAT TOGGLE ══ */
+function toggleChat(id, btnId){
+  const el=document.getElementById(id);
+  const btn=document.getElementById(btnId);
+  const open=el.classList.toggle('open');
+  const labels={'cwMore1':'Continue conversation','cwMore2':'Read full farewell'};
+  btn.textContent=open?'Collapse ↑':(labels[id]||'Read more')+' ↓';
+  if(open){
+    el.querySelectorAll('.cmsg').forEach((m,i)=>{
+      m.style.opacity='0'; m.style.transform='translateY(8px)';
+      setTimeout(()=>{m.style.transition='opacity .4s ease,transform .4s ease';m.style.opacity='1';m.style.transform='none';},i*80);
+    });
+  }
+}
+
+/* ══ TRAIN TRACKER ══ */
+let journeyStarted = false;
+const stationPcts = [0, 24, 50, 76, 100];
+const stationKms  = [0, 88, 175, 262, 350];
+const stationEtas = ['—', '~1h20m', '~2h30m', '~3h40m', 'Arrived!'];
+const stationStatuses = ['Departing', 'En Route', 'Midway', 'Approaching', 'Arrived ✓'];
+
+function startJourney(){
+  if(journeyStarted) return;
+  journeyStarted = true;
+  const btn = document.getElementById('trackerBtn');
+  btn.disabled = true;
+  btn.textContent = '🚂 Journey in progress…';
+  runStation(1);
+}
+
+function runStation(idx){
+  if(idx > 4) return;
+  const delay = idx === 4 ? 1200 : 1400;
+  setTimeout(()=>{
+    // update fill & train position
+    const pct = stationPcts[idx];
+    document.getElementById('routeFill').style.width = pct + '%';
+    document.getElementById('routeTrain').style.left = 'calc('+pct+'% - 9px)';
+
+    // update stats
+    document.getElementById('statKm').textContent = stationKms[idx];
+    document.getElementById('statRemain').textContent = 350 - stationKms[idx];
+    document.getElementById('statEta').textContent = stationEtas[idx];
+    document.getElementById('statStatus').textContent = stationStatuses[idx];
+
+    // update station dots
+    for(let i=0; i<idx; i++){
+      const st = document.getElementById('st'+i);
+      st.classList.remove('active'); st.classList.add('passed');
+    }
+    const active = document.getElementById('st'+idx);
+    active.classList.add('active');
+    if(idx > 0) document.getElementById('st'+(idx-1)).classList.remove('active');
+
+    if(idx === 4){
+      document.getElementById('trackerBtn').textContent = '✓ Victoria has arrived safely!';
+      document.getElementById('trackerBtn').style.color = 'var(--sage)';
+      document.getElementById('trackerBtn').style.borderColor = 'var(--sage-b)';
+      document.getElementById('trackerBtn').style.background = 'var(--sage-g)';
+      document.getElementById('trackerLive').textContent = 'COMPLETE';
+      document.getElementById('trackerLive').style.color = 'var(--sage)';
+      document.getElementById('routeTrain').textContent = '✓';
+      document.getElementById('routeTrain').style.background = 'var(--sage)';
+      document.getElementById('routeTrain').style.boxShadow = '0 0 12px rgba(72,200,144,0.6)';
+    } else {
+      runStation(idx+1);
+    }
+  }, delay * idx + 300);
+}
+</script>
+</body>
+</html>

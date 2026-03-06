@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Game On — Whispers of Caring</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Fira+Code:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+
+/* ══════════════════════════════════════
+   TOKENS
+══════════════════════════════════════ */
+:root {
+  --bg:       #080a0e;
+  --bg2:      #0c0f14;
+  --bg3:      #101520;
+  --panel:    #131924;
+  --card:     #18202e;
+  --card2:    #1e2838;
+
+  /* text */
+  --white:    #eef2ff;
+  --silver:   #b0bcd8;
+  --dim:      #6a7a9a;
+  --faint:    #364060;
+
+  /* Lucifer / Nightshade — electric cyan */
+  --cyan:     #00d4ff;
+  --cyan2:    #0096cc;
+  --cyan-g:   rgba(0,212,255,0.08);
+  --cyan-b:   rgba(0,212,255,0.2);
+  --cyan-glow:0 0 20px rgba(0,212,255,0.3);
+
+  /* Victoria / Starfire — violet-magenta */
+  --mag:      #d040ff;
+  --mag2:     #9020cc;
+  --mag-g:    rgba(208,64,255,0.08);
+  --mag-b:    rgba(208,64,255,0.2);
+  --mag-glow: 0 0 20px rgba(208,64,255,0.3);
+
+  /* work stress — orange-red */
+  --stress:   #ff6030;
+  --stress-g: rgba(255,96,48,0.08);
+  --stress-b: rgba(255,96,48,0.2);
+
+  /* victory — lime green */
+  --lime:     #50e060;
+  --lime-g:   rgba(80,224,96,0.08);
+  --lime-b:   rgba(80,224,96,0.2);
+
+  --sep:  rgba(255,255,255,0.06);
+  --sep2: rgba(255,255,255,0.1);
+}
+
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'Libre Baskerville',serif;
+  background:var(--bg);
+  color:var(--white);
+  overflow-x:hidden;
+  line-height:1.65;
+}
+
+/* scanline overlay */
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:repeating-linear-gradient(
+    0deg,
+    transparent,transparent 2px,
+    rgba(0,0,0,0.04) 2px,rgba(0,0,0,0.04) 4px
+  );
+}
+/* grain */
+body::after{
+  content:'';position:fixed;inset:0;z-index:1;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+}
+
+/* ══ PROGRESS ══ */
+#prog{
+  position:fixed;top:0;left:0;height:2px;width:0%;z-index:600;
+  background:linear-gradient(90deg,var(--cyan),var(--mag),var(--lime));
+  transition:width .1s linear;
+}
+
+/* ══ NAV ══ */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:500;
+  height:56px;display:flex;align-items:center;justify-content:space-between;
+  padding:0 clamp(18px,5vw,64px);
+  background:rgba(8,10,14,0.92);backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--sep);
+}
+nav::after{
+  content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,var(--cyan),var(--mag));
+  opacity:.2;
+}
+.nav-brand{
+  font-family:'Syne',sans-serif;font-weight:700;
+  font-size:0.88rem;letter-spacing:0.06em;
+  color:var(--white);text-decoration:none;
+  text-transform:uppercase;transition:color .3s;
+}
+.nav-brand span{color:var(--cyan);}
+.nav-brand:hover{color:var(--cyan);}
+.nav-right{display:flex;align-items:center;gap:12px;}
+.nav-tag{
+  font-family:'Fira Code',monospace;font-size:0.54rem;
+  letter-spacing:0.16em;color:var(--dim);
+  border:1px solid var(--sep2);padding:3px 10px;border-radius:3px;
+}
+.nav-home{
+  font-family:'Fira Code',monospace;font-size:0.54rem;
+  letter-spacing:0.16em;text-transform:uppercase;
+  color:var(--dim);text-decoration:none;
+  border:1px solid var(--sep2);padding:5px 14px;border-radius:3px;
+  transition:all .25s;
+}
+.nav-home:hover{color:var(--cyan);border-color:var(--cyan-b);background:var(--cyan-g);}
+
+/* ══════════════════════════════════════
+   HERO
+══════════════════════════════════════ */
+.hero{
+  position:relative;min-height:100vh;overflow:hidden;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  text-align:center;padding:100px 24px 80px;
+  z-index:2;
+}
+
+/* grid bg */
+.hero-grid{
+  position:absolute;inset:0;z-index:0;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(0,212,255,0.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,212,255,0.04) 1px,transparent 1px);
+  background-size:60px 60px;
+  mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 30%,transparent 100%);
+}
+.hero-glow{
+  position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:
+    radial-gradient(ellipse 55% 45% at 30% 40%,rgba(0,212,255,0.07) 0%,transparent 60%),
+    radial-gradient(ellipse 50% 40% at 70% 55%,rgba(208,64,255,0.07) 0%,transparent 60%);
+}
+
+#gridCanvas{position:absolute;inset:0;z-index:1;pointer-events:none;}
+
+.hero-inner{position:relative;z-index:3;max-width:720px;}
+
+.h-tag{
+  font-family:'Fira Code',monospace;font-size:0.58rem;
+  letter-spacing:0.28em;color:var(--dim);
+  display:block;margin-bottom:16px;
+  opacity:0;animation:fadeUp .7s ease .15s forwards;
+}
+.h-eyebrow{
+  font-family:'Syne',sans-serif;font-weight:500;
+  font-size:0.75rem;letter-spacing:0.5em;text-transform:uppercase;
+  color:var(--cyan);display:block;margin-bottom:18px;
+  opacity:0;animation:fadeUp .7s ease .3s forwards;
+}
+.h-title{
+  font-family:'Syne',sans-serif;font-weight:800;
+  font-size:clamp(3rem,9vw,7rem);
+  line-height:0.95;letter-spacing:-0.03em;
+  color:var(--white);margin-bottom:12px;
+  opacity:0;animation:fadeUp .9s ease .45s forwards;
+  text-transform:uppercase;
+}
+.h-title .cyan{
+  color:var(--cyan);
+  text-shadow:0 0 40px rgba(0,212,255,0.4);
+}
+.h-title .mag{
+  color:var(--mag);
+  text-shadow:0 0 40px rgba(208,64,255,0.4);
+}
+.h-sub-title{
+  font-family:'Libre Baskerville',serif;font-style:italic;
+  font-size:clamp(0.9rem,1.8vw,1.1rem);
+  color:var(--dim);letter-spacing:0.04em;
+  display:block;margin-bottom:22px;
+  opacity:0;animation:fadeUp .7s ease .62s forwards;
+}
+.h-desc{
+  font-family:'Libre Baskerville',serif;
+  font-size:1rem;color:var(--silver);line-height:1.85;
+  max-width:500px;margin:0 auto 30px;
+  opacity:0;animation:fadeUp .7s ease .78s forwards;
+}
+
+/* character badges */
+.h-chars{
+  display:flex;gap:14px;justify-content:center;flex-wrap:wrap;
+  opacity:0;animation:fadeUp .7s ease .95s forwards;
+  margin-bottom:28px;
+}
+.char-badge{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 18px 9px 12px;
+  border-radius:5px;border:1px solid;
+  font-family:'Syne',sans-serif;
+  font-size:0.72rem;font-weight:600;letter-spacing:0.1em;
+  text-transform:uppercase;position:relative;overflow:hidden;
+}
+.char-badge::before{
+  content:'';position:absolute;inset:0;opacity:0.07;
+}
+.char-badge.ns{border-color:var(--cyan-b);color:var(--cyan);}
+.char-badge.ns::before{background:var(--cyan);}
+.char-badge.sf{border-color:var(--mag-b);color:var(--mag);}
+.char-badge.sf::before{background:var(--mag);}
+.char-role{
+  font-size:0.48rem;color:var(--dim);
+  font-family:'Fira Code',monospace;letter-spacing:0.14em;
+  display:block;margin-top:1px;font-weight:400;
+}
+
+.scroll-cue{
+  position:absolute;bottom:30px;left:50%;transform:translateX(-50%);
+  z-index:3;display:flex;flex-direction:column;align-items:center;gap:8px;
+  opacity:0;animation:fadeUp .7s ease 1.4s forwards;
+}
+.scroll-cue span{
+  font-family:'Fira Code',monospace;font-size:0.48rem;
+  letter-spacing:0.35em;color:var(--faint);
+}
+.scroll-bar{width:1px;height:38px;background:linear-gradient(180deg,var(--cyan),transparent);animation:lineGrow 2s ease-in-out infinite;}
+@keyframes lineGrow{0%,100%{opacity:.3;transform:scaleY(1);}50%{opacity:1;transform:scaleY(1.12);}}
+
+/* ══════════════════════════════════════
+   PAGE
+══════════════════════════════════════ */
+.page{position:relative;z-index:2;max-width:820px;margin:0 auto;padding:0 clamp(20px,5vw,52px) 100px;}
+
+/* ── Section heads ── */
+.sec-head{
+  display:flex;align-items:center;gap:14px;
+  margin:72px 0 28px;
+  opacity:0;transform:translateY(12px);
+  transition:opacity .7s,transform .7s;
+}
+.sec-head.vis{opacity:1;transform:none;}
+.sec-lbl{
+  font-family:'Fira Code',monospace;font-size:0.54rem;
+  letter-spacing:0.24em;text-transform:uppercase;white-space:nowrap;
+}
+.sec-lbl.c{color:var(--cyan);}
+.sec-lbl.m{color:var(--mag);}
+.sec-lbl.g{color:var(--lime);}
+.sec-lbl.s{color:var(--stress);}
+.sec-lbl.d{color:var(--dim);}
+.sec-line{flex:1;height:1px;background:var(--sep);}
+.sec-icon{font-size:0.75rem;opacity:.5;}
+
+/* ── Scene title ── */
+.scene-title{
+  font-family:'Syne',sans-serif;font-weight:800;
+  font-size:clamp(1.8rem,4vw,2.8rem);
+  line-height:1.1;text-transform:uppercase;letter-spacing:-0.02em;
+  color:var(--white);margin-bottom:22px;
+  opacity:0;transform:translateY(14px);
+  transition:opacity .8s,transform .8s;
+}
+.scene-title.vis{opacity:1;transform:none;}
+.scene-title .c{color:var(--cyan);}
+.scene-title .m{color:var(--mag);}
+.scene-title .g{color:var(--lime);}
+.scene-title .s{color:var(--stress);}
+
+/* ── Prose ── */
+.prose{
+  font-family:'Libre Baskerville',serif;
+  font-size:1.05rem;line-height:2;
+  color:var(--silver);font-weight:400;
+  margin-bottom:20px;
+  opacity:0;transform:translateY(10px);
+  transition:opacity .7s,transform .7s;
+}
+.prose.vis{opacity:1;transform:none;}
+.prose em{font-style:italic;color:var(--white);}
+
+/* drop cap */
+.drop::first-letter{
+  font-family:'Syne',sans-serif;font-weight:800;
+  font-size:4.2rem;line-height:.8;
+  float:left;margin:.06em .13em 0 0;
+  color:var(--cyan);
+  text-shadow:var(--cyan-glow);
+}
+
+/* ── Work frustration box ── */
+.stress-box{
+  margin:28px 0;padding:24px 28px;
+  background:var(--panel);
+  border:1px solid var(--sep);
+  border-left:3px solid var(--stress);
+  border-radius:0 8px 8px 0;
+  position:relative;overflow:hidden;
+  opacity:0;transform:translateY(12px);
+  transition:opacity .8s,transform .8s;
+}
+.stress-box.vis{opacity:1;transform:none;}
+.stress-box::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 60% 80% at 0% 50%,var(--stress-g),transparent);
+  pointer-events:none;
+}
+.stress-box::after{
+  content:'MANAGER.EXE';position:absolute;top:14px;right:16px;
+  font-family:'Fira Code',monospace;font-size:0.48rem;
+  letter-spacing:0.14em;color:rgba(255,96,48,0.18);
+}
+.sb-label{
+  font-family:'Fira Code',monospace;font-size:0.52rem;
+  letter-spacing:0.18em;text-transform:uppercase;
+  color:var(--stress);display:block;margin-bottom:12px;
+}
+.sb-text{
+  font-family:'Libre Baskerville',serif;font-style:italic;
+  font-size:0.98rem;line-height:1.9;color:var(--silver);
+  position:relative;z-index:1;
+}
+
+/* ── Pull quote ── */
+.pull{
+  margin:36px 0;padding:26px 0;
+  border-top:1px solid var(--sep);
+  border-bottom:1px solid var(--sep);
+  text-align:center;position:relative;
+  opacity:0;transform:translateY(12px);
+  transition:opacity .8s,transform .8s;
+}
+.pull.vis{opacity:1;transform:none;}
+.pull::before{
+  content:'';position:absolute;top:0;left:20%;right:20%;height:1px;
+  background:linear-gradient(90deg,transparent,var(--cyan-b),transparent);
+}
+.pull::after{
+  content:'';position:absolute;bottom:0;left:20%;right:20%;height:1px;
+  background:linear-gradient(90deg,transparent,var(--mag-b),transparent);
+}
+.pull p{
+  font-family:'Syne',sans-serif;font-weight:600;
+  font-size:clamp(1rem,2vw,1.22rem);
+  color:var(--white);line-height:1.6;
+  letter-spacing:0.01em;
+}
+.pull cite{
+  display:block;margin-top:12px;
+  font-family:'Fira Code',monospace;font-style:normal;
+  font-size:0.5rem;letter-spacing:0.2em;color:var(--faint);
+}
+
+/* ══════════════════════════════════════
+   KILL COUNTER — Interactive boss battle
+══════════════════════════════════════ */
+.boss-arena{
+  margin:40px 0;
+  background:var(--panel);
+  border:1px solid var(--sep2);
+  border-radius:12px;overflow:hidden;
+  opacity:0;transform:translateY(14px);
+  transition:opacity .9s,transform .9s;
+  box-shadow:0 0 48px rgba(0,0,0,0.5);
+}
+.boss-arena.vis{opacity:1;transform:none;}
+
+/* arena header */
+.arena-head{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:14px 24px;
+  background:var(--bg3);
+  border-bottom:1px solid var(--sep);
+}
+.arena-title{
+  font-family:'Syne',sans-serif;font-weight:700;
+  font-size:0.7rem;letter-spacing:0.25em;text-transform:uppercase;
+  color:var(--lime);
+}
+.arena-live{
+  display:flex;align-items:center;gap:6px;
+  font-family:'Fira Code',monospace;font-size:0.54rem;
+  letter-spacing:0.12em;color:var(--lime);
+}
+.arena-live::before{
+  content:'';width:6px;height:6px;border-radius:50%;
+  background:var(--lime);box-shadow:0 0 6px var(--lime);
+  animation:blink 1.5s infinite;
+}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:.15;}}
+
+/* boss HP */
+.boss-hp-section{padding:20px 24px 0;}
+.boss-hp-label{
+  display:flex;justify-content:space-between;
+  font-family:'Fira Code',monospace;font-size:0.54rem;
+  letter-spacing:0.12em;color:var(--stress);margin-bottom:6px;
+}
+.boss-hp-bar{height:8px;background:var(--sep);border-radius:4px;overflow:hidden;}
+.boss-hp-fill{
+  height:100%;border-radius:4px;
+  background:linear-gradient(90deg,#cc1010,var(--stress),#ff8050);
+  width:100%;transition:width 1.2s cubic-bezier(.4,0,.2,1);
+}
+
+/* scoreboard */
+.scoreboard{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:1px;background:var(--sep);margin:16px 0 0;
+}
+.score-col{
+  background:var(--panel);
+  padding:20px 24px;display:flex;flex-direction:column;align-items:center;gap:6px;
+}
+.score-who{
+  font-family:'Syne',sans-serif;font-weight:700;
+  font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;
+}
+.score-col.ns .score-who{color:var(--cyan);}
+.score-col.sf .score-who{color:var(--mag);}
+.score-num{
+  font-family:'Syne',sans-serif;font-weight:800;
+  font-size:3rem;line-height:1;letter-spacing:-0.03em;
+  transition:transform .15s ease;
+}
+.score-col.ns .score-num{color:var(--cyan);text-shadow:var(--cyan-glow);}
+.score-col.sf .score-num{color:var(--mag);text-shadow:var(--mag-glow);}
+.score-num.pop{transform:scale(1.3);}
+.score-tag{
+  font-family:'Fira Code',monospace;font-size:0.5rem;
+  letter-spacing:0.14em;color:var(--faint);
+}
+
+/* attack buttons */
+.attack-row{
+  display:grid;grid-template-columns:1fr 1fr;gap:1px;
+  background:var(--sep);border-top:1px solid var(--sep);
+}
+.atk-btn{
+  background:var(--bg3);border:none;cursor:pointer;
+  padding:16px 20px;
+  font-family:'Syne',sans-serif;font-weight:600;
+  font-size:0.68rem;letter-spacing:0.15em;text-transform:uppercase;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  transition:background .2s;
+}
+.atk-btn.ns{color:var(--cyan);}
+.atk-btn.sf{color:var(--mag);}
+.atk-btn.ns:hover{background:var(--cyan-g);}
+.atk-btn.sf:hover{background:var(--mag-g);}
+.atk-btn:disabled{opacity:.3;cursor:not-allowed;}
+
+/* combat log */
+.combat-log{
+  padding:14px 20px;max-height:160px;overflow-y:auto;
+  background:var(--bg2);border-top:1px solid var(--sep);
+}
+.combat-log::-webkit-scrollbar{width:3px;}
+.combat-log::-webkit-scrollbar-thumb{background:var(--sep2);border-radius:2px;}
+.log-entry{
+  font-family:'Fira Code',monospace;font-size:0.66rem;
+  line-height:1.8;color:var(--dim);padding:1px 0;
+  border-bottom:1px solid rgba(255,255,255,0.025);
+}
+.log-entry:last-child{border-bottom:none;}
+.log-ns{color:var(--cyan);}
+.log-sf{color:var(--mag);}
+.log-sys{color:var(--lime);}
+.log-boss{color:var(--stress);}
+
+/* victory banner */
+.victory-banner{
+  display:none;padding:24px;text-align:center;
+  background:linear-gradient(135deg,var(--lime-g),var(--cyan-g));
+  border-top:1px solid var(--lime-b);
+}
+.victory-banner.show{display:block;}
+.vb-icon{font-size:2rem;display:block;margin-bottom:8px;}
+.vb-title{
+  font-family:'Syne',sans-serif;font-weight:800;
+  font-size:1.4rem;letter-spacing:0.04em;text-transform:uppercase;
+  color:var(--lime);text-shadow:0 0 20px rgba(80,224,96,0.4);
+  margin-bottom:6px;
+}
+.vb-sub{
+  font-family:'Fira Code',monospace;font-size:0.56rem;
+  letter-spacing:0.18em;color:var(--dim);
+}
+
+/* ══ MESSENGER ══ */
+.messenger{
+  background:var(--panel);border:1px solid var(--sep);
+  border-radius:10px;margin:32px 0;overflow:hidden;
+  opacity:0;transform:translateY(14px);
+  transition:opacity .8s,transform .8s;
+}
+.messenger.vis{opacity:1;transform:none;}
+.ms-bar{
+  display:flex;align-items:center;gap:8px;
+  padding:11px 20px;border-bottom:1px solid var(--sep);
+  background:var(--bg3);
+}
+.ms-dots{display:flex;gap:5px;}
+.ms-dots span{width:8px;height:8px;border-radius:50%;}
+.td1{background:#ff605a;}.td2{background:#ffbc2c;}.td3{background:#28c840;}
+.ms-title{
+  font-family:'Fira Code',monospace;font-size:0.52rem;
+  letter-spacing:0.16em;text-transform:uppercase;color:var(--faint);margin-left:8px;
+}
+.ms-online{
+  margin-left:auto;display:flex;align-items:center;gap:5px;
+  font-family:'Fira Code',monospace;font-size:0.52rem;color:var(--lime);
+}
+.ms-online::before{
+  content:'';width:5px;height:5px;border-radius:50%;
+  background:var(--lime);box-shadow:0 0 5px var(--lime);
+  animation:blink 2.2s infinite;
+}
+.ms-body{padding:20px;display:flex;flex-direction:column;gap:11px;}
+.ms-more{display:none;flex-direction:column;gap:11px;}
+.ms-more.open{display:flex;}
+.ms-toggle{
+  display:block;width:100%;padding:10px;
+  background:none;border:none;border-top:1px solid var(--sep);
+  font-family:'Fira Code',monospace;font-size:0.5rem;
+  letter-spacing:0.2em;text-transform:uppercase;color:var(--faint);
+  cursor:pointer;transition:color .2s,background .2s;
+}
+.ms-toggle:hover{color:var(--cyan);background:var(--cyan-g);}
+.msg{display:flex;flex-direction:column;max-width:78%;}
+.msg.luc{align-self:flex-end;align-items:flex-end;}
+.msg.vic{align-self:flex-start;}
+.msg-who{
+  font-family:'Fira Code',monospace;font-size:0.48rem;
+  letter-spacing:0.16em;text-transform:uppercase;margin-bottom:4px;
+}
+.msg.luc .msg-who{color:var(--cyan);text-align:right;}
+.msg.vic .msg-who{color:var(--mag);}
+.msg-bub{
+  padding:11px 16px;
+  font-family:'Libre Baskerville',serif;font-size:0.92rem;
+  line-height:1.72;color:var(--silver);
+}
+.msg.luc .msg-bub{
+  background:var(--cyan-g);border:1px solid var(--cyan-b);
+  border-radius:10px 0 10px 10px;
+}
+.msg.vic .msg-bub{
+  background:var(--mag-g);border:1px solid var(--mag-b);
+  border-radius:0 10px 10px 10px;
+}
+
+/* ══ RIVALRY SCOREBOARD SUMMARY ══ */
+.rivalry-card{
+  display:grid;grid-template-columns:1fr auto 1fr;
+  align-items:center;gap:16px;
+  margin:36px 0;padding:28px 24px;
+  background:var(--panel);border:1px solid var(--sep);border-radius:12px;
+  opacity:0;transform:translateY(14px);
+  transition:opacity .8s,transform .8s;
+  position:relative;overflow:hidden;
+}
+.rivalry-card.vis{opacity:1;transform:none;}
+.rivalry-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--cyan),var(--mag));
+}
+.rc-player{display:flex;flex-direction:column;align-items:center;gap:6px;}
+.rc-player.ns{align-items:flex-start;}
+.rc-player.sf{align-items:flex-end;}
+.rc-name{
+  font-family:'Syne',sans-serif;font-weight:700;
+  font-size:0.85rem;letter-spacing:0.12em;text-transform:uppercase;
+}
+.rc-player.ns .rc-name{color:var(--cyan);}
+.rc-player.sf .rc-name{color:var(--mag);}
+.rc-class{
+  font-family:'Fira Code',monospace;font-size:0.5rem;
+  letter-spacing:0.14em;color:var(--faint);
+}
+.rc-score-val{
+  font-family:'Syne',sans-serif;font-weight:800;
+  font-size:2.2rem;line-height:1;letter-spacing:-0.03em;
+}
+.rc-player.ns .rc-score-val{color:var(--cyan);text-shadow:var(--cyan-glow);}
+.rc-player.sf .rc-score-val{color:var(--mag);text-shadow:var(--mag-glow);}
+.rc-mid{
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+}
+.rc-vs{
+  font-family:'Syne',sans-serif;font-weight:800;
+  font-size:1.2rem;color:var(--white);opacity:.2;
+  letter-spacing:0.06em;
+}
+.rc-result{
+  font-family:'Fira Code',monospace;font-size:0.5rem;
+  letter-spacing:0.14em;color:var(--lime);text-align:center;
+  line-height:1.6;
+}
+
+/* ══ STAT BARS ══ */
+.stat-block{
+  margin:32px 0;
+  background:var(--panel);border:1px solid var(--sep);
+  border-radius:10px;padding:26px 28px;
+  opacity:0;transform:translateY(14px);
+  transition:opacity .8s,transform .8s;
+}
+.stat-block.vis{opacity:1;transform:none;}
+.stat-head{
+  font-family:'Fira Code',monospace;font-size:0.54rem;
+  letter-spacing:0.22em;text-transform:uppercase;
+  color:var(--dim);margin-bottom:18px;display:block;
+}
+.stat-rows{display:flex;flex-direction:column;gap:12px;}
+.stat-row{display:flex;flex-direction:column;gap:5px;}
+.stat-row-h{
+  display:flex;justify-content:space-between;
+  font-family:'Fira Code',monospace;font-size:0.54rem;
+  letter-spacing:0.1em;color:var(--silver);
+}
+.stat-bar{height:4px;border-radius:2px;background:var(--sep);overflow:hidden;}
+.stat-fill{height:100%;border-radius:2px;width:0%;transition:width 1.4s cubic-bezier(.4,0,.2,1) .3s;}
+.stat-block.vis .stat-fill{width:var(--w);}
+.f-cyan  {background:linear-gradient(90deg,var(--cyan2),var(--cyan));}
+.f-mag   {background:linear-gradient(90deg,var(--mag2),var(--mag));}
+.f-lime  {background:linear-gradient(90deg,#28a038,var(--lime));}
+.f-stress{background:linear-gradient(90deg,#cc2010,var(--stress));}
+
+/* ══ CLOSING ══ */
+.closing-card{
+  margin:52px 0 0;padding:44px;text-align:center;
+  background:linear-gradient(135deg,var(--cyan-g),var(--mag-g));
+  border:1px solid var(--sep2);border-radius:12px;
+  position:relative;overflow:hidden;
+  opacity:0;transform:translateY(14px);
+  transition:opacity .8s,transform .8s;
+}
+.closing-card.vis{opacity:1;transform:none;}
+.closing-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--cyan),var(--mag));
+}
+.closing-icon{font-size:2rem;display:block;margin-bottom:14px;}
+.closing-title{
+  font-family:'Syne',sans-serif;font-weight:800;
+  font-size:1.4rem;text-transform:uppercase;letter-spacing:0.04em;
+  color:var(--white);margin-bottom:12px;
+}
+.closing-text{
+  font-family:'Libre Baskerville',serif;font-style:italic;
+  font-size:1rem;line-height:1.9;color:var(--silver);
+  max-width:480px;margin:0 auto 28px;
+}
+.sep-rule{
+  display:flex;align-items:center;gap:16px;
+  border-top:1px solid var(--sep);
+  padding-top:40px;margin-top:52px;
+}
+.sep-rule::before,.sep-rule::after{display:none;}
+.btn-back{
+  display:inline-flex;align-items:center;gap:9px;
+  padding:11px 28px;border-radius:5px;
+  border:1px solid var(--sep2);color:var(--silver);
+  text-decoration:none;
+  font-family:'Fira Code',monospace;font-size:0.56rem;
+  letter-spacing:0.18em;text-transform:uppercase;
+  transition:all .3s;
+}
+.btn-back:hover{border-color:var(--cyan-b);color:var(--cyan);background:var(--cyan-g);}
+.btn-back svg{width:12px;height:12px;transition:transform .25s;}
+.btn-back:hover svg{transform:translateX(-3px);}
+.back-note{
+  font-family:'Libre Baskerville',serif;font-style:italic;
+  font-size:0.88rem;color:var(--faint);margin-left:8px;
+}
+
+/* ANIMS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:none;}}
+
+/* RESPONSIVE */
+@media(max-width:640px){
+  nav{padding:0 16px;}.nav-tag{display:none;}
+  .page{padding:0 18px 80px;}
+  .scoreboard,.attack-row{grid-template-columns:1fr 1fr;}
+  .rivalry-card{grid-template-columns:1fr auto 1fr;gap:10px;padding:20px 16px;}
+  .rc-score-val{font-size:1.6rem;}
+  .boss-arena{margin:24px 0;}
+  .h-title{font-size:2.8rem;}
+  .scene-title{font-size:1.7rem;}
+  .closing-card{padding:24px 18px;}
+}
+</style>
+</head>
+<body>
+
+<div id="prog"></div>
+
+<nav>
+  <a href="index.html" class="nav-brand">Whispers<span> of Caring</span></a>
+  <div class="nav-right">
+    <span class="nav-tag">C4 · P3</span>
+    <a href="c4index.html" class="nav-home">HOME</a>
+  </div>
+</nav>
+
+<!-- ════════════════ HERO ════════════════ -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <canvas id="gridCanvas"></canvas>
+
+  <div class="hero-inner">
+    <span class="h-tag">// whispers of caring · chapter iv · phase iii //</span>
+    <span class="h-eyebrow">Conquering Work Woes in the Digital Arena</span>
+    <h1 class="h-title">
+      <span class="cyan">Game</span><br><span class="mag">On</span>
+    </h1>
+    <span class="h-sub-title">Where frustration becomes fuel, and enemies wear familiar faces</span>
+    <p class="h-desc">Lucifer wakes nightmare-free. A rough day at work. An outlet that turns stress into strikes — and a rivalry that makes everything better.</p>
+    <div class="h-chars">
+      <div class="char-badge ns">
+        <span style="font-size:1.2rem">🗡</span>
+        <div>
+          <div>Nightshade</div>
+          <span class="char-role">Rogue · Lucifer</span>
+        </div>
+      </div>
+      <div style="color:var(--faint);font-size:1rem;align-self:center;font-family:'Syne',sans-serif;">×</div>
+      <div class="char-badge sf">
+        <span style="font-size:1.2rem">✦</span>
+        <div>
+          <div>Starfire</div>
+          <span class="char-role">Sorceress · Victoria</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scroll-cue">
+    <span>// load game //</span>
+    <div class="scroll-bar"></div>
+  </div>
+</section>
+
+<!-- ════════════════ CONTENT ════════════════ -->
+<div class="page">
+
+  <!-- ── I. THE MORNING ── -->
+  <div class="sec-head rev">
+    <span class="sec-lbl c">// scene i · a clean morning //</span>
+    <div class="sec-line"></div>
+    <span class="sec-icon">🌅</span>
+  </div>
+  <h2 class="scene-title rev"><span class="c">No</span> Nightmares.<br><span class="g">Zero.</span></h2>
+
+  <p class="prose drop rev">Lucifer woke up at a regular time and had his breakfast as a normal thing. He realised he hadn't gotten any nightmare the night before. He slept over 8 hours without any distraction or fear. The moment when he had shared his scared moments with Victoria — and she had helped him through it — she had pushed him from zero to a hundred percent. <em>All things had returned to normal position, including the fear.</em></p>
+
+  <div class="stat-block rev">
+    <span class="stat-head">// lucifer's state · morning after nightmare-free sleep //</span>
+    <div class="stat-rows">
+      <div class="stat-row">
+        <div class="stat-row-h"><span>SLEEP QUALITY</span><span>98%</span></div>
+        <div class="stat-bar"><div class="stat-fill f-lime" style="--w:98%"></div></div>
+      </div>
+      <div class="stat-row">
+        <div class="stat-row-h"><span>DREAD</span><span>4%</span></div>
+        <div class="stat-bar"><div class="stat-fill f-stress" style="--w:4%"></div></div>
+      </div>
+      <div class="stat-row">
+        <div class="stat-row-h"><span>CLARITY</span><span>82%</span></div>
+        <div class="stat-bar"><div class="stat-fill f-cyan" style="--w:82%"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <p class="prose rev">A person who stands very lonely — who has lived alone for years — will undergo psychic phenomena: their mind constantly working like a machine, creating visuals they cannot speak about without hesitation. <em>The loneliest people are often the sharpest.</em> Nobody knows what an introvert can do.</p>
+
+  <!-- ── II. WORK FRUSTRATION ── -->
+  <div class="sec-head rev">
+    <span class="sec-lbl s">// scene ii · the office call //</span>
+    <div class="sec-line"></div>
+    <span class="sec-icon">💼</span>
+  </div>
+  <h2 class="scene-title rev"><span class="s">MANAGER.</span><br>EXE</h2>
+
+  <p class="prose rev">Lucifer logged into his office laptop, took the call, completed work with his manager, and submitted everything on time. The manager reviewed and raised a comment — one part of execution was missing, corrections needed before resubmission. Lucifer tested the code again. <em>No errors found.</em></p>
+
+  <div class="stress-box rev">
+    <span class="sb-label">⚠ frustration · peak level detected</span>
+    <p class="sb-text">Due to the manager's behaviour, his frustration level reached a peak. He could not find what was missing — yet the correction demand stood. He decided to wait until sign-out time so he could release his frustration by playing an online game. The arena was waiting. The enemies would pay.</p>
+  </div>
+
+  <div class="pull rev">
+    <p>"Every enemy that appeared before him took on the visage of his manager — and with each strike, he felt a surge of satisfaction."</p>
+    <cite>— Game On · Chapter IV</cite>
+  </div>
+
+  <!-- ── III. BOSS BATTLE ── -->
+  <div class="sec-head rev">
+    <span class="sec-lbl g">// scene iii · interactive boss battle //</span>
+    <div class="sec-line"></div>
+    <span class="sec-icon">⚔</span>
+  </div>
+  <h2 class="scene-title rev">The <span class="c">Digital</span><br><span class="m">Arena</span></h2>
+
+  <p class="prose rev">As Nightshade, Lucifer felt the familiar rush of adrenaline joining Victoria's Starfire in their virtual battleground. Today his mind was still tangled with the frustrations of his day — but that tension became fuel. Every keystroke flew with renewed vigour.</p>
+
+  <!-- INTERACTIVE BOSS FIGHT -->
+  <div class="boss-arena rev" id="bossArena">
+    <div class="arena-head">
+      <span class="arena-title">⚔ Epic Realm: Guardians of the Guild</span>
+      <span class="arena-live">Live Session</span>
+    </div>
+
+    <div class="boss-hp-section">
+      <div class="boss-hp-label">
+        <span>BOSS HP — Manager.exe</span>
+        <span id="bossHpText">2000 / 2000</span>
+      </div>
+      <div class="boss-hp-bar">
+        <div class="boss-hp-fill" id="bossHpFill"></div>
+      </div>
+    </div>
+
+    <div class="scoreboard">
+      <div class="score-col ns">
+        <div class="score-who">🗡 Nightshade</div>
+        <div class="score-num" id="nsScore">0</div>
+        <div class="score-tag">kills</div>
+      </div>
+      <div class="score-col sf">
+        <div class="score-who">✦ Starfire</div>
+        <div class="score-num" id="sfScore">0</div>
+        <div class="score-tag">kills</div>
+      </div>
+    </div>
+
+    <div class="attack-row">
+      <button class="atk-btn ns" id="btnNS" onclick="attack('ns')">⚔ Shadow Strike [Nightshade]</button>
+      <button class="atk-btn sf" id="btnSF" onclick="attack('sf')">✦ Fireball Barrage [Starfire]</button>
+    </div>
+
+    <div class="combat-log" id="combatLog">
+      <div class="log-entry log-sys">▶ SESSION LOADED — Boss: Manager.exe · HP: 2000</div>
+      <div class="log-entry log-sys">▶ Nightshade &amp; Starfire enter the arena. Click to attack.</div>
+    </div>
+
+    <div class="victory-banner" id="victoryBanner">
+      <span class="vb-icon">🏆</span>
+      <div class="vb-title">Victory!</div>
+      <div class="vb-sub">// manager.exe defeated · stress purged · quest complete //</div>
+    </div>
+  </div>
+
+  <!-- ── IV. THE RIVALRY ── -->
+  <div class="sec-head rev">
+    <span class="sec-lbl m">// scene iv · friendly rivalry //</span>
+    <div class="sec-line"></div>
+    <span class="sec-icon">🎯</span>
+  </div>
+  <h2 class="scene-title rev">Who<br>Lands the <span class="g">Final Blow?</span></h2>
+
+  <p class="prose rev">They had often played cooperatively, but tonight they decided to inject some friendly competition into their gameplay. Each enemy was a target for their skills, racing to see who could claim the most kills. Victoria was not one to back down — <em>"Impressive, but I can do better."</em></p>
+
+  <div class="rivalry-card rev">
+    <div class="rc-player ns">
+      <div class="rc-name">🗡 Nightshade</div>
+      <div class="rc-class">// rogue · lucifer</div>
+      <div class="rc-score-val">47</div>
+    </div>
+    <div class="rc-mid">
+      <div class="rc-vs">VS</div>
+      <div class="rc-result">Boss defeated<br>together ✦<br>Session: EPIC</div>
+    </div>
+    <div class="rc-player sf">
+      <div class="rc-name">✦ Starfire</div>
+      <div class="rc-class">// sorceress · victoria</div>
+      <div class="rc-score-val">44</div>
+    </div>
+  </div>
+
+  <p class="prose rev">"That was one of our best runs," Victoria said. "But I think I still edged you out in overall kills," Lucifer replied, a wide grin on his face. "In your dreams, Nightshade," Victoria retorted playfully. Their banter kept the mood light and enjoyable — <em>the combination of challenge, competition, and camaraderie had turned an ordinary evening into a memorable adventure.</em></p>
+
+  <!-- ── V. POST-GAME CHAT ── -->
+  <div class="sec-head rev">
+    <span class="sec-lbl d">// scene v · post-game messages //</span>
+    <div class="sec-line"></div>
+    <span class="sec-icon">💬</span>
+  </div>
+  <h2 class="scene-title rev">After the <span class="c">Arena</span></h2>
+
+  <div class="messenger rev">
+    <div class="ms-bar">
+      <div class="ms-dots"><span class="td1"></span><span class="td2"></span><span class="td3"></span></div>
+      <span class="ms-title">Direct Messages · Post-Session</span>
+      <span class="ms-online">Online</span>
+    </div>
+    <div class="ms-body">
+      <div class="msg luc">
+        <div class="msg-who">Lucifer</div>
+        <div class="msg-bub">"That was awesome! I needed that. Thanks for the great game tonight."</div>
+      </div>
+      <div class="msg vic">
+        <div class="msg-who">Victoria</div>
+        <div class="msg-bub">"It was a blast! You were on fire, Nightshade. Heading to bed soon?"</div>
+      </div>
+      <div class="msg luc">
+        <div class="msg-who">Lucifer</div>
+        <div class="msg-bub">"Yeah, I'm pretty beat. Long day at work. Just gonna chill for a bit before hitting the sack."</div>
+      </div>
+      <div class="msg vic">
+        <div class="msg-who">Victoria</div>
+        <div class="msg-bub">"I still can't get over how you visualized your manager as the enemies. That was hilarious!"</div>
+      </div>
+    </div>
+    <div class="ms-more" id="ms-more">
+      <div class="msg luc">
+        <div class="msg-who">Lucifer</div>
+        <div class="msg-bub">"It's my way of dealing with stress, I guess. How was your day? Any breakthroughs on your latest painting?"</div>
+      </div>
+      <div class="msg vic">
+        <div class="msg-who">Victoria</div>
+        <div class="msg-bub">"Not quite yet, but I'm getting there. Today was a bit frustrating. Sometimes the ideas just don't flow, you know?"</div>
+      </div>
+      <div class="msg luc">
+        <div class="msg-who">Lucifer</div>
+        <div class="msg-bub">"I hear you. Creativity can be so fickle. But knowing you, you'll nail it soon enough."</div>
+      </div>
+      <div class="msg vic">
+        <div class="msg-who">Victoria</div>
+        <div class="msg-bub">"I noticed you seemed a bit off tonight. Work has been tough?"</div>
+      </div>
+      <div class="msg luc">
+        <div class="msg-who">Lucifer</div>
+        <div class="msg-bub">"Actually, work has been a nightmare lately. My manager has been especially demanding. Today was just one of those days where everything piled up."</div>
+      </div>
+      <div class="msg vic">
+        <div class="msg-who">Victoria</div>
+        <div class="msg-bub">"I'm sorry to hear that. But hey, I'm here if you need to talk more about it."</div>
+      </div>
+      <div class="msg luc">
+        <div class="msg-who">Lucifer</div>
+        <div class="msg-bub">"Thanks, Vic. Just talking about it now helps. You're a good friend."</div>
+      </div>
+      <div class="msg vic">
+        <div class="msg-who">Victoria</div>
+        <div class="msg-bub">"Anytime, Luci. We all have those rough patches. Just remember, you're not alone."</div>
+      </div>
+      <div class="msg luc">
+        <div class="msg-who">Lucifer</div>
+        <div class="msg-bub">"I've been thinking about taking a short trip to clear my head. Evervale has been on my mind."</div>
+      </div>
+      <div class="msg vic">
+        <div class="msg-who">Victoria</div>
+        <div class="msg-bub">"Evervale is beautiful this time of year. You should go for it. A change of scenery might be just what you need — and we could finally meet up in person!"</div>
+      </div>
+      <div class="msg luc">
+        <div class="msg-who">Lucifer</div>
+        <div class="msg-bub">"Deal. Let's plan it soon. For now though, I should get some sleep. Goodnight, Vic."</div>
+      </div>
+      <div class="msg vic">
+        <div class="msg-who">Victoria</div>
+        <div class="msg-bub">"Goodnight, Luci. Sweet dreams — and remember, no more work stress. Just think of our epic victories instead. 🌟"</div>
+      </div>
+    </div>
+    <button class="ms-toggle" onclick="toggleMs('ms-more',this)">Read full conversation ↓</button>
+  </div>
+
+  <!-- ── CLOSING ── -->
+  <div class="closing-card rev">
+    <span class="closing-icon">🌙</span>
+    <div class="closing-title">We Make a Pretty Unbeatable Team</div>
+    <p class="closing-text">As he set his phone down and climbed into bed, Lucifer felt a sense of peace wash over him. Despite the daily stresses, he knew he had a friend who understood and supported him. With thoughts of their gaming adventures and the promise of future plans, he drifted off to sleep.</p>
+  </div>
+
+  <div class="sep-rule rev">
+    <a href="c4index.html" class="btn-back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+      Return to Chapter Four
+    </a>
+    <span class="back-note">Continue the story</span>
+  </div>
+
+</div>
+
+<script>
+/* ── Progress ── */
+window.addEventListener('scroll', () => {
+  const t = document.documentElement.scrollHeight - innerHeight;
+  document.getElementById('prog').style.width = (t > 0 ? scrollY / t * 100 : 0) + '%';
+}, {passive:true});
+
+/* ── Grid canvas — floating dots ── */
+(function(){
+  const c = document.getElementById('gridCanvas');
+  const ctx = c.getContext('2d');
+  const resize = () => { c.width = innerWidth; c.height = innerHeight; };
+  resize(); window.addEventListener('resize', resize);
+
+  const dots = Array.from({length:40}, () => ({
+    x: Math.random() * innerWidth,
+    y: Math.random() * innerHeight,
+    r: Math.random() * 1.5 + 0.5,
+    vx: (Math.random()-.5)*.3,
+    vy: (Math.random()-.5)*.3,
+    col: Math.random() > .5 ? [0,212,255] : [208,64,255],
+    a: Math.random()*.3+.05
+  }));
+  let t=0;
+  (function draw(){
+    ctx.clearRect(0,0,c.width,c.height);
+    dots.forEach(d => {
+      const tw = d.a*(0.4+0.6*Math.sin(t*.005+d.x));
+      ctx.beginPath();ctx.arc(d.x,d.y,d.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(${d.col.join(',')},${tw})`;ctx.fill();
+      d.x+=d.vx; d.y+=d.vy;
+      if(d.x<0||d.x>c.width) d.vx*=-1;
+      if(d.y<0||d.y>c.height) d.vy*=-1;
+    });
+    t++;requestAnimationFrame(draw);
+  })();
+})();
+
+/* ── Scroll reveal ── */
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('vis'); });
+}, {threshold:0.1});
+document.querySelectorAll('.rev').forEach(el => io.observe(el));
+
+/* ── Stagger msg bubbles ── */
+document.querySelectorAll('.msg').forEach((m,i) => {
+  m.style.cssText += `opacity:0;transform:translateY(8px);transition:opacity .45s ease ${i*.06}s,transform .45s ease ${i*.06}s`;
+});
+const msgObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if(e.isIntersecting){
+      e.target.querySelectorAll('.msg').forEach(m => { m.style.opacity='1'; m.style.transform='none'; });
+      msgObs.unobserve(e.target);
+    }
+  });
+},{threshold:.1});
+document.querySelectorAll('.messenger').forEach(el => msgObs.observe(el));
+
+/* ── Boss Battle ── */
+let bossHp = 2000, nsKills = 0, sfKills = 0, done = false;
+const nsHits = [
+  ['Shadow Strike', [180,220]], ['Dual Blade Slash', [140,180]],
+  ['Backstab from Stealth', [200,260]], ['Rogue Finisher', [160,200]],
+  ['Critical Strike! (Manager = eliminated)', [280,340]]
+];
+const sfHits = [
+  ['Fireball Barrage', [150,200]], ['Frost Nova — area stun!', [120,160]],
+  ['Arcane Missiles volley', [170,220]], ['Healing Nova — team restored', [0,0]],
+  ['Meteor Strike!', [300,380]]
+];
+let nsIdx=0, sfIdx=0;
+
+function rnd(min,max){return Math.floor(Math.random()*(max-min+1))+min;}
+
+function addLog(text, cls=''){
+  const log = document.getElementById('combatLog');
+  const d = document.createElement('div');
+  d.className = 'log-entry' + (cls?' '+cls:'');
+  d.textContent = text;
+  log.appendChild(d);
+  log.scrollTop = log.scrollHeight;
+}
+
+function popNum(id){
+  const el = document.getElementById(id);
+  el.classList.remove('pop');
+  void el.offsetWidth;
+  el.classList.add('pop');
+  setTimeout(()=>el.classList.remove('pop'),200);
+}
+
+function attack(who){
+  if(done) return;
+  let name, dmg, hits;
+  if(who==='ns'){
+    const h = nsHits[nsIdx % nsHits.length]; nsIdx++;
+    name=h[0]; dmg=rnd(...h[1]);
+    nsKills++;
+    document.getElementById('nsScore').textContent = nsKills;
+    popNum('nsScore');
+    addLog(`⚔ NIGHTSHADE — ${name} · −${dmg} HP`, 'log-ns');
+  } else {
+    const h = sfHits[sfIdx % sfHits.length]; sfIdx++;
+    name=h[0]; dmg=rnd(...h[1]);
+    sfKills++;
+    document.getElementById('sfScore').textContent = sfKills;
+    popNum('sfScore');
+    addLog(`✦ STARFIRE — ${name} · −${dmg} HP`, 'log-sf');
+  }
+
+  bossHp = Math.max(0, bossHp - dmg);
+  const pct = bossHp/2000*100;
+  document.getElementById('bossHpFill').style.width = pct+'%';
+  document.getElementById('bossHpText').textContent = bossHp+' / 2000';
+
+  if(bossHp <= 0){
+    done = true;
+    document.getElementById('bossHpFill').style.background = 'var(--lime)';
+    document.getElementById('bossHpText').textContent = 'DEFEATED';
+    document.getElementById('btnNS').disabled = true;
+    document.getElementById('btnSF').disabled = true;
+    addLog('★ MANAGER.EXE DEFEATED — STRESS PURGED — VICTORY!', 'log-sys');
+    setTimeout(()=>{
+      const banner = document.getElementById('victoryBanner');
+      banner.classList.add('show');
+    }, 500);
+  }
+}
+
+/* ── Messenger expand ── */
+function toggleMs(id, btn){
+  const el = document.getElementById(id);
+  const open = el.classList.toggle('open');
+  btn.textContent = open ? 'Collapse ↑' : 'Read full conversation ↓';
+  if(open){
+    el.querySelectorAll('.msg').forEach((m,i)=>{
+      m.style.opacity='0'; m.style.transform='translateY(8px)';
+      setTimeout(()=>{ m.style.opacity='1'; m.style.transform='none'; }, i*70);
+    });
+  }
+}
+</script>
+</body>
+</html>
